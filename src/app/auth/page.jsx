@@ -1,6 +1,7 @@
-import { redirect } from "next/navigation";
+import React from 'react'
 
-export default function AuthPage() {
-  redirect("/login");
-}
-
+export const AuthPage = () => {
+  return (
+    <div className='bg-black text-white text-center'>Login Page</div>
+  )
+} 
