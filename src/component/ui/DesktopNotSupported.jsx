@@ -2,29 +2,27 @@
 
 import { useState, useEffect } from "react";
 
+const MOBILE_TABLET_MAX_WIDTH = 1024;
 
-const MOBILE_TABLET_MAX_WIDTH = 1023; 
-
-export default function Page() {
-  const [isSupported, setIsSupported] = useState(null); 
+export default function DesktopNotSupported({ children }) {
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(null);
 
   useEffect(() => {
     function checkDevice() {
       const width = window.innerWidth;
-      setIsSupported(width < MOBILE_TABLET_MAX_WIDTH);
+      setIsMobileOrTablet(width <= MOBILE_TABLET_MAX_WIDTH);
     }
 
-    checkDevice(); 
+    checkDevice();
     window.addEventListener("resize", checkDevice);
     return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
- 
-  if (isSupported === null) {
+  if (isMobileOrTablet === null) {
     return null;
   }
 
-  if (!isSupported) {
+  if (!isMobileOrTablet) {
     return (
       <div
         style={{
@@ -32,8 +30,14 @@ export default function Page() {
           alignItems: "center",
           justifyContent: "center",
           height: "100vh",
+          width: "100vw",
           textAlign: "center",
           fontFamily: "sans-serif",
+          fontSize: "18px",
+          fontWeight: "500",
+          backgroundColor: "#ffffff",
+          color: "#03130a",
+          padding: "20px",
         }}
       >
         This screen not supported, Please open in Mobile or Tablet Screens.
@@ -41,5 +45,5 @@ export default function Page() {
     );
   }
 
- return null;
+  return <>{children}</>;
 }

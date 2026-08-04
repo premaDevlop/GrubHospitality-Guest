@@ -43,8 +43,9 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${orbitron.variable} antialiased`}
 			>
 				<MainProvider>
-					<DesktopNotSupported />
-					{children}
+					<DesktopNotSupported>
+						{children}
+					</DesktopNotSupported>
 				</MainProvider>
 			</body>
 		</html>
