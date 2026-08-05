@@ -22,12 +22,15 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
         }
       }, 600);
     } else {
-      showOtpErrorToast("Invalid OTP", "Please enter a valid OTP and try again.");
+      showOtpErrorToast(
+        "Invalid OTP",
+        "Please enter a valid OTP and try again.",
+      );
     }
   };
 
   return (
-    <div className="w-full flex-1 bg-white rounded-t-3xl -mt-5 z-30 px-6 pt-5 pb-6 flex flex-col justify-between items-center shadow-lg overflow-y-auto">
+    <div className="w-full flex-1 bg-white rounded-t-xl -mt-5 z-30 px-6 pt-5 pb-6 flex flex-col justify-between items-center shadow-lg overflow-y-auto">
       <div className="w-full flex flex-col items-center">
         {/* Hyatt Hotel Logo */}
         <div className="mb-3 flex justify-center h-10 relative w-[170px]">
@@ -42,8 +45,16 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
         <h2 className="text-xl font-bold text-[var(--color-neutral-primary)] mb-1 text-center">
           OTP Verification
         </h2>
+
         <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6">
-          Enter the OTP sent to <span className="font-semibold text-slate-800">{email || "+91 9012029209"}</span>
+          Enter the OTP sent to{" "}
+          <span className="font-semibold text-slate-800">
+            {email
+              ? /^\d+$/.test(email)
+                ? `+91 ${email}`
+                : email
+              : "+91 9012029209"}
+          </span>
         </p>
 
         {/* OTP Inputs */}

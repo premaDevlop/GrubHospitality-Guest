@@ -8,7 +8,11 @@ export default function OtpLoginModal({ onNext }) {
   const [value, setValue] = useState("");
   const [focusedInput, setFocusedInput] = useState(null);
 
-  const isEmail = (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  // Email format validation strictly allowing only allowed extensions (.com, .yahoo, .org, .net, .in, .co, .edu, .io)
+  const isEmail = (val) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|yahoo|org|net|in|co|edu|io)$/i.test(
+      val.trim()
+    );
   const isMobile = (val) => /^\d{10}$/.test(val);
 
   const isValid = value && (isEmail(value.trim()) || isMobile(value.trim()));

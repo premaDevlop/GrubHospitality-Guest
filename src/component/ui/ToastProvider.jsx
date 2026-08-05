@@ -8,16 +8,20 @@ export default function ToastProvider() {
       toastOptions={{
         duration: 3000,
         style: {
-          borderRadius: "8px",
+          background: "transparent",
+          boxShadow: "none",
           padding: 0,
-          boxShadow: "0 2px 8px 0 rgba(0,0,0,0.04)",
-          minWidth: 0,
+          margin: 0,
+          maxWidth: "100%",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
         },
       }}
       containerStyle={{
-        top: 10,
-        left: 0,
-        right: 0,
+        top: 16,
+        left: 16,
+        right: 16,
         zIndex: 10000,
       }}
     />
