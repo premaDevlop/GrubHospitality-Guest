@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 const slides = [
   {
@@ -47,10 +48,8 @@ export default function LoginHeader() {
     if (!touchStartX.current || !touchEndX.current) return;
     const distance = touchStartX.current - touchEndX.current;
     if (distance > 40) {
-      // Swipe left -> Next slide
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     } else if (distance < -40) {
-      // Swipe right -> Previous slide
       setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     }
     touchStartX.current = 0;
@@ -62,47 +61,50 @@ export default function LoginHeader() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[220px] xs:h-[240px] sm:h-[260px] overflow-hidden bg-slate-950 flex-shrink-0 select-none cursor-grab active:cursor-grabbing"
+      className="relative w-full h-[300px] sm:h-[320px] overflow-hidden bg-slate-950 flex-shrink-0 select-none cursor-grab active:cursor-grabbing"
     >
-      {/* Slide Images */}
       {slides.map((slide, index) => (
         <div
           key={slide.id}
           className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
-            index === currentSlide ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+            index === currentSlide
+              ? "opacity-100 z-10 pointer-events-auto"
+              : "opacity-0 z-0 pointer-events-none"
           }`}
         >
-          <img
+          <Image
             src={slide.image}
             alt={slide.title}
-            className="w-full h-full object-cover object-center brightness-[0.75]"
+            fill
+            className="object-cover object-center brightness-[0.75]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
         </div>
       ))}
 
-      {/* GrubHospitality Red Orbitron Logo */}
-      <div className="absolute top-3 left-4 z-20">
+      <div className="absolute top-4 left-4 z-20">
         <span
-          className="font-medium text-[18px] sm:text-[20px] leading-[120%] tracking-normal"
-          style={{ color: "#FF3333", fontFamily: "var(--font-orbitron), sans-serif" }}
+          className="font-medium text-[20px] leading-[120%] tracking-normal"
+          style={{
+            color: "#FF3333",
+            fontFamily: "var(--font-orbitron)",
+          }}
         >
           GrubHospitality
         </span>
       </div>
 
-      {/* Slide Text Overlay */}
-      <div className="absolute bottom-8 left-4 right-4 z-20 text-white">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-0.5">
+      <div className="absolute bottom-12 left-5 right-5 z-20 text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1">
           {slides[currentSlide].title}
         </h1>
-        <p className="text-xs sm:text-sm text-slate-200 font-light italic">
+        <p className="text-sm sm:text-base text-slate-200 font-light italic">
           {slides[currentSlide].subtitle}
         </p>
       </div>
 
-      {/* Carousel Pagination Dots */}
-      <div className="absolute bottom-3 right-4 z-20 flex items-center gap-1.5">
+      {/* Carousel Dots */}
+      <div className="absolute bottom-12 right-5 z-20 flex items-center gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -110,8 +112,8 @@ export default function LoginHeader() {
             onClick={() => setCurrentSlide(index)}
             className={`transition-all duration-300 rounded-full cursor-pointer ${
               index === currentSlide
-                ? "w-6 h-2 bg-[#FF3333]"
-                : "w-2 h-2 bg-white/70 hover:bg-white"
+                ? "w-7 h-2.5 bg-[#FF3333]"
+                : "w-2.5 h-2.5 bg-white hover:bg-white/80"
             }`}
             aria-label={`Slide ${index + 1}`}
           />

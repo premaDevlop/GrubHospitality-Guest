@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Icon from "../ui/Icon";
 
 export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -26,7 +27,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
   return (
     <div className="w-full flex-1 bg-white rounded-t-3xl -mt-5 z-30 px-6 pt-5 pb-6 flex flex-col justify-between items-center shadow-lg overflow-y-auto">
       <div className="w-full flex flex-col items-center">
-        {/* Hyatt Hotel Logo */}
+        {/* Hotel Logo */}
         <div className="mb-3 flex justify-center h-10 relative w-[170px]">
           <img
             src="/hyatt_logo.png"
@@ -36,14 +37,14 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
         </div>
 
         {/* Title */}
-        <h2 className="text-xl font-bold text-[var(--color-neutral-primary)] mb-1 text-center">
-          OTP Verification
+       <h2 className="text-xl font-bold text-[var(--color-neutral-primary)] mb-1 text-center">
+          Welcome to Hyatt Regency
         </h2>
-        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6">
-          Enter the OTP sent to <span className="font-semibold text-slate-800">{email || "+91 9012029209"}</span>
+        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-4">
+          Enter your mobile number or email to continue.
         </p>
 
-        {/* 4-Digit Inputs */}
+        {/* OTP Inputs */}
         <div className="flex gap-3 mb-4 w-full justify-center">
           {otp.map((digit, idx) => (
             <div
@@ -56,7 +57,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
                 inputMode="numeric"
                 maxLength={1}
                 placeholder="0"
-                className="w-full h-full rounded-xl text-center text-xl font-bold text-[var(--color-neutral-primary)] outline-none bg-transparent"
+                className="w-full h-full rounded-xl text-center text-sm  text-[var(--color-neutral-primary)] outline-none bg-transparent"
                 value={digit}
                 onChange={(e) => {
                   setErrorMessage("");
@@ -94,20 +95,20 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
               : "bg-[#eff1f0] border-[#e0e3e1] text-[#c1c7c4] cursor-not-allowed"
           }`}
         >
-          <span>VERIFY</span>
-          <span className="text-lg">›</span>
+          <span className="uppercase">verify</span>
+          <Icon name="arrow_right" className="w-5 h-5" />
         </button>
 
-        {/* BACK Button */}
+        {/* back */}
         <button
           type="button"
           onClick={onBack}
           className="text-sm font-semibold text-[var(--color-neutral-secondary)] hover:text-slate-900 transition-colors uppercase tracking-wider py-1 mb-5 cursor-pointer"
         >
-          BACK
+          back
         </button>
 
-        {/* Don't receive OTP? RESEND */}
+        {/* Resend */}
         <div className="text-xs text-[var(--color-neutral-tertiary)] font-medium text-center mb-2">
           <span>Don’t receive the OTP? </span>
           <button
@@ -119,7 +120,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
             }}
             className="text-[#FF3333] font-semibold hover:underline cursor-pointer uppercase ml-1"
           >
-            RESEND
+            resend
           </button>
         </div>
       </div>

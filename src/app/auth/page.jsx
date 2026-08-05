@@ -32,10 +32,10 @@ export default function AuthPage({ onLoginSuccess }) {
 
   return (
     <main className="w-full min-h-screen bg-white flex flex-col justify-between select-none">
-      {/* Carousel Header */}
+     
       <LoginHeader />
 
-      {/* Full Mobile Sheet */}
+    
       {step === "login" ? (
         <OtpLoginModal onNext={handleNext} />
       ) : (
