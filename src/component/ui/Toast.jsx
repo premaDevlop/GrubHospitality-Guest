@@ -2,10 +2,11 @@
 
 import toast from "react-hot-toast";
 import React from "react";
+import Image from "next/image";
 
 export function showOtpErrorToast(
   title = "Invalid OTP",
-  message = "Please enter a valid OTP and try again."
+  message = "Please enter a valid OTP and try again.",
 ) {
   toast.custom(
     (t) => (
@@ -14,9 +15,11 @@ export function showOtpErrorToast(
           t.visible ? "animate-enter" : "animate-leave"
         } w-full max-w-[340px] sm:max-w-[540px] sm:w-[500px] md:w-[540px] bg-[#FFD8CB] border border-[#FF3333] rounded-2xl p-3.5 sm:p-4 shadow-lg flex items-start gap-3.5 relative z-[9999] mx-auto`}
       >
-        <img
+        <Image
           src="/otp_icons/invalid_otp.svg"
           alt="Error"
+          width={28}
+          height={28}
           className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 mt-0.5"
         />
         <div className="flex flex-col text-left flex-1">
@@ -29,13 +32,13 @@ export function showOtpErrorToast(
         </div>
       </div>
     ),
-    { position: "top-center", duration: 3000 }
+    { position: "top-center", duration: 3000 },
   );
 }
 
 export function showOtpSuccessToast(
   title = "OTP Verified",
-  message = "You have successfully signed in."
+  message = "You have successfully signed in.",
 ) {
   toast.custom(
     (t) => (
@@ -44,9 +47,11 @@ export function showOtpSuccessToast(
           t.visible ? "animate-enter" : "animate-leave"
         } w-full max-w-[340px] sm:max-w-[540px] sm:w-[500px] md:w-[540px] bg-[#DCECD4] border border-[#479F29] rounded-2xl p-3.5 sm:p-4 shadow-lg flex items-start gap-3.5 relative z-[9999] mx-auto`}
       >
-        <img
+        <Image
           src="/otp_icons/verified_otp.svg"
           alt="Success"
+          width={28}
+          height={28}
           className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 mt-0.5"
         />
         <div className="flex flex-col text-left flex-1">
@@ -59,7 +64,7 @@ export function showOtpSuccessToast(
         </div>
       </div>
     ),
-    { position: "top-center", duration: 2500 }
+    { position: "top-center", duration: 2500 },
   );
 }
 

@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Icon from "@/component/ui/Icon";
 import { showOtpErrorToast, showOtpSuccessToast } from "@/component/ui/Toast";
+import Image from "next/image";
 
 export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -32,12 +33,13 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
   return (
     <div className="w-full flex-1 bg-white rounded-t-xl -mt-5 z-30 px-6 pt-5 pb-6 flex flex-col justify-between items-center shadow-lg overflow-y-auto">
       <div className="w-full flex flex-col items-center">
-        {/* Hyatt Hotel Logo */}
+        {/* Hotel Logo */}
         <div className="mb-3 flex justify-center h-10 relative w-[170px]">
-          <img
+          <Image
             src="/hyatt_logo.png"
             alt="Hyatt Regency"
-            className="w-full h-full object-contain"
+            fill
+            className="object-contain"
           />
         </div>
 

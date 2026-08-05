@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Input from "@/component/ui/Input";
 import Icon from "@/component/ui/Icon";
+import Image from "next/image";
 
 export default function OtpLoginModal({ onNext }) {
   const [value, setValue] = useState("");
@@ -11,7 +12,7 @@ export default function OtpLoginModal({ onNext }) {
   // Email format validation strictly allowing only allowed extensions (.com, .yahoo, .org, .net, .in, .co, .edu, .io)
   const isEmail = (val) =>
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|yahoo|org|net|in|co|edu|io)$/i.test(
-      val.trim()
+      val.trim(),
     );
   const isMobile = (val) => /^\d{10}$/.test(val);
 
@@ -42,10 +43,11 @@ export default function OtpLoginModal({ onNext }) {
       <div className="w-full flex flex-col items-center">
         {/* Hotel Logo */}
         <div className="mb-2.5 flex justify-center h-10 relative w-[170px]">
-          <img
+          <Image
             src="/hyatt_logo.png"
             alt="Hyatt Regency"
-            className="w-full h-full object-contain"
+            fill
+            className="object-contain"
           />
         </div>
 
