@@ -46,7 +46,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           OTP Verification
         </h2>
 
-        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6">
+        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6 italic">
           Enter the OTP sent to{" "}
           <span className="font-semibold text-slate-800">
             {email
