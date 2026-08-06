@@ -96,5 +96,79 @@
       "image": "/loginCrousel/Login_Crousel3.jpg",
       "slug": "spice-route-cafe"
     }
+  ],
+  "dishes": [
+    {
+      "id": "d1",
+      "name": "Hyderabadi Biryani",
+      "kitchenName": "Nawab's Biryani House",
+      "restaurantId": "8",
+      "price": 1400,
+      "rating": 4.6,
+      "isVeg": true,
+      "cuisine": "Indian",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "description": "Savor our exquisite Hyderabadi Biryani, featuring aromatic basmati rice, succulent marinated vegetables, and a delicate blend of traditional spices, all slow-cooked to perfection in a 5-star style."
+    },
+    {
+      "id": "d2",
+      "name": "Lucknowi Biryani",
+      "kitchenName": "Khyber Royal Grill",
+      "restaurantId": "7",
+      "price": 1400,
+      "rating": 4.6,
+      "isVeg": true,
+      "cuisine": "Indian",
+      "image": "/loginCrousel/Login_Crousel2.jpg",
+      "description": "Fragrant Awadhi-style dum biryani layered with saffron, caramelized onions, and tender hand-selected spices."
+    },
+    {
+      "id": "d3",
+      "name": "Kolkata Mutton Biryani",
+      "kitchenName": "House Of Ming",
+      "restaurantId": "1",
+      "price": 1650,
+      "rating": 4.8,
+      "isVeg": false,
+      "cuisine": "Indian",
+      "image": "/loginCrousel/Login_Crousel3.jpg",
+      "description": "Aromatic long-grain rice cooked with spiced mutton cuts, potatoes, and boiled eggs in a subtle saffron broth."
+    },
+    {
+      "id": "d4",
+      "name": "Truffle Mushroom Pizza",
+      "kitchenName": "La Piazza",
+      "restaurantId": "3",
+      "price": 1250,
+      "rating": 4.7,
+      "isVeg": true,
+      "cuisine": "Italian",
+      "image": "/food-items/restaurant.jpg",
+      "description": "Hand-tossed sourdough pizza topped with wild mushrooms, black truffle oil, and aged mozzarella cheese."
+    },
+    {
+      "id": "d5",
+      "name": "Sichuan Chili Noodles",
+      "kitchenName": "The China Kitchen",
+      "restaurantId": "2",
+      "price": 980,
+      "rating": 4.5,
+      "isVeg": false,
+      "cuisine": "Chinese",
+      "image": "/food-items/cafeteria.jpg",
+      "description": "Hand-pulled wheat noodles tossed in authentic Sichuan chili oil, scallions, and roasted crushed peanuts."
+    },
+    {
+      "id": "d6",
+      "name": "Artisanal Opera Cake",
+      "kitchenName": "Sidewalk Bakery & Café",
+      "restaurantId": "6",
+      "price": 650,
+      "rating": 4.9,
+      "isVeg": true,
+      "cuisine": "Desserts",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "description": "Classic French Opera pastry layered with almond sponge, espresso buttercream, and dark chocolate ganache."
+    }
   ]
 }
