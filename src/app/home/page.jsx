@@ -1,27 +1,57 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import data from "../../data/data.json";
+
+import HomeHeader from "@/component/home/HomeHeader";
+import HomeHeroBanner from "@/component/home/HomeHeroBanner";
+import HomeSearchBar from "@/component/home/HomeSearchBar";
+import HomeScheduleBanner from "@/component/home/HomeScheduleBanner";
+import RestaurantListSection from "@/component/home/RestaurantListSection";
+import HomeSkeleton from "@/component/home/HomeSkeleton";
 
 export default function HomePage() {
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { user, restaurants } = data;
+
+  useEffect(() => {
+    // Simulate initial data loading for smooth UX
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // search filter
+  const filteredRestaurants = restaurants.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (isLoading) {
+    return <HomeSkeleton />;
+  }
 
   return (
-    <main className="w-full min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="flex flex-col items-center gap-4">
-        <h1
-          className="text-xl font-medium text-slate-900 cursor-pointer"
-          onClick={() => router.push("/home/restaurant-list")}
-        >
-          Home page
-        </h1>
-
-        <h1
-          className="text-xl font-medium text-slate-900 cursor-pointer"
-          onClick={() => router.push("/profile")}
-        >
-          Profile
-        </h1>
+    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-y-auto">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white min-h-screen shadow-sm flex flex-col pb-12">
+        <HomeHeader />
+        <main className="flex-1 px-5 pt-4 flex flex-col gap-5">
+          <HomeHeroBanner user={user} />
+          <HomeSearchBar
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <HomeScheduleBanner />
+          <RestaurantListSection
+            restaurants={filteredRestaurants}
+            searchQuery={searchQuery}
+          />
+        </main>
       </div>
-    </main>
+    </div>
   );
 }

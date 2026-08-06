@@ -1,0 +1,100 @@
+{
+  "user": {
+    "name": "Rohit",
+    "hotel": "Hyatt Regency",
+    "location": "Chanakyapuri, New Delhi",
+    "room": "Room 302"
+  },
+  "restaurants": [
+    {
+      "id": "1",
+      "name": "House Of Ming",
+      "description": "Masterfully charred meats and artisanal shakira wood-fired delicacies.",
+      "cuisine": "Chinese · Japanese",
+      "timing": "Open Now | Closes 11 pm",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "slug": "house-of-ming"
+    },
+    {
+      "id": "2",
+      "name": "The China Kitchen",
+      "description": "Authentic Sichuan & Cantonese specialties prepared in live open kitchens.",
+      "cuisine": "Chinese · Asian",
+      "timing": "Open Now | Closes 11 pm",
+      "image": "/food-items/restaurant.jpg",
+      "slug": "the-china-kitchen"
+    },
+    {
+      "id": "3",
+      "name": "La Piazza",
+      "description": "Award-winning Italian trattoria serving wood-fired pizzas and fresh handmade pasta.",
+      "cuisine": "Italian · European",
+      "timing": "Open Now | Closes 11:30 pm",
+      "image": "/loginCrousel/Login_Crousel3.jpg",
+      "slug": "la-piazza"
+    },
+    {
+      "id": "4",
+      "name": "TK's Oriental Grill",
+      "description": "Interactive Teppanyaki dining with fresh seafood and sizzling prime cuts.",
+      "cuisine": "Japanese · Teppanyaki",
+      "timing": "Open Now | Closes 10:45 pm",
+      "image": "/food-items/cafeteria.jpg",
+      "slug": "tks-oriental-grill"
+    },
+    {
+      "id": "5",
+      "name": "Syrah Restaurant",
+      "description": "Levantine and Eastern Mediterranean flavours served in an elegant courtyard setting.",
+      "cuisine": "Mediterranean · Lebanese",
+      "timing": "Open Now | Closes 11:00 pm",
+      "image": "/loginCrousel/Login_Crousel2.jpg",
+      "slug": "syrah-restaurant"
+    },
+    {
+      "id": "6",
+      "name": "Sidewalk Bakery & Café",
+      "description": "European-style bakery crafting fresh pastries, gourmet coffee, and artisan breads.",
+      "cuisine": "Bakery · Café · Desserts",
+      "timing": "Open Now | Closes 10:00 pm",
+      "image": "/food-items/restaurant.jpg",
+      "slug": "sidewalk-bakery"
+    },
+    {
+      "id": "7",
+      "name": "Khyber Royal Grill",
+      "description": "North Indian Mughlai barbecue, slow-cooked biryanis, and succulent kebabs.",
+      "cuisine": "North Indian · Mughlai",
+      "timing": "Open Now | Closes 11:30 pm",
+      "image": "/food-items/cafeteria.jpg",
+      "slug": "khyber-royal-grill"
+    },
+    {
+      "id": "8",
+      "name": "Nawab's Biryani House",
+      "description": "Heritage Hyderabadi Dum Biryanis infused with saffron and aromatic spices.",
+      "cuisine": "Biryani · Awadhi",
+      "timing": "Open Now | Closes 11:00 pm",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "slug": "nawabs-biryani-house"
+    },
+    {
+      "id": "9",
+      "name": "The Polo Lounge & Bistro",
+      "description": "Chic lounge with handcrafted cocktails, artisanal sliders, and global small plates.",
+      "cuisine": "Continental · Finger Food",
+      "timing": "Open Now | Closes 12:00 am",
+      "image": "/loginCrousel/Login_Crousel2.jpg",
+      "slug": "the-polo-lounge"
+    },
+    {
+      "id": "10",
+      "name": "Spice Route Café",
+      "description": "All-day dining restaurant featuring international buffet spreads and regional Indian classics.",
+      "cuisine": "Multi-Cuisine · All Day Dining",
+      "timing": "Open 24 Hours",
+      "image": "/loginCrousel/Login_Crousel3.jpg",
+      "slug": "spice-route-cafe"
+    }
+  ]
+}

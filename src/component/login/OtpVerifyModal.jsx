@@ -91,7 +91,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           ))}
         </div>
 
-        {/* VERIFY Button */}
+        {/* Verify button */}
         <button
           type="button"
           disabled={isDisabled}
@@ -106,7 +106,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           <Icon name="arrow_right" className="w-5 h-5" />
         </button>
 
-        {/* BACK Button */}
+        {/* Back button*/}
         <button
           type="button"
           onClick={onBack}
