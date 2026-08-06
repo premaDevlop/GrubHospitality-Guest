@@ -14,18 +14,17 @@ export default function RestaurantListPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { restaurants } = data;
 
-  // Filter 
+  // Filter
   const filteredRestaurants = restaurants.filter(
     (item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-y-auto">
       <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white min-h-screen shadow-sm flex flex-col pb-16">
-        
         <HomeHeader />
 
         <main className="flex-1 px-5 pt-4 flex flex-col gap-4 overflow-y-auto">
@@ -48,15 +47,17 @@ export default function RestaurantListPage() {
             <h1 className="text-lg font-bold text-[#03130a]">See More</h1>
           </div>
 
-          {/* Reusing Existing HomeSearchBar */}
+          {/*  HomeSearchBar */}
           <HomeSearchBar
             placeholder="Search Restaurant"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+        </main>
 
+        <div className="bg-[#f7f8fa] mt-3 flex-1 px-5 pt-4 flex flex-col gap-4 overflow-y-auto">
           {/* Restaurant Listing */}
-          <div className="flex flex-col gap-4 mt-1">
+          <div className="flex flex-col gap-4 mt-10">
             {filteredRestaurants.length > 0 ? (
               filteredRestaurants.map((restaurant) => (
                 <RestaurantCard key={restaurant.id} restaurant={restaurant} />
@@ -67,7 +68,7 @@ export default function RestaurantListPage() {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

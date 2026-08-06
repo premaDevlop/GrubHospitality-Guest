@@ -16,7 +16,7 @@ export default function HomePage() {
   const { user, restaurants } = data;
 
   useEffect(() => {
-    // Simulate initial data loading for smooth UX
+    //  data loading 
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 400);
@@ -28,7 +28,7 @@ export default function HomePage() {
     (item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.cuisine.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   if (isLoading) {
@@ -36,10 +36,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-y-auto">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white min-h-screen shadow-sm flex flex-col pb-12">
+    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col  items-center select-none">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen   shadow-sm flex flex-col pb-12">
         <HomeHeader />
-        <main className="flex-1 px-5 pt-4 flex flex-col gap-5">
+        <main className="flex-1 px-5 pt-4 flex flex-col gap-5 bg-[#f7f8fa] mt-2">
           <HomeHeroBanner user={user} />
           <HomeSearchBar
             value={searchQuery}
