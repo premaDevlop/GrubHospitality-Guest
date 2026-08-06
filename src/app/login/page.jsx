@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import LoginHeader from "@/component/auth/LoginHeader";
-import OtpLoginModal from "@/component/auth/OtpLoginModal";
-import OtpVerifyModal from "@/component/auth/OtpVerifyModal";
+import LoginHeader from "@/component/login/LoginHeader";
+import OtpLoginModal from "@/component/login/OtpLoginModal";
+import OtpVerifyModal from "@/component/login/OtpVerifyModal";
 
 export default function AuthPage({ onLoginSuccess }) {
   const router = useRouter();
