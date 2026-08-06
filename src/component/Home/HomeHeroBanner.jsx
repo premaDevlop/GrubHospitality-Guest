@@ -6,7 +6,7 @@ export default function HomeHeroBanner({ user }) {
   if (!user) return null;
 
   return (
-    <div className="relative w-full h-[260px] sm:h-[340px] rounded-2xl overflow-hidden shadow-sm">
+    <div className="relative w-full h-[430px] sm:h-[500px] rounded-lg overflow-hidden shadow-sm border">
       <Image
         src="/loginCrousel/Login_Crousel1.jpg"
         alt={user.hotel || "Hyatt Regency"}
