@@ -1,6 +1,6 @@
 "use client";
 
-import AuthPage from "./auth/page";
+import AuthPage from "./login/page";
 
 export default function Home() {
   return <AuthPage />;
