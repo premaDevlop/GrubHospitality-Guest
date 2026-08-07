@@ -6,9 +6,12 @@ export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) 
   if (!isOpen || !dish) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in cursor-pointer"
+    >
       <div
-        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative max-h-[90vh] overflow-y-auto cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -26,12 +29,10 @@ export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) 
           />
         </button>
 
-        
         <h2 className="text-lg font-bold text-[#03130a] border-b border-[#eff1f0] pb-2">
           {dish.kitchenName || "The Saffron Room"}
         </h2>
 
-        
         <div className="w-full h-[200px] sm:h-[260px] relative rounded-2xl overflow-hidden border border-slate-100 shadow-xs">
           <Image
             src={dish.image || "/food-items/restaurant.jpg"}
@@ -86,9 +87,16 @@ export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) 
               if (onAddToCart) onAddToCart(dish);
               onClose();
             }}
-            className="px-5 py-2 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-xl text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1 cursor-pointer"
+            className="px-5 py-2 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-xl text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span className="text-base font-semibold">+</span> ADD
+            <Image
+              src="/kitchen/plus.svg"
+              alt="Add"
+              width={14}
+              height={14}
+              className="w-3.5 h-3.5 object-contain"
+            />
+            <span>add</span>
           </button>
         </div>
 

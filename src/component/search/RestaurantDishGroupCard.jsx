@@ -57,7 +57,13 @@ export default function RestaurantDishGroupCard({
                   {dish.name}
                 </h4>
                 <div className="flex items-center gap-1 text-[11px] font-semibold text-[#03130a]">
-                  <span className="text-[#f59e0b]">★</span>
+                  <Image
+                    src="/restaurant/star.svg"
+                    alt="Star"
+                    width={12}
+                    height={12}
+                    className="w-3 h-3 object-contain"
+                  />
                   <span>{dish.rating || 4.6}</span>
                 </div>
                 <div className="text-xs font-bold text-[#03130a] mt-1">
@@ -82,9 +88,16 @@ export default function RestaurantDishGroupCard({
                 e.stopPropagation();
                 if (onAddToCart) onAddToCart(dish);
               }}
-              className="w-full py-1 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-lg text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1 cursor-pointer mt-1"
+              className="w-full py-1 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-lg text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer mt-1"
             >
-              <span className="text-sm font-semibold">+</span> ADD
+              <Image
+                src="/kitchen/plus.svg"
+                alt="Add"
+                width={12}
+                height={12}
+                className="w-3 h-3 object-contain"
+              />
+              <span>add</span>
             </button>
           </div>
         ))}

@@ -4,21 +4,22 @@ import Image from "next/image";
 
 export default function HomeScheduleBanner() {
   return (
-    <div className="w-full bg-white border border-[#e0e3e1] rounded-2xl p-4 flex items-center justify-between shadow-xs">
-      <div className="flex flex-col gap-0.5 max-w-[65%]">
-        <h3 className="text-sm font-bold text-[#03130a] leading-snug">
+    <div className="w-full bg-white border border-[#e0e3e1] rounded-2xl shadow-xs shrink-0 flex flex-col overflow-hidden">
+      <div className="p-4 pb-2 flex flex-col gap-0.5">
+        <h3 className="text-base sm:text-lg font-bold text-[#03130a] leading-tight">
           Schedule order anytime,
         </h3>
-        <p className="text-xs font-normal text-[#6b7971] leading-snug">
+        <h3 className="text-base sm:text-lg font-bold text-[#03130a] leading-tight">
           Still get freshly cooked food.
-        </p>
+        </h3>
       </div>
-      <div className="w-20 h-16 relative rounded-lg overflow-hidden shrink-0 border border-slate-100">
+
+      <div className="w-full h-[180px] sm:h-[220px] relative mt-1">
         <Image
           src="/loginCrousel/Login_Crousel2.jpg"
           alt="Schedule Order"
           fill
-          className="object-cover"
+          className="object-cover object-center"
         />
       </div>
     </div>

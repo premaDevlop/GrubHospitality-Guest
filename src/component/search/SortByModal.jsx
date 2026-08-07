@@ -27,9 +27,12 @@ export default function SortByModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in cursor-pointer"
+    >
       <div
-        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative"
+        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -65,7 +68,7 @@ export default function SortByModal({
           </button>
         </div>
 
-        {/* Radio  */}
+        {/* Radio Options  */}
         <div className="flex flex-col gap-3 py-1">
           {options.map((option) => {
             const isSelected = currentSort === option.id;
@@ -79,7 +82,7 @@ export default function SortByModal({
                   className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                     isSelected
                       ? "border-[#fe480b]"
-                      : "border-slate-300 group-hover:border-slate-400"
+                      : "border-[#fe480b]/60 group-hover:border-[#fe480b]"
                   }`}
                 >
                   {isSelected && (

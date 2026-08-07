@@ -43,12 +43,14 @@ export default function FilterModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs transition-opacity animate-fade-in cursor-pointer"
+    >
       <div
-        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative max-h-[85vh]"
+        className="w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-3xl p-5 flex flex-col gap-4 animate-slide-up shadow-2xl relative max-h-[85vh] cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
-       
         <button
           type="button"
           onClick={onClose}
@@ -83,7 +85,6 @@ export default function FilterModal({
           </button>
         </div>
 
-       
         <div className="flex items-start gap-4 h-[320px] overflow-hidden">
           <div className="w-28 flex flex-col border-r border-[#eff1f0] h-full pr-2 shrink-0">
             {categories.map((cat) => (
@@ -102,7 +103,6 @@ export default function FilterModal({
             ))}
           </div>
 
-          {/* Right  */}
           <div className="flex-1 overflow-y-auto h-full pl-1 flex flex-col gap-3 pr-2 no-scrollbar">
             {activeCategory === "CUISINES" &&
               cuisineOptions.map((item) => {
@@ -117,7 +117,7 @@ export default function FilterModal({
                       className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
                         isChecked
                           ? "bg-[#fe480b] border-[#fe480b]"
-                          : "border-slate-300 group-hover:border-slate-400 bg-white"
+                          : "border-[#fe480b]/60 group-hover:border-[#fe480b] bg-white"
                       }`}
                     >
                       {isChecked && (

@@ -44,7 +44,7 @@ export default function RestaurantListPage() {
                 className="w-5 h-5 object-contain"
               />
             </button>
-            <h1 className="text-lg font-bold text-[#03130a]">See More</h1>
+            <h1 className="text-lg font-semibold text-[#03130a]">See More</h1>
           </div>
 
           {/*  HomeSearchBar */}

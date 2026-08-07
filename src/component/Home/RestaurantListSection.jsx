@@ -10,7 +10,6 @@ export default function RestaurantListSection({
 }) {
   const router = useRouter();
 
-  // If a limit is specified (e.g. for Home screen preview), slice the array
   const displayedRestaurants = limit
     ? restaurants.slice(0, limit)
     : restaurants;
@@ -22,7 +21,7 @@ export default function RestaurantListSection({
         <button
           type="button"
           onClick={() => router.push("/home/restaurant-list")}
-          className="text-xs font-semibold text-[#6b7971] hover:text-[#03130a] uppercase tracking-wider transition-colors cursor-pointer"
+          className="text-xs font-semibold text-[#6b7971] uppercase tracking-wider transition-colors cursor-pointer"
         >
           see more
         </button>

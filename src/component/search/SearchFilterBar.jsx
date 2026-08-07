@@ -46,7 +46,7 @@ export default function SearchFilterBar({
           height={14}
           className="w-3.5 h-3.5 object-contain"
         />
-        <span>SORT BY</span>
+        <span>sort by</span>
         <Image
           src="/restaurant/chevron_down.svg"
           alt="Down"
@@ -60,9 +60,9 @@ export default function SearchFilterBar({
       <button
         type="button"
         onClick={onToggleRated4Plus}
-        className={`px-3 py-1.5 border rounded-lg text-xs font-bold transition-colors shrink-0 cursor-pointer uppercase${
+        className={`px-3 py-1.5 border rounded-lg text-xs font-bold transition-colors shrink-0 cursor-pointer uppercase ${
           isRated4Plus
-            ? "bg-[#fe480b] border-[#fe480b] text-white"
+            ? "bg-red-50 border-[#fe480b] text-[#fe480b]"
             : "bg-white border-[#d2d7d4] text-[#445048] hover:bg-slate-50"
         }`}
       >
