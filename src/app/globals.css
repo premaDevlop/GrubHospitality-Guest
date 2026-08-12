@@ -759,6 +759,13 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	html {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	html::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 @layer utilities {
@@ -769,4 +776,17 @@
 	.no-scrollbar::-webkit-scrollbar {
 		display: none;
 	}
+}
+
+@keyframes slide-up {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+.animate-slide-up {
+	animation: slide-up 0.3s ease-out;
 }

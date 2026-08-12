@@ -2,7 +2,11 @@
 
 import { MdOutlineSearch } from "react-icons/md";
 
-export default function SearchBar({ placeholder = "Search, Dish, Restaurants etc." }) {
+export default function SearchBar({
+  placeholder = "Search, Dish, Restaurants etc.",
+  value = "",
+  onChange,
+}) {
   return (
     <div className="w-full flex justify-center px-[24px] md:px-[29px]">
       <div
@@ -12,6 +16,8 @@ export default function SearchBar({ placeholder = "Search, Dish, Restaurants etc
         <input
           type="text"
           placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
           className="w-full h-full text-[16px] text-[var(--gp-color-text-neutral-primary)] placeholder:text-[var(--gp-color-text-neutral-light)] outline-none bg-transparent"
         />
       </div>
