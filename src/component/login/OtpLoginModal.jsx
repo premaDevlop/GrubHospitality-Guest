@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Input from "@/component/ui/Input";
 import Icon from "@/component/ui/Icon";
 import Image from "next/image";
 
 export default function OtpLoginModal({ onNext }) {
   const [value, setValue] = useState("");
-  const [focusedInput, setFocusedInput] = useState(null);
 
   // Email format validation strictly allowing only allowed extensions (.com, .yahoo, .org, .net, .in, .co, .edu, .io)
   const isEmail = (val) =>
@@ -67,12 +67,9 @@ export default function OtpLoginModal({ onNext }) {
             value={value}
             onChange={handleInputChange}
             maxLength={value.includes("@") ? 100 : 10}
-            className="w-full pl-12 pr-4 h-12 text-base rounded-xl text-[var(--color-neutral-secondary)] placeholder:text-[var(--color-neutral-light)] transition-all duration-200 border border-[var(--color-box-border)] focus:border-[var(--color-brand-default)]"
-            isFocused={focusedInput === "email"}
-            onFocus={() => setFocusedInput("email")}
-            onBlur={() => setFocusedInput(null)}
+            className="w-full pl-12 pr-4 h-12 text-base rounded-xl text-[var(--color-neutral-secondary)] placeholder:text-[var(--color-neutral-secondary)] border border-[#e0e3e1] focus:border-[#e0e3e1] focus:outline-none focus:ring-0"
           />
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-light)] pointer-events-none">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-secondary)] pointer-events-none">
             <Icon name="login_user" className="h-5 w-5" />
           </span>
         </div>
@@ -92,10 +89,10 @@ export default function OtpLoginModal({ onNext }) {
           <Icon name="arrow_right" className="w-5 h-5" />
         </button>
 
-        {/*  Divider */}
+        {/* Divider */}
         <div className="relative w-full flex items-center justify-center mb-3.5">
-          <div className="border-t border-[var(--color-box-border)] w-full" />
-          <span className="absolute bg-white px-1 text-xs text-[var(--color-neutral-tertiary)] uppercase tracking-wider font-medium">
+          <div className="border-t border-[#e0e3e1] w-full" />
+          <span className="absolute bg-white px-2 text-xs text-[#6b7971] uppercase tracking-wider font-medium">
             or
           </span>
         </div>
@@ -103,21 +100,21 @@ export default function OtpLoginModal({ onNext }) {
         <button
           type="button"
           onClick={() => {}}
-          className=" text-[var(--color-neutral-tertiary)] my-3 uppercase font-medium text-sm flex items-center justify-center gap-3 cursor-pointer"
+          className="text-[#6b7971] my-3 uppercase font-medium text-sm flex items-center justify-center gap-3 cursor-pointer hover:text-slate-800 transition-colors"
         >
           <Icon name="google" className="w-5 h-5" />
           continue with google
         </button>
 
         {/* Footer */}
-        <div className="flex items-center gap-4 text-xs text-[var(--color-neutral-tertiary)] font-medium mt-1 mb-1">
-          <a href="#" className="hover:underline uppercase">
+        <div className="flex items-center gap-4 text-xs text-[#6b7971] font-medium mt-1 mb-1">
+          <Link href="/privacy-policy" className="hover:underline uppercase">
             privacy policy
-          </a>
+          </Link>
           <span>|</span>
-          <a href="#" className="hover:underline uppercase">
+          <Link href="/terms-of-service" className="hover:underline uppercase">
             terms of services
-          </a>
+          </Link>
         </div>
       </div>
     </form>

@@ -1,9 +1,13 @@
 "use client";
 
+import ToastProvider from "../ui/ToastProvider";
+import { CartProvider } from "./CartProvider";
+
 export default function MainProvider({ children }) {
   return (
     <>
-      {children}
+      <ToastProvider />
+      <CartProvider>{children}</CartProvider>
     </>
   );
 }
