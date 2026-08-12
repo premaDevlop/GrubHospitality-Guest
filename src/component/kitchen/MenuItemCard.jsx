@@ -49,18 +49,18 @@ export default function MenuItemCard({
     return (
       <div
         onClick={onClick}
-        className="w-full max-w-[332px] flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] bg-white cursor-pointer"
+                className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
         style={{ minHeight: "182px" }}
       >
         <div className="flex gap-[var(--gp-space-s)]">
           {/* Left Content */}
           <div className="flex-1 flex flex-col gap-[var(--gp-text-spacing-narrow)]">
             <VegIndicator isVeg={isVeg} />
-            <h3 className="text-[16px] font-semibold text-[var(--gp-color-text-neutral-primary)] leading-[24px]">
+            <h3 className="text-[16px] md:text-[20px] font-semibold text-[var(--gp-color-text-neutral-primary)] leading-[24px] md:leading-[28px]">
               {name}
             </h3>
             {description && (
-              <p className="text-[14px] leading-[20px] text-[var(--gp-color-text-neutral-secondary)] line-clamp-2">
+              <p className="text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] text-[var(--gp-color-text-neutral-secondary)] line-clamp-2">
                 {description}
               </p>
             )}
@@ -77,19 +77,19 @@ export default function MenuItemCard({
               <MdOutlineSchedule className="w-[16px] h-[16px] text-[var(--gp-color-text-neutral-tertiary)]" />
             </div>
             <div className="mt-auto pt-[var(--gp-space-s)]">
-              <span className="text-[16px] font-semibold text-[var(--gp-color-text-neutral-primary)]">
+              <span className="text-[16px] md:text-[18px] font-semibold text-[var(--gp-color-text-neutral-primary)]">
                 ₹{price}
               </span>
             </div>
           </div>
           {/* Right Image + ADD */}
           <div className="flex flex-col items-end gap-[var(--gp-space-s)] shrink-0">
-            <div className="w-[120px] h-[120px] relative rounded-[var(--gp-radius-base)] overflow-hidden">
+            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] relative rounded-[var(--gp-radius-base)] overflow-hidden">
               <Image
                 src={image}
                 alt={name}
                 fill
-                sizes="120px"
+                sizes="(min-width: 768px) 160px, 120px"
                 className="object-cover"
               />
             </div>
@@ -103,16 +103,16 @@ export default function MenuItemCard({
   return (
     <div
       onClick={onClick}
-      className="w-full max-w-[332px] flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] bg-white cursor-pointer"
+              className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
       style={{ minHeight: "182px" }}
     >
       <div className="flex flex-col gap-[var(--gp-text-spacing-narrow)]">
         <VegIndicator isVeg={isVeg} />
-        <h3 className="text-[16px] font-semibold text-[var(--gp-color-text-neutral-primary)] leading-[24px]">
+        <h3 className="text-[16px] md:text-[20px] font-semibold text-[var(--gp-color-text-neutral-primary)] leading-[24px] md:leading-[28px]">
           {name}
         </h3>
         {description && (
-          <p className="text-[14px] leading-[20px] text-[var(--gp-color-text-neutral-secondary)] line-clamp-2">
+          <p className="text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] text-[var(--gp-color-text-neutral-secondary)] line-clamp-2">
             {description}
           </p>
         )}
@@ -131,7 +131,7 @@ export default function MenuItemCard({
       </div>
       {/* Price + ADD row for no-image cards */}
       <div className="flex items-center justify-between mt-auto pt-[var(--gp-space-s)]">
-        <span className="text-[16px] font-semibold text-[var(--gp-color-text-neutral-primary)]">
+        <span className="text-[16px] md:text-[18px] font-semibold text-[var(--gp-color-text-neutral-primary)]">
           ₹{price}
         </span>
         {addButton}

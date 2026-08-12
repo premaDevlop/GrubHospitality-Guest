@@ -13,12 +13,12 @@ export default function CategoryCard({
 }) {
   return (
     <div
-      className="w-full max-w-[332px] flex flex-col bg-white rounded-t-[var(--gp-radius-xl)]"
+      className="w-full flex flex-col bg-white rounded-t-[var(--gp-radius-xl)]"
     >
       {/* Header with title and toggle */}
-      <div className="w-full flex items-center justify-between gap-[var(--gp-space-m)] px-[var(--gp-padding-l)] py-[var(--gp-space-m)]">
+      <div className="w-full flex items-center justify-between gap-[var(--gp-space-m)] px-[var(--gp-padding-l)] md:px-[var(--gp-padding-xl)] py-[var(--gp-space-m)]">
         <h2
-          className="text-[22px] leading-[32px] font-heading text-[var(--gp-color-text-neutral-primary)]"
+          className="text-[22px] md:text-[28px] leading-[32px] md:leading-[40px] font-heading text-[var(--gp-color-text-neutral-primary)]"
           style={{
             fontFamily: "var(--gp-font-heading)",
             fontWeight: "var(--gp-font-weight-heading)",
@@ -45,7 +45,7 @@ export default function CategoryCard({
 
       {/* Banner Image with Gradient Overlay - only when expanded */}
       {isExpanded && (
-        <div className="w-full px-[var(--gp-padding-l)] pb-[var(--gp-padding-l)]">
+        <div className="w-full px-[var(--gp-padding-l)] md:px-[var(--gp-padding-xl)] pb-[var(--gp-padding-l)] md:pb-[var(--gp-padding-xl)]">
           <div
             className="w-full relative overflow-hidden rounded-[var(--gp-radius-lg)]"
             style={{ height: "186.75px" }}
@@ -54,7 +54,7 @@ export default function CategoryCard({
               src={image}
               alt={title}
               fill
-              sizes="332px"
+              sizes="(min-width: 768px) 480px, 332px"
               className="object-cover"
             />
             {/* Gradient Overlay */}
