@@ -2,25 +2,6 @@
 
 import { MdOutlineFilterList, MdOutlineKeyboardArrowDown, MdOutlineSort } from "react-icons/md";
 
-const filterButtons = [
-  {
-    label: "FILTER",
-    icon: "filter",
-  },
-  {
-    label: "VEG",
-    icon: "veg",
-  },
-  {
-    label: "NON-VEG",
-    icon: "nonveg",
-  },
-  {
-    label: "SORT",
-    icon: "sort",
-  },
-];
-
 function FilterIcon({ type }) {
   if (type === "filter") {
     return <MdOutlineFilterList className="w-4 h-4" />;
@@ -45,24 +26,77 @@ function FilterIcon({ type }) {
   return null;
 }
 
-export default function FilterButtons() {
+export default function FilterButtons({
+  onOpenFilter,
+  onOpenSort,
+  selectedDietary = [],
+  onToggleDietary,
+}) {
+  const isDietActive = (value) => selectedDietary.includes(value);
+
+  const handleToggle = (value) => {
+    if (onToggleDietary) onToggleDietary(value);
+  };
+
   return (
     <div className="w-full flex justify-center px-[24px] md:px-[29px]">
       <div className="w-full max-w-[364px] md:max-w-none flex items-center gap-[12px] overflow-x-auto no-scrollbar">
-        {filterButtons.map((btn) => (
-          <button
-            key={btn.label}
-            className="flex items-center gap-[8px] h-[32px] min-w-[64px] px-[12px] py-[8px] bg-white rounded-[8px] border border-[#6B7971] shrink-0 cursor-pointer"
-          >
-            <FilterIcon type={btn.icon} />
-            <span className="text-[14px] font-medium leading-[16px] uppercase text-[var(--gp-color-text-neutral-primary)]">
-              {btn.label}
-            </span>
-            {btn.icon === "filter" && (
-              <MdOutlineKeyboardArrowDown className="w-4 h-4" />
-            )}
-          </button>
-        ))}
+        {/* FILTER - opens search FilterModal */}
+        <button
+          type="button"
+          onClick={onOpenFilter}
+          className="flex items-center gap-[8px] h-[32px] min-w-[64px] px-[12px] py-[8px] bg-white rounded-[8px] border border-[#6B7971] shrink-0 cursor-pointer"
+        >
+          <FilterIcon type="filter" />
+          <span className="text-[14px] font-medium leading-[16px] uppercase text-[var(--gp-color-text-neutral-primary)]">
+            FILTER
+          </span>
+          <MdOutlineKeyboardArrowDown className="w-4 h-4" />
+        </button>
+
+        {/* VEG quick toggle */}
+        <button
+          type="button"
+          onClick={() => handleToggle("Veg")}
+          className={`flex items-center gap-[8px] h-[32px] min-w-[64px] px-[12px] py-[8px] rounded-[8px] border shrink-0 cursor-pointer ${
+            isDietActive("Veg")
+              ? "bg-[var(--gp-color-bg-brand-secondary)] border-[var(--gp-color-brand-primary)]"
+              : "bg-white border-[#6B7971]"
+          }`}
+        >
+          <FilterIcon type="veg" />
+          <span className="text-[14px] font-medium leading-[16px] uppercase text-[var(--gp-color-text-neutral-primary)]">
+            VEG
+          </span>
+        </button>
+
+        {/* NON-VEG quick toggle */}
+        <button
+          type="button"
+          onClick={() => handleToggle("Non-Veg")}
+          className={`flex items-center gap-[8px] h-[32px] min-w-[64px] px-[12px] py-[8px] rounded-[8px] border shrink-0 cursor-pointer ${
+            isDietActive("Non-Veg")
+              ? "bg-[var(--gp-color-bg-brand-secondary)] border-[var(--gp-color-brand-primary)]"
+              : "bg-white border-[#6B7971]"
+          }`}
+        >
+          <FilterIcon type="nonveg" />
+          <span className="text-[14px] font-medium leading-[16px] uppercase text-[var(--gp-color-text-neutral-primary)]">
+            NON-VEG
+          </span>
+        </button>
+
+        {/* SORT - opens search SortByModal */}
+        <button
+          type="button"
+          onClick={onOpenSort}
+          className="flex items-center gap-[8px] h-[32px] min-w-[64px] px-[12px] py-[8px] bg-white rounded-[8px] border border-[#6B7971] shrink-0 cursor-pointer"
+        >
+          <FilterIcon type="sort" />
+          <span className="text-[14px] font-medium leading-[16px] uppercase text-[var(--gp-color-text-neutral-primary)]">
+            SORT
+          </span>
+        </button>
       </div>
     </div>
   );

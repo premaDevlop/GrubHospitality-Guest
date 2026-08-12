@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { MdStar, MdOutlineDeliveryDining, MdOutlineSchedule } from "react-icons/md";
+import {
+  MdStar,
+  MdOutlineDeliveryDining,
+  MdOutlineSchedule,
+} from "react-icons/md";
+import CartCounterButton from "@/component/ui/CartCounterButton";
 
 function VegIndicator({ isVeg = true }) {
   if (isVeg) {
@@ -19,6 +24,8 @@ function VegIndicator({ isVeg = true }) {
 }
 
 export default function MenuItemCard({
+  restaurant = null,
+  item = null,
   name = "Menu Item",
   description = "",
   rating = 0,
@@ -28,28 +35,16 @@ export default function MenuItemCard({
   onAdd,
   onClick,
 }) {
-  const handleAdd = (e) => {
-    e.stopPropagation();
-    onAdd?.();
-  };
-
-  const addButton = (
-    <button
-      onClick={handleAdd}
-      className="flex items-center gap-[8px] h-[36px] px-[16px] bg-white rounded-[8px] border border-[var(--gp-color-brand-primary)] cursor-pointer hover:bg-[var(--gp-color-bg-brand-secondary)] transition-colors"
-    >
-      <span className="text-[16px] text-[var(--gp-color-brand-primary)]">+</span>
-      <span className="text-[14px] font-semibold text-[var(--gp-color-brand-primary)] uppercase">
-        ADD
-      </span>
-    </button>
-  );
+  const addButton =
+    restaurant && item ? (
+      <CartCounterButton restaurant={restaurant} item={item} />
+    ) : null;
 
   if (image) {
     return (
       <div
         onClick={onClick}
-                className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
+        className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
         style={{ minHeight: "182px" }}
       >
         <div className="flex gap-[var(--gp-space-s)]">
@@ -103,7 +98,7 @@ export default function MenuItemCard({
   return (
     <div
       onClick={onClick}
-              className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
+      className="w-full flex flex-col gap-[var(--gp-space-s)] p-[var(--gp-padding-l)] md:p-[var(--gp-padding-xl)] bg-white cursor-pointer md:min-h-[220px]"
       style={{ minHeight: "182px" }}
     >
       <div className="flex flex-col gap-[var(--gp-text-spacing-narrow)]">

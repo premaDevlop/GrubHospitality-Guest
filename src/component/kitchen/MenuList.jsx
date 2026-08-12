@@ -7,11 +7,13 @@ import CategoryMenu from "./CategoryMenu";
 import MenuItemCard from "./MenuItemCard";
 
 export default function MenuList({
+  restaurant = null,
   menuData = [],
   categories = [],
   activeCategory = "",
   onSelectCategory,
   onMenuItemClick,
+  onAddItem,
 }) {
   const [expandedCategories, setExpandedCategories] = useState(() => {
     const initial = {};
@@ -69,13 +71,15 @@ export default function MenuList({
                 {category.items?.map((item, itemIndex) => (
                   <div key={item.id} className="w-full flex flex-col">
                     <MenuItemCard
+                      restaurant={restaurant}
+                      item={item}
                       name={item.name}
                       description={item.description}
                       rating={item.rating}
                       price={item.price}
                       isVeg={item.isVeg}
                       image={item.image}
-                      onAdd={() => console.log("Add:", item.id)}
+                      onAdd={() => onAddItem?.(item)}
                       onClick={() => onMenuItemClick?.(item)}
                     />
                     {itemIndex < category.items.length - 1 && (
