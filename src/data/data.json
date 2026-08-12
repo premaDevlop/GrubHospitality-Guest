@@ -92,6 +92,112 @@
       "orders": []
     }
   ],
+  "orderHistory": {
+    "completedOrders": [
+      {
+        "id": "oh-comp-1",
+        "restaurantName": "House Of Ming",
+        "time": "13 June '26, 17:09",
+        "status": "Delivered",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ],
+        "moreCount": 2,
+        "totalAmount": 1240,
+        "orderRating": 5,
+        "foodRating": 5
+      },
+      {
+        "id": "oh-comp-2",
+        "restaurantName": "Royal cafffee",
+        "time": "13 June '26, 17:09",
+        "status": "Delivered",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ],
+        "moreCount": 2,
+        "totalAmount": 1240,
+        "orderRating": 5,
+        "foodRating": 5
+      },
+      {
+        "id": "oh-comp-3",
+        "restaurantName": "Fit Food",
+        "time": "13 June '26, 17:09",
+        "status": "Delivered",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ],
+        "moreCount": 2,
+        "totalAmount": 1240,
+        "orderRating": 5,
+        "foodRating": 5
+      },
+      {
+        "id": "oh-comp-4",
+        "restaurantName": "The Pizza house",
+        "time": "13 June '26, 17:09",
+        "status": "Delivered",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ],
+        "moreCount": 2,
+        "totalAmount": 1240,
+        "orderRating": 5,
+        "foodRating": 5
+      }
+    ],
+    "canceledOrders": [
+      {
+        "id": "oh-canc-1",
+        "restaurantName": "House Of burger",
+        "time": "13 June '26, 17:09",
+        "status": "Canceled",
+        "cancellationReason": "Changed my mind",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ]
+      },
+      {
+        "id": "oh-canc-2",
+        "restaurantName": "The china kitchen",
+        "time": "13 June '26, 17:09",
+        "status": "Canceled",
+        "cancellationReason": "Take too much time",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ]
+      },
+      {
+        "id": "oh-canc-3",
+        "restaurantName": "Laa pizzzaa",
+        "time": "13 June '26, 17:09",
+        "status": "Canceled",
+        "cancellationReason": "By mistake order",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ]
+      },
+      {
+        "id": "oh-canc-4",
+        "restaurantName": "royal grill",
+        "time": "13 June '26, 17:09",
+        "status": "Canceled",
+        "cancellationReason": "Changed my mind",
+        "items": [
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+          { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+        ]
+      }
+    ]
+  },
   "helpCategories": [
     {
       "id": "1",

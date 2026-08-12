@@ -21,7 +21,7 @@ export default function OrderHistoryCard() {
           </p>
         </div>
 
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0">
+        <div className="w-7 h-7  flex items-center justify-center shrink-0">
           <Image
             src="/profile/chevron_down.svg"
             alt="Order History"
