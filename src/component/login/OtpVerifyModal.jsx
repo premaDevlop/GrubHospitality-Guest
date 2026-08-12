@@ -48,9 +48,9 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           OTP Verification
         </h2>
 
-        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6 italic">
+        <p className="text-[var(--color-neutral-tertiary)] text-sm text-center mb-6 italic">
           Enter the OTP sent to{" "}
-          <span className="font-semibold text-slate-800">
+          <span className="font-semibold text-[var(--color-neutral-tertiary)]">
             {email
               ? /^\d+$/.test(email)
                 ? `+91 ${email}`
@@ -64,7 +64,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           {otp.map((digit, idx) => (
             <div
               key={idx}
-              className="relative flex-1 max-w-[70px] h-[54px] rounded-xl border border-[var(--color-box-border)] focus-within:border-2 focus-within:border-[#FF480B] bg-white flex items-center justify-center transition-all"
+              className="relative flex-1 max-w-[70px] h-[54px] rounded-xl border border-[#e0e3e1] focus-within:border-2 focus-within:border-[#FF480B] bg-white flex items-center justify-center transition-all"
             >
               <input
                 ref={otpRefs[idx]}
@@ -91,7 +91,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           ))}
         </div>
 
-        {/* VERIFY Button */}
+        {/* Verify button */}
         <button
           type="button"
           disabled={isDisabled}
@@ -106,7 +106,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           <Icon name="arrow_right" className="w-5 h-5" />
         </button>
 
-        {/* BACK Button */}
+        {/* Back button*/}
         <button
           type="button"
           onClick={onBack}

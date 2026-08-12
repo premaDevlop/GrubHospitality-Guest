@@ -1,0 +1,235 @@
+{
+  "user": {
+    "name": "Rohit",
+    "guestName": "Parveen Kumar",
+    "hotel": "Hyatt Regency",
+    "location": "Chanakyapuri, New Delhi",
+    "room": "302",
+    "reservationId": "12345466",
+    "checkIn": "20 June 2026",
+    "checkOut": "28 June 2026",
+    "mobile": "+91 95604 34587",
+    "email": "johndoe@gmail.com",
+    "avatarInitials": "RK"
+  },
+  "helpCategories": [
+    {
+      "id": "1",
+      "title": "My Orders",
+      "subtitle": "View your recently delivered orders"
+    },
+    {
+      "id": "2",
+      "title": "Smart Food Box",
+      "subtitle": "View your recently delivered orders"
+    },
+    {
+      "id": "3",
+      "title": "Hotel Services",
+      "subtitle": "View your recently delivered orders"
+    },
+    {
+      "id": "4",
+      "title": "Account & App",
+      "subtitle": "View your recently delivered orders"
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "How to i place an order?",
+      "answer": "Select dishes from any restaurant menu, customize your order, choose instant delivery or schedule time, and click place order."
+    },
+    {
+      "id": "faq-2",
+      "question": "How do I schedule a meal?",
+      "answer": "Use the schedule banner on the home screen to pick a future date and time slot for your food delivery."
+    },
+    {
+      "id": "faq-3",
+      "question": "How does the Smart Food Box work?",
+      "answer": "Your order is delivered directly to your room's secure thermal food box, keeping your meals fresh and hot."
+    },
+    {
+      "id": "faq-4",
+      "question": "Can I cancel my order?",
+      "answer": "You can cancel your order within 2 minutes of placing it directly from the Order Status section."
+    },
+    {
+      "id": "faq-5",
+      "question": "How can I modify my order?",
+      "answer": "To modify items or special notes, contact hotel room dining reception before the order enters preparation."
+    },
+    {
+      "id": "faq-6",
+      "question": "What should I do if my food is delayed?",
+      "answer": "You can track real-time kitchen status in the app or click CALL RECEPTION to speak directly with guest service."
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "1",
+      "name": "House Of Ming",
+      "description": "Masterfully charred meats and artisanal shakira wood-fired delicacies.",
+      "cuisine": "Chinese · Japanese",
+      "timing": "Open Now | Closes 11 pm",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "slug": "house-of-ming"
+    },
+    {
+      "id": "2",
+      "name": "The China Kitchen",
+      "description": "Authentic Sichuan & Cantonese specialties prepared in live open kitchens.",
+      "cuisine": "Chinese · Asian",
+      "timing": "Open Now | Closes 11 pm",
+      "image": "/food-items/restaurant.jpg",
+      "slug": "the-china-kitchen"
+    },
+    {
+      "id": "3",
+      "name": "La Piazza",
+      "description": "Award-winning Italian trattoria serving wood-fired pizzas and fresh handmade pasta.",
+      "cuisine": "Italian · European",
+      "timing": "Open Now | Closes 11:30 pm",
+      "image": "/loginCrousel/Login_Crousel3.jpg",
+      "slug": "la-piazza"
+    },
+    {
+      "id": "4",
+      "name": "TK's Oriental Grill",
+      "description": "Interactive Teppanyaki dining with fresh seafood and sizzling prime cuts.",
+      "cuisine": "Japanese · Teppanyaki",
+      "timing": "Open Now | Closes 10:45 pm",
+      "image": "/food-items/cafeteria.jpg",
+      "slug": "tks-oriental-grill"
+    },
+    {
+      "id": "5",
+      "name": "Syrah Restaurant",
+      "description": "Levantine and Eastern Mediterranean flavours served in an elegant courtyard setting.",
+      "cuisine": "Mediterranean · Lebanese",
+      "timing": "Open Now | Closes 11:00 pm",
+      "image": "/loginCrousel/Login_Crousel2.jpg",
+      "slug": "syrah-restaurant"
+    },
+    {
+      "id": "6",
+      "name": "Sidewalk Bakery & Café",
+      "description": "European-style bakery crafting fresh pastries, gourmet coffee, and artisan breads.",
+      "cuisine": "Bakery · Café · Desserts",
+      "timing": "Open Now | Closes 10:00 pm",
+      "image": "/food-items/restaurant.jpg",
+      "slug": "sidewalk-bakery"
+    },
+    {
+      "id": "7",
+      "name": "Khyber Royal Grill",
+      "description": "North Indian Mughlai barbecue, slow-cooked biryanis, and succulent kebabs.",
+      "cuisine": "North Indian · Mughlai",
+      "timing": "Open Now | Closes 11:30 pm",
+      "image": "/food-items/cafeteria.jpg",
+      "slug": "khyber-royal-grill"
+    },
+    {
+      "id": "8",
+      "name": "Nawab's Biryani House",
+      "description": "Heritage Hyderabadi Dum Biryanis infused with saffron and aromatic spices.",
+      "cuisine": "Biryani · Awadhi",
+      "timing": "Open Now | Closes 11:00 pm",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "slug": "nawabs-biryani-house"
+    },
+    {
+      "id": "9",
+      "name": "The Polo Lounge & Bistro",
+      "description": "Chic lounge with handcrafted cocktails, artisanal sliders, and global small plates.",
+      "cuisine": "Continental · Finger Food",
+      "timing": "Open Now | Closes 12:00 am",
+      "image": "/food-items/restaurant.jpg",
+      "slug": "the-polo-lounge"
+    },
+    {
+      "id": "10",
+      "name": "Spice Route Café",
+      "description": "All-day dining restaurant featuring international buffet spreads and regional Indian classics.",
+      "cuisine": "Multi-Cuisine · All Day Dining",
+      "timing": "Open 24 Hours",
+      "image": "/food-items/cafeteria.jpg",
+      "slug": "spice-route-cafe"
+    }
+  ],
+  "dishes": [
+    {
+      "id": "d1",
+      "name": "Hyderabadi Biryani",
+      "kitchenName": "Nawab's Biryani House",
+      "restaurantId": "8",
+      "price": 1400,
+      "rating": 4.6,
+      "isVeg": true,
+      "cuisine": "Indian",
+      "image": "/food-items/Biryani2.jpg",
+      "description": "Savor our exquisite Hyderabadi Biryani, featuring aromatic basmati rice, succulent marinated vegetables, and a delicate blend of traditional spices, all slow-cooked to perfection in a 5-star style."
+    },
+    {
+      "id": "d2",
+      "name": "Lucknowi Biryani",
+      "kitchenName": "Khyber Royal Grill",
+      "restaurantId": "7",
+      "price": 1400,
+      "rating": 4.6,
+      "isVeg": true,
+      "cuisine": "Indian",
+      "image": "/food-items/Biryani.jpg",
+      "description": "Fragrant Awadhi-style dum biryani layered with saffron, caramelized onions, and tender hand-selected spices."
+    },
+    {
+      "id": "d3",
+      "name": "Kolkata Mutton Biryani",
+      "kitchenName": "House Of Ming",
+      "restaurantId": "1",
+      "price": 1650,
+      "rating": 4.8,
+      "isVeg": false,
+      "cuisine": "Indian",
+      "image": "/loginCrousel/Login_Crousel3.jpg",
+      "description": "Aromatic long-grain rice cooked with spiced mutton cuts, potatoes, and boiled eggs in a subtle saffron broth."
+    },
+    {
+      "id": "d4",
+      "name": "Truffle Mushroom Pizza",
+      "kitchenName": "La Piazza",
+      "restaurantId": "3",
+      "price": 1250,
+      "rating": 4.7,
+      "isVeg": true,
+      "cuisine": "Italian",
+      "image": "/food-items/restaurant.jpg",
+      "description": "Hand-tossed sourdough pizza topped with wild mushrooms, black truffle oil, and aged mozzarella cheese."
+    },
+    {
+      "id": "d5",
+      "name": "Sichuan Chili Noodles",
+      "kitchenName": "The China Kitchen",
+      "restaurantId": "2",
+      "price": 980,
+      "rating": 4.5,
+      "isVeg": false,
+      "cuisine": "Chinese",
+      "image": "/food-items/cafeteria.jpg",
+      "description": "Hand-pulled wheat noodles tossed in authentic Sichuan chili oil, scallions, and roasted crushed peanuts."
+    },
+    {
+      "id": "d6",
+      "name": "Artisanal Opera Cake",
+      "kitchenName": "Sidewalk Bakery & Café",
+      "restaurantId": "6",
+      "price": 650,
+      "rating": 4.9,
+      "isVeg": true,
+      "cuisine": "Desserts",
+      "image": "/loginCrousel/Login_Crousel1.jpg",
+      "description": "Classic French Opera pastry layered with almond sponge, espresso buttercream, and dark chocolate ganache."
+    }
+  ]
+}

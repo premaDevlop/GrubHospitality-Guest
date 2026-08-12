@@ -32,7 +32,7 @@ export default function DesktopNotSupported({ children }) {
           height: "100vh",
           width: "100vw",
           textAlign: "center",
-          fontFamily: "sans-serif",
+          // fontFamily: "sans-serif",
           fontSize: "18px",
           fontWeight: "500",
           backgroundColor: "#ffffff",
