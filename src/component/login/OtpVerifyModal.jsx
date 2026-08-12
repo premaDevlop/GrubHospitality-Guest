@@ -48,9 +48,9 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
           OTP Verification
         </h2>
 
-        <p className="text-[var(--color-neutral-secondary)] text-sm text-center mb-6 italic">
+        <p className="text-[var(--color-neutral-tertiary)] text-sm text-center mb-6 italic">
           Enter the OTP sent to{" "}
-          <span className="font-semibold text-slate-800">
+          <span className="font-semibold text-[var(--color-neutral-tertiary)]">
             {email
               ? /^\d+$/.test(email)
                 ? `+91 ${email}`

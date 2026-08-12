@@ -66,9 +66,9 @@ export default function OtpLoginModal({ onNext }) {
             value={value}
             onChange={handleInputChange}
             maxLength={value.includes("@") ? 100 : 10}
-            className="w-full pl-12 pr-4 h-12 text-base rounded-xl text-[var(--color-neutral-secondary)] placeholder:text-[var(--color-neutral-light)] border border-[#e0e3e1] focus:border-[#e0e3e1] focus:outline-none focus:ring-0"
+            className="w-full pl-12 pr-4 h-12 text-base rounded-xl text-[var(--color-neutral-secondary)] placeholder:text-[var(--color-neutral-secondary)] border border-[#e0e3e1] focus:border-[#e0e3e1] focus:outline-none focus:ring-0"
           />
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-light)] pointer-events-none">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-secondary)] pointer-events-none">
             <Icon name="login_user" className="h-5 w-5" />
           </span>
         </div>

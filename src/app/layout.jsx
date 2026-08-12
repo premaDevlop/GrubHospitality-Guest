@@ -1,5 +1,6 @@
 import { Inter, Orbitron } from "next/font/google";
 import "@/app/globals.css";
+import "@/styles/globals.css";
 import MainProvider from "@/component/providers/MainProvider";
 import DesktopPreview from "@/component/ui/DesktopPreview";
 
