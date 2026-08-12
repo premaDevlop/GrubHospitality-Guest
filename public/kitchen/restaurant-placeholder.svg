@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="412" height="309" viewBox="0 0 412 309" fill="none">
+  <rect width="412" height="309" fill="#E5E7EB"/>
+  <g transform="translate(180, 120)">
+    <path d="M26 16C26 7.16344 33.1634 0 42 0H78C86.8366 0 94 7.16344 94 16V24H26V16Z" fill="#D1D5DB"/>
+    <rect x="10" y="24" width="110" height="8" rx="2" fill="#D1D5DB"/>
+    <path d="M20 32C20 29.7909 21.7909 28 24 28H96C98.2091 28 100 29.7909 100 32V40H20V32Z" fill="#F3F4F6"/>
+  </g>
+  <text x="206" y="180" text-anchor="middle" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="14">Restaurant Image</text>
+</svg>
