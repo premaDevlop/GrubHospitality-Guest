@@ -24,6 +24,12 @@ function CartToast({ name }) {
 export function CartProvider({ children }) {
   // items: [{ restaurant, item, qty }] where restaurant = { id, name, slug }
   const [items, setItems] = useState([]);
+  // Per-kitchen notes: { [restaurantId]: string }
+  const [kitchenNotes, setKitchenNotesState] = useState({});
+  // Global order instruction
+  const [orderInstruction, setOrderInstructionState] = useState("");
+  // Order placed flag
+  const [lastOrderId, setLastOrderId] = useState(null);
 
   const addToCart = (restaurant, item) => {
     if (!restaurant || !item) return;
@@ -63,7 +69,26 @@ export function CartProvider({ children }) {
     );
   };
 
-  const clearCart = () => setItems([]);
+  const clearCart = () => {
+    setItems([]);
+    setKitchenNotesState({});
+    setOrderInstructionState("");
+  };
+
+  const setKitchenNote = (restaurantId, note) => {
+    setKitchenNotesState((prev) => ({ ...prev, [restaurantId]: note }));
+  };
+
+  const setOrderInstruction = (text) => {
+    setOrderInstructionState(text);
+  };
+
+  const placeOrder = () => {
+    const orderId = `ORD${Date.now()}`;
+    setLastOrderId(orderId);
+    clearCart();
+    return orderId;
+  };
 
   const value = useMemo(() => {
     const itemCount = items.reduce((sum, entry) => sum + entry.qty, 0);
@@ -77,12 +102,18 @@ export function CartProvider({ children }) {
       itemCount,
       subtotal,
       restaurantCount,
+      kitchenNotes,
+      orderInstruction,
+      lastOrderId,
       addToCart,
       removeFromCart,
       updateQty,
       clearCart,
+      setKitchenNote,
+      setOrderInstruction,
+      placeOrder,
     };
-  }, [items]);
+  }, [items, kitchenNotes, orderInstruction, lastOrderId]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

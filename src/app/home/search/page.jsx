@@ -19,6 +19,7 @@ import FilterModal, {
   getPriceRange,
 } from "@/component/search/FilterModal";
 import DishDetailModal from "@/component/search/DishDetailModal";
+import CartCheckoutBar from "@/component/ui/CartCheckoutBar";
 import { useCart } from "@/component/providers/CartProvider";
 
 function SearchResultsContent() {
@@ -236,6 +237,9 @@ function SearchResultsContent() {
           onAddToCart={handleAddToCart}
         />
       </div>
+
+      {/* Cart Checkout Bar */}
+      <CartCheckoutBar />
     </div>
   );
 }

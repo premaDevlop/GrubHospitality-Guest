@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useMemo, useState, useEffect } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import BackButton from "@/component/kitchen/BackButton";
 import RestaurantCard from "@/component/kitchen/RestaurantCard";
 import Divider from "@/component/kitchen/Divider";
@@ -16,13 +16,31 @@ import FilterModal, {
 import SortByModal from "@/component/search/SortByModal";
 import MenuList from "@/component/kitchen/MenuList";
 import MenuDetailModal from "@/component/kitchen/MenuDetailModal";
+import CartCheckoutBar from "@/component/ui/CartCheckoutBar";
 import data from "@/data/data.json";
 import { useCart } from "@/component/providers/CartProvider";
 
 export default function KitchenPage() {
   const params = useParams();
   const slug = params?.slug;
-  const { addToCart } = useCart();
+  const { addToCart, itemCount } = useCart();
+
+  // Order success banner
+  const [showOrderBanner, setShowOrderBanner] = useState(false);
+  const [isBannerExpanded, setIsBannerExpanded] = useState(true);
+
+  // Show banner when returning with ?placed=true — we use a simple effect
+  // (useSearchParams needs Suspense; we use window.location for simplicity here)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("orderPlaced") === "true") {
+        setShowOrderBanner(true);
+        // Clean up URL
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+    }
+  }, []);
 
   const restaurant = useMemo(
     () => data.restaurants.find((r) => r.slug === slug) || null,
@@ -181,7 +199,7 @@ export default function KitchenPage() {
   }
 
   return (
-    <main className="w-full min-h-screen bg-[#F7F8FA]">
+    <main className="w-full min-h-screen bg-[#F7F8FA]" style={{ paddingBottom: itemCount > 0 ? "80px" : "0" }}>
       <BackButton />
 
       <div className="w-full">
@@ -260,6 +278,47 @@ export default function KitchenPage() {
           onAdd={() => handleAdd(selectedItem)}
         />
       )}
+
+      {/* Order Success Status Bar */}
+      {showOrderBanner && (
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white border-t border-[#e0e3e1] z-50 shadow-lg">
+          <button
+            type="button"
+            onClick={() => setIsBannerExpanded((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-3 cursor-pointer"
+            id="order-status-banner"
+          >
+            <div className="flex items-center gap-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" />
+                <rect x="9" y="3" width="6" height="4" rx="1" stroke="#6b7971" strokeWidth="1.5" />
+              </svg>
+              <span className="text-sm font-bold text-[#03130a]">Order Status</span>
+            </div>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              className={`transition-transform ${isBannerExpanded ? "rotate-180" : "rotate-0"}`}
+            >
+              <path d="M6 9L12 15L18 9" stroke="#6b7971" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {isBannerExpanded && (
+            <div className="px-4 pb-4">
+              <p className="text-sm text-[#6b7971]">
+                We&apos;ve successfully{" "}
+                <span className="text-green-600 font-semibold">received</span>{" "}
+                your order.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Cart Checkout Bar — only shows when no order banner */}
+      {!showOrderBanner && <CartCheckoutBar />}
     </main>
   );
 }

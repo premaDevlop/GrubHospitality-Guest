@@ -1,248 +1,485 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import HomeHeader from "@/component/Home/HomeHeader";
 import { useCart } from "@/component/providers/CartProvider";
+import ScheduleOrderModal from "@/component/ui/ScheduleOrderModal";
+import data from "@/data/data.json";
+
+// Veg / Non-veg indicator dot
+function VegDot({ isVeg = true }) {
+  if (isVeg) {
+    return (
+      <div className="w-[14px] h-[14px] border-2 border-green-600 rounded-sm flex items-center justify-center shrink-0">
+        <div className="w-[6px] h-[6px] bg-green-600 rounded-full" />
+      </div>
+    );
+  }
+  return (
+    <div className="w-[14px] h-[14px] border-2 border-red-600 rounded-sm flex items-center justify-center shrink-0">
+      <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[7px] border-b-red-600" />
+    </div>
+  );
+}
+
+// Qty stepper for cart
+function QtyStepper({ qty, onDecrease, onIncrease }) {
+  return (
+    <div className="flex items-center gap-3">
+      <button
+        type="button"
+        onClick={onDecrease}
+        className="w-7 h-7 flex items-center justify-center text-[#fe480b] text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        aria-label="Decrease quantity"
+      >
+        −
+      </button>
+      <span className="text-sm font-semibold text-[#03130a] min-w-[16px] text-center">
+        {qty}
+      </span>
+      <button
+        type="button"
+        onClick={onIncrease}
+        className="w-7 h-7 flex items-center justify-center text-[#fe480b] text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        aria-label="Increase quantity"
+      >
+        +
+      </button>
+    </div>
+  );
+}
+
+// Scalloped bill summary card
+function BillSummaryCard({ subtotal }) {
+  return (
+    <div className="relative mx-0">
+      {/* Top scallop */}
+      <div
+        className="w-full h-3 bg-[#f7f8fa]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 50% 0, #f7f8fa 10px, transparent 10px)",
+          backgroundSize: "20px 12px",
+          backgroundRepeat: "repeat-x",
+        }}
+      />
+      <div className="bg-white px-5 py-5 flex flex-col gap-3">
+        <div>
+          <h2 className="text-sm font-bold text-[#03130a]">Bill Summary</h2>
+          <p className="text-xs text-[#6b7971] mt-0.5">
+            Your total amount to pay{" "}
+            <span className="text-green-600 font-semibold">₹{subtotal}</span>
+          </p>
+        </div>
+        <div className="h-px bg-[#eff1f0]" />
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-[#6b7971]">Items Total</span>
+          <span className="font-semibold text-[#03130a]">₹{subtotal}</span>
+        </div>
+        <p className="text-[11px] text-[#6b7971]">*Bill will be added to your hotel bill.</p>
+        <div className="h-px bg-[#03130a]" style={{ borderTop: "1px dashed #e0e3e1", background: "none" }} />
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-bold text-[#03130a]">Grand Total</span>
+          <span className="font-bold text-[#03130a]">₹{subtotal}</span>
+        </div>
+      </div>
+      {/* Bottom scallop */}
+      <div
+        className="w-full h-3 bg-[#f7f8fa]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 50% 100%, #f7f8fa 10px, transparent 10px)",
+          backgroundSize: "20px 12px",
+          backgroundRepeat: "repeat-x",
+        }}
+      />
+    </div>
+  );
+}
+
+// Delivery details section
+function DeliveryDetails({ orderId }) {
+  const user = data.user;
+  return (
+    <div className="px-5 py-5 bg-white flex flex-col gap-3">
+      <h2 className="text-sm font-bold text-[#03130a]">Delivery Details</h2>
+      <p className="text-xs text-[#6b7971]">Order ID #{orderId}</p>
+      <div className="grid grid-cols-2 gap-y-3 text-sm">
+        <div className="flex flex-col gap-0.5">
+          <span className="font-semibold text-[#03130a]">20-30 Minutes</span>
+          <span className="text-xs text-[#6b7971]">Estimated Delivery</span>
+        </div>
+        <div className="flex flex-col gap-0.5 items-end">
+          <div className="flex items-center gap-1">
+            <span className="font-semibold text-[#03130a]">{user.room}</span>
+            <button
+              type="button"
+              className="text-xs text-[#fe480b] font-semibold cursor-pointer hover:underline"
+              id="change-room-btn"
+            >
+              Change
+            </button>
+          </div>
+          <span className="text-xs text-[#6b7971]">Room No.</span>
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-semibold text-[#03130a]">{user.reservationId}</span>
+          <span className="text-xs text-[#6b7971]">Guest ID</span>
+        </div>
+        <div className="flex flex-col gap-0.5 items-end">
+          <span className="font-semibold text-[#03130a]">{user.guestName}</span>
+          <span className="text-xs text-[#6b7971]">Guest Name</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ADD INSTRUCTION button
+function AddInstructionButton({ onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex items-center gap-2 border border-[#fe480b] rounded-lg px-4 py-2 cursor-pointer hover:bg-red-50 transition-colors"
+      id="add-instruction-btn"
+    >
+      {/* Pencil icon */}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+          stroke="#fe480b"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+          stroke="#fe480b"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span className="text-xs font-semibold text-[#fe480b] uppercase tracking-wide">
+        Add Instruction
+      </span>
+    </button>
+  );
+}
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, itemCount, subtotal, updateQty, removeFromCart, clearCart } =
-    useCart();
+  const {
+    items,
+    itemCount,
+    subtotal,
+    updateQty,
+    kitchenNotes,
+    orderInstruction,
+    setKitchenNote,
+    setOrderInstruction,
+    placeOrder,
+  } = useCart();
 
-  const deliveryFee = subtotal > 0 ? 49 : 0;
-  const gst = Math.round(subtotal * 0.05);
-  const total = subtotal + deliveryFee + gst;
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [scheduledFor, setScheduledFor] = useState(null);
+  const [showInstructionFor, setShowInstructionFor] = useState(null); // restaurantId | 'global'
 
-  return (
-    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-white shadow-sm flex flex-col pb-24">
-        <HomeHeader />
+  // Generate unique order ID once per cart session
+  const [orderId] = useState(
+    () => `${Math.floor(100000 + Math.random() * 900000)}`,
+  );
 
-        <main className="flex-1 px-5 pt-4 flex flex-col gap-5">
-          {/* Page Title */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
-                aria-label="Go back"
-              >
-                <Image
-                  src="/restaurant/back.svg"
-                  alt="Back"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 object-contain"
-                />
-              </button>
-              <h1 className="text-lg font-bold text-[#03130a]">
-                My Cart{items.length > 0 ? ` (${itemCount})` : ""}
-              </h1>
-            </div>
-            {items.length > 0 && (
-              <button
-                type="button"
-                onClick={clearCart}
-                className="text-xs font-semibold text-[#6b7971] uppercase tracking-wider hover:text-[#fe480b] transition-colors cursor-pointer"
-              >
-                Clear All
-              </button>
-            )}
-          </div>
+  // Group items by restaurant
+  const grouped = Object.values(
+    items.reduce((groups, entry) => {
+      const key = entry.restaurant.id;
+      if (!groups[key]) {
+        groups[key] = { restaurant: entry.restaurant, entries: [] };
+      }
+      groups[key].entries.push(entry);
+      return groups;
+    }, {}),
+  );
 
-          {items.length === 0 ? (
-            /* Empty Cart */
-            <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-              <div className="w-20 h-20 rounded-full bg-[#f7f8fa] flex items-center justify-center">
-                <Image
-                  src="/kitchen/list.png"
-                  alt="Empty cart"
-                  width={36}
-                  height={36}
-                  className="w-9 h-9 object-contain"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-base font-bold text-[#03130a]">
-                  Your cart is empty
-                </h2>
-                <p className="text-sm text-[#6b7971]">
-                  Add dishes from any restaurant to get started.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => router.push("/home")}
-                className="mt-2 px-6 py-2.5 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-xl text-sm font-bold uppercase transition-colors cursor-pointer"
-              >
-                Browse Restaurants
-              </button>
-            </div>
-          ) : (
-            <>
-              {/* Cart Items Grouped by Restaurant */}
-              <div className="flex flex-col gap-5">
-                {Object.values(
-                  items.reduce((groups, entry) => {
-                    const key = entry.restaurant.id;
-                    if (!groups[key]) {
-                      groups[key] = {
-                        restaurant: entry.restaurant,
-                        entries: [],
-                      };
-                    }
-                    groups[key].entries.push(entry);
-                    return groups;
-                  }, {}),
-                ).map(({ restaurant, entries }) => (
-                  <section
-                    key={restaurant.id}
-                    className="flex flex-col gap-3 border border-[#e0e3e1] rounded-2xl p-4 bg-white"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => router.push(`/kitchen/${restaurant.slug}`)}
-                      className="flex items-center gap-2 text-left cursor-pointer group"
-                    >
-                      <h2 className="text-sm font-bold text-[#03130a] group-hover:text-[#fe480b] transition-colors">
-                        {restaurant.name}
-                      </h2>
-                      <Image
-                        src="/kitchen/arrow_right.svg"
-                        alt="Open menu"
-                        width={14}
-                        height={14}
-                        className="w-3.5 h-3.5 object-contain opacity-60 group-hover:opacity-100"
-                      />
-                    </button>
+  const isMultiKitchen = grouped.length > 1;
 
-                    <div className="flex flex-col gap-3 border-t border-[#eff1f0] pt-3">
-                      {entries.map((entry) => (
-                        <div
-                          key={entry.item.id}
-                          className="flex items-start gap-3"
-                        >
-                          <div className="w-16 h-16 relative rounded-lg overflow-hidden shrink-0 border border-slate-100">
-                            <Image
-                              src={entry.item.image || "/food-items/restaurant.jpg"}
-                              alt={entry.item.name}
-                              fill
-                              className="object-cover object-center"
-                            />
-                          </div>
+  const handleOrderNow = () => {
+    placeOrder();
+    router.push("/order-status?placed=true");
+  };
 
-                          <div className="flex-1 min-w-0 flex flex-col gap-1">
-                            <h3 className="text-sm font-bold text-[#03130a] truncate">
-                              {entry.item.name}
-                            </h3>
-                            <span className="text-xs text-[#6b7971]">
-                              ₹ {entry.item.price}
-                            </span>
+  const handleScheduleConfirm = (schedule) => {
+    setScheduledFor(schedule);
+  };
 
-                            <div className="flex items-center gap-3 mt-1">
-                              <div className="flex items-center border border-[#e0e3e1] rounded-lg">
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    updateQty(
-                                      restaurant.id,
-                                      entry.item.id,
-                                      -1,
-                                    )
-                                  }
-                                  className="w-7 h-7 flex items-center justify-center text-[#fe480b] font-bold cursor-pointer hover:bg-slate-50"
-                                  aria-label="Decrease quantity"
-                                >
-                                  −
-                                </button>
-                                <span className="w-7 text-center text-sm font-semibold text-[#03130a]">
-                                  {entry.qty}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    updateQty(restaurant.id, entry.item.id, 1)
-                                  }
-                                  className="w-7 h-7 flex items-center justify-center text-[#fe480b] font-bold cursor-pointer hover:bg-slate-50"
-                                  aria-label="Increase quantity"
-                                >
-                                  +
-                                </button>
-                              </div>
-
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  removeFromCart(restaurant.id, entry.item.id)
-                                }
-                                className="text-xs font-medium text-[#6b7971] hover:text-[#fe480b] transition-colors cursor-pointer"
-                              >
-                                Remove
-                              </button>
-                            </div>
-                          </div>
-
-                          <span className="text-sm font-bold text-[#03130a] shrink-0">
-                            ₹ {entry.item.price * entry.qty}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                ))}
-              </div>
-
-              {/* Bill Summary */}
-              <section className="flex flex-col gap-3 border border-[#e0e3e1] rounded-2xl p-4 bg-white">
-                <h2 className="text-sm font-bold text-[#03130a]">
-                  Bill Details
-                </h2>
-                <div className="flex flex-col gap-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#6b7971]">Item Total</span>
-                    <span className="font-semibold text-[#03130a]">
-                      ₹ {subtotal}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#6b7971]">Delivery Fee</span>
-                    <span className="font-semibold text-[#03130a]">
-                      ₹ {deliveryFee}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#6b7971]">GST (5%)</span>
-                    <span className="font-semibold text-[#03130a]">
-                      ₹ {gst}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between border-t border-[#eff1f0] pt-2.5 mt-1">
-                    <span className="font-bold text-[#03130a]">To Pay</span>
-                    <span className="font-bold text-[#fe480b]">
-                      ₹ {total}
-                    </span>
-                  </div>
-                </div>
-              </section>
-            </>
-          )}
-        </main>
-
-        {/* Place Order Bar */}
-        {items.length > 0 && (
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] px-5 py-3 bg-white border-t border-[#eff1f0]">
+  if (items.length === 0) {
+    return (
+      <div className="w-full min-h-screen bg-[#f7f8fa] flex flex-col items-center">
+        <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-white flex flex-col">
+          {/* Header */}
+          <div className="flex items-center gap-3 px-4 py-4 border-b border-[#eff1f0]">
             <button
               type="button"
-              onClick={() => router.push("/order-status")}
-              className="w-full py-3.5 bg-[#fe480b] text-white rounded-xl text-sm font-bold uppercase tracking-wide transition-colors hover:bg-[#e4450a] cursor-pointer"
+              onClick={() => router.back()}
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Go back"
             >
-              Place Order · ₹ {total}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M15 18L9 12L15 6" stroke="#03130a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <h1 className="text-base font-bold text-[#03130a]">Cart</h1>
+          </div>
+          {/* Empty state */}
+          <div className="flex flex-col items-center justify-center gap-4 py-24 text-center px-8 flex-1">
+            <div className="w-16 h-16 rounded-full bg-[#f7f8fa] flex items-center justify-center">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 6h18M16 10a4 4 0 01-8 0" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-base font-bold text-[#03130a]">Your cart is empty</h2>
+              <p className="text-sm text-[#6b7971]">Add dishes from any restaurant to get started.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => router.push("/home")}
+              className="mt-2 px-6 py-2.5 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-xl text-sm font-bold uppercase transition-colors cursor-pointer"
+            >
+              Browse Restaurants
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full min-h-screen bg-[#f7f8fa] flex flex-col items-center">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-[#f7f8fa] flex flex-col pb-28">
+        {/* Header */}
+        <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-[#eff1f0]">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Go back"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="#03130a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <h1 className="text-base font-bold text-[#03130a]">Cart</h1>
+        </div>
+
+        {/* Scheduled banner */}
+        {scheduledFor && (
+          <div className="mx-4 mt-3 px-4 py-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#16a34a" strokeWidth="1.5" />
+              <path d="M12 6v6l4 2" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <span className="text-xs font-semibold text-green-700">
+              Scheduled for {scheduledFor.date.day} {scheduledFor.date.month} at {scheduledFor.time}
+            </span>
+            <button
+              type="button"
+              onClick={() => setScheduledFor(null)}
+              className="ml-auto text-xs text-green-600 underline cursor-pointer"
+            >
+              Change
             </button>
           </div>
         )}
+
+        {/* Items Section */}
+        <div className="mt-3 bg-white">
+          <div className="px-4 pt-5 pb-3">
+            <h2 className="text-sm font-bold text-[#03130a]">Items</h2>
+          </div>
+
+          {grouped.map(({ restaurant, entries }, gIdx) => (
+            <div key={restaurant.id}>
+              {/* Kitchen name label — only for multi-kitchen */}
+              {isMultiKitchen && (
+                <div className="px-4 pt-3 pb-1">
+                  <span className="text-xs font-bold text-[#03130a] uppercase tracking-wide">
+                    {restaurant.name}
+                  </span>
+                </div>
+              )}
+
+              {/* Item rows */}
+              {entries.map((entry) => (
+                <div
+                  key={entry.item.id}
+                  className="flex items-center justify-between px-4 py-4 border-t border-[#eff1f0]"
+                >
+                  <div className="flex items-start gap-2 flex-1 min-w-0">
+                    <VegDot isVeg={entry.item.isVeg !== false} />
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-semibold text-[#03130a] leading-tight truncate">
+                        {entry.item.name}
+                      </span>
+                      <span className="text-xs text-[#6b7971] mt-0.5">
+                        ₹{entry.item.price}
+                      </span>
+                    </div>
+                  </div>
+                  <QtyStepper
+                    qty={entry.qty}
+                    onDecrease={() => updateQty(restaurant.id, entry.item.id, -1)}
+                    onIncrease={() => updateQty(restaurant.id, entry.item.id, 1)}
+                  />
+                </div>
+              ))}
+
+              {/* Per-kitchen note (multi-kitchen only) */}
+              {isMultiKitchen && (
+                <div className="px-4 pb-4 pt-2">
+                  {showInstructionFor === restaurant.id ? (
+                    <div className="flex flex-col gap-2">
+                      <textarea
+                        value={kitchenNotes[restaurant.id] || ""}
+                        onChange={(e) => setKitchenNote(restaurant.id, e.target.value)}
+                        placeholder="Add Note"
+                        rows={3}
+                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                        id={`kitchen-note-${restaurant.id}`}
+                      />
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => setShowInstructionFor(null)}
+                          className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                          id={`submit-note-${restaurant.id}`}
+                        >
+                          Submit
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="#fe480b" strokeWidth="2" strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <AddInstructionButton
+                      onClick={() => setShowInstructionFor(restaurant.id)}
+                    />
+                  )}
+                </div>
+              )}
+
+              {/* Divider between kitchens */}
+              {isMultiKitchen && gIdx < grouped.length - 1 && (
+                <div className="h-2 bg-[#f7f8fa]" />
+              )}
+            </div>
+          ))}
+
+          {/* Single-kitchen ADD INSTRUCTION */}
+          {!isMultiKitchen && (
+            <div className="px-4 pb-4 pt-2 border-t border-[#eff1f0]">
+              {showInstructionFor === "global" ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    value={orderInstruction}
+                    onChange={(e) => setOrderInstruction(e.target.value)}
+                    placeholder="Add special instructions for your order..."
+                    rows={3}
+                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                    id="order-instruction-input"
+                  />
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setShowInstructionFor(null)}
+                      className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                    >
+                      Submit
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18L15 12L9 6" stroke="#fe480b" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <AddInstructionButton onClick={() => setShowInstructionFor("global")} />
+              )}
+            </div>
+          )}
+
+          {/* Multi-kitchen global ADD INSTRUCTION at bottom */}
+          {isMultiKitchen && (
+            <div className="px-4 pb-4 pt-2 border-t border-[#eff1f0]">
+              {showInstructionFor === "global" ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    value={orderInstruction}
+                    onChange={(e) => setOrderInstruction(e.target.value)}
+                    placeholder="Add a note for the entire order..."
+                    rows={3}
+                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                    id="global-instruction-input"
+                  />
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setShowInstructionFor(null)}
+                      className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <AddInstructionButton onClick={() => setShowInstructionFor("global")} />
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Bill Summary (scalloped ticket style) */}
+        <div className="mt-3">
+          <BillSummaryCard subtotal={subtotal} />
+        </div>
+
+        {/* Delivery Details */}
+        <div className="mt-1 bg-white">
+          <DeliveryDetails orderId={orderId} />
+        </div>
       </div>
+
+      {/* Fixed bottom buttons */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white border-t border-[#eff1f0] px-4 py-3 z-30">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setIsScheduleOpen(true)}
+            className="flex-1 py-3.5 border-2 border-[#fe480b] text-[#fe480b] rounded-xl text-xs font-bold uppercase tracking-wide cursor-pointer hover:bg-red-50 transition-colors"
+            id="schedule-order-btn"
+          >
+            Schedule Order
+          </button>
+          <button
+            type="button"
+            onClick={handleOrderNow}
+            className="flex-1 py-3.5 bg-[#fe480b] text-white rounded-xl text-xs font-bold uppercase tracking-wide cursor-pointer hover:bg-[#e4450a] transition-colors"
+            id="order-now-btn"
+          >
+            Order Now
+          </button>
+        </div>
+      </div>
+
+      {/* Schedule Modal */}
+      <ScheduleOrderModal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        onSchedule={handleScheduleConfirm}
+      />
     </div>
   );
 }
