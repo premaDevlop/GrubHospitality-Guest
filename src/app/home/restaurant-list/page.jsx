@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/home/HomeHeader";
-import HomeSearchBar from "@/component/home/HomeSearchBar";
-import RestaurantCard from "@/component/home/RestaurantCard";
+import HomeHeader from "@/component/Home/HomeHeader";
+import HomeSearchBar from "@/component/Home/HomeSearchBar";
+import RestaurantCard from "@/component/Home/RestaurantCard";
 
 export default function RestaurantListPage() {
   const router = useRouter();

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/home/HomeHeader";
+import HomeHeader from "@/component/Home/HomeHeader";
 import SearchInputBar from "@/component/search/SearchInputBar";
 import SearchTabs from "@/component/search/SearchTabs";
 import SearchFilterBar from "@/component/search/SearchFilterBar";

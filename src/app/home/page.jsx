@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import data from "../../data/data.json";
 
-import HomeHeader from "@/component/home/HomeHeader";
-import HomeHeroBanner from "@/component/home/HomeHeroBanner";
-import HomeSearchBar from "@/component/home/HomeSearchBar";
-import HomeScheduleBanner from "@/component/home/HomeScheduleBanner";
-import RestaurantListSection from "@/component/home/RestaurantListSection";
-import HomeSkeleton from "@/component/home/HomeSkeleton";
+import HomeHeader from "@/component/Home/HomeHeader";
+import HomeHeroBanner from "@/component/Home/HomeHeroBanner";
+import HomeSearchBar from "@/component/Home/HomeSearchBar";
+import HomeScheduleBanner from "@/component/Home/HomeScheduleBanner";
+import RestaurantListSection from "@/component/Home/RestaurantListSection";
+import HomeSkeleton from "@/component/Home/HomeSkeleton";
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);

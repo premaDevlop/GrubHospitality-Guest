@@ -1,9 +1,16 @@
 {
   "user": {
     "name": "Rohit",
+    "guestName": "Parveen Kumar",
     "hotel": "Hyatt Regency",
     "location": "Chanakyapuri, New Delhi",
-    "room": "Room 302"
+    "room": "302",
+    "reservationId": "12345466",
+    "checkIn": "20 June 2026",
+    "checkOut": "28 June 2026",
+    "mobile": "+91 95604 34587",
+    "email": "johndoe@gmail.com",
+    "avatarInitials": "RK"
   },
   "restaurants": [
     {
