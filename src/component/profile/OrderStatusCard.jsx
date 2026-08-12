@@ -25,7 +25,7 @@ export default function OrderStatusCard() {
           </p>
         </div>
 
-        <div className={`w-7 h-7 rounded-lg bg-[#f7f8fa] flex items-center justify-center shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}>
+        <div className={`w-7 h-7 rounded-lg  flex items-center justify-center shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}>
           <Image
             src="/profile/chevron_down.svg"
             alt="Toggle"

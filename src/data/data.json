@@ -1,7 +1,6 @@
 {
   "user": {
-    "name": "Rohit",
-    "guestName": "Parveen Kumar",
+    "name": "Parveen Kumar",
     "hotel": "Hyatt Regency",
     "location": "Chanakyapuri, New Delhi",
     "room": "302",
@@ -9,9 +8,90 @@
     "checkIn": "20 June 2026",
     "checkOut": "28 June 2026",
     "mobile": "+91 95604 34587",
-    "email": "johndoe@gmail.com",
-    "avatarInitials": "RK"
+    "email": "praveenKumar@gmail.com",
+    "avatarInitials": "PK"
   },
+  "stays": [
+    {
+      "id": "stay-1",
+      "dates": "20 May - 28 May 2026",
+      "status": "Current Stay",
+      "isCurrent": true,
+      "hotelName": "Hyatt Regency, Janakpuri, New Delhi, 110058",
+      "roomNumber": "302",
+      "reservationId": "25375248347",
+      "totalOrders": 18,
+      "totalAmount": 3720,
+      "orders": [
+        {
+          "id": "ord-1",
+          "restaurantName": "House Of Ming",
+          "time": "13 June '26, 17:09",
+          "status": "Delivered",
+          "items": [
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+          ],
+          "moreCount": 2,
+          "totalAmount": 1240,
+          "orderRating": 5,
+          "foodRating": 5
+        },
+        {
+          "id": "ord-2",
+          "restaurantName": "House Of Ming",
+          "time": "13 June '26, 17:09",
+          "status": "Delivered",
+          "items": [
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+          ],
+          "moreCount": 2,
+          "totalAmount": 1240,
+          "orderRating": 5,
+          "foodRating": 5
+        },
+        {
+          "id": "ord-3",
+          "restaurantName": "House Of Ming",
+          "time": "13 June '26, 17:09",
+          "status": "Delivered",
+          "items": [
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true },
+            { "name": "Hyderabadi Biryani", "qty": 1, "isVeg": true }
+          ],
+          "moreCount": 2,
+          "totalAmount": 1240,
+          "orderRating": 5,
+          "foodRating": 5
+        }
+      ]
+    },
+    {
+      "id": "stay-2",
+      "dates": "20 Apr - 28 Apr 2026",
+      "status": "Completed",
+      "isCurrent": false,
+      "hotelName": "Hyatt Regency, Janakpuri, New Delhi, 110058",
+      "roomNumber": "1234",
+      "reservationId": "25375248347",
+      "totalOrders": 18,
+      "totalAmount": 3720,
+      "orders": []
+    },
+    {
+      "id": "stay-3",
+      "dates": "20 Mar - 28 Mar 2026",
+      "status": "Completed",
+      "isCurrent": false,
+      "hotelName": "Hyatt Regency, Janakpuri, New Delhi, 110058",
+      "roomNumber": "1234",
+      "reservationId": "25375248347",
+      "totalOrders": 18,
+      "totalAmount": 3720,
+      "orders": []
+    }
+  ],
   "helpCategories": [
     {
       "id": "1",
