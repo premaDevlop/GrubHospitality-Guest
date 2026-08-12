@@ -45,15 +45,32 @@ export default function StayOrderCard({ order }) {
                 {item.name}
               </span>
             </div>
-            <span className="text-[14px] leading-[20px] font-normal text-[#6B7971] shrink-0 text-right">
-              x{item.qty}
-            </span>
+
+            <div className="flex items-center gap-1 shrink-0 justify-end">
+              <Image
+                src="/profile/x.svg"
+                alt="x"
+                width={12}
+                height={12}
+                className="w-3 h-3 object-contain opacity-70"
+              />
+              <span className="text-[14px] leading-[20px] font-normal text-[#6B7971]">
+                {item.qty}
+              </span>
+            </div>
           </div>
         ))}
 
         {order.moreCount > 0 && (
-          <div className="text-[12px] leading-[16px] font-normal text-[#6B7971] text-right pt-0.5">
-            +{order.moreCount} More
+          <div className="flex items-center justify-end gap-1 text-[12px] leading-[16px] font-normal text-[#6B7971] text-right pt-0.5">
+            <Image
+              src="/profile/plus.png"
+              alt="Plus"
+              width={10}
+              height={10}
+              className="w-2.5 h-2.5 object-contain opacity-70"
+            />
+            <span>{order.moreCount} More</span>
           </div>
         )}
       </div>
@@ -70,10 +87,7 @@ export default function StayOrderCard({ order }) {
       </div>
 
       <div className="w-full border-t border-[#E0E3E1]" />
-
-      {/* Ratings Section */}
       <div className="grid grid-cols-2 gap-3">
-        {/* Order Rating */}
         <div className="flex flex-col gap-1">
           <span className="text-[14px] leading-[20px] font-normal text-[#37493F]">
             Order Rating

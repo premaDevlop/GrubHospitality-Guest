@@ -21,7 +21,7 @@ export default function OrderHistoryPage() {
     <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
       <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] min-h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
         {/* Header Bar */}
-        <header className="w-full px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
+        <header className="w-full px-4 sm:px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
           <button
             type="button"
             onClick={() => router.push("/profile")}
@@ -65,8 +65,11 @@ export default function OrderHistoryPage() {
           </button>
         </div>
 
-        <main className="flex-1 px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
-          <div className="w-full bg-white rounded-lg p-4 flex flex-col gap-3 shadow-[0px_0px_4px_rgba(0,0,0,0.08),4px_4px_8px_rgba(0,0,0,0.16)] border border-[#E0E3E1]">
+        {/* Scrollable Main Content */}
+        <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
+          {/* Main Container Card */}
+          <div className="w-full bg-white rounded-lg p-4 sm:p-5 flex flex-col gap-3 shadow-[0px_0px_4px_rgba(0,0,0,0.08),4px_4px_8px_rgba(0,0,0,0.16)] border border-[#E0E3E1]">
+            {/* Title Header */}
             <div className="flex items-start gap-3 w-full">
               <div className="w-7 h-7 flex items-center justify-center shrink-0 mt-0.5 opacity-70">
                 <Image
@@ -88,9 +91,11 @@ export default function OrderHistoryPage() {
               </div>
             </div>
 
+            {/* Divider */}
             <div className="w-full border-t border-[#E0E3E1]" />
 
-            <div className="flex flex-col gap-3 pt-1">
+            {/* Orders List spanning full container width */}
+            <div className="flex flex-col gap-3 pt-1 w-full">
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => (
                   <OrderHistoryItemCard key={order.id} order={order} />
