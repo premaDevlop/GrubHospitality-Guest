@@ -9,7 +9,7 @@ export default function SearchFilterBar({
   onToggleRated4Plus,
 }) {
   return (
-    <div className="flex items-center gap-2 overflow-x-auto py-1 no-scrollbar w-full">
+    <div className="flex items-center gap-2 overflow-x-auto py-1 scrollbar-hide w-full shrink-0">
       {/* Filter  */}
       <button
         type="button"
@@ -33,7 +33,7 @@ export default function SearchFilterBar({
         />
       </button>
 
-      {/* Sort */}
+      {/* Sort By*/}
       <button
         type="button"
         onClick={onOpenSort}
@@ -56,7 +56,7 @@ export default function SearchFilterBar({
         />
       </button>
 
-      {/* Rated  */}
+      {/* Rated 4+*/}
       <button
         type="button"
         onClick={onToggleRated4Plus}

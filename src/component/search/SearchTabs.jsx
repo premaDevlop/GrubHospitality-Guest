@@ -2,7 +2,7 @@
 
 export default function SearchTabs({ activeTab, onSelectTab }) {
   return (
-    <div className="flex items-center gap-8 border-b border-[#eff1f0] w-full pt-1">
+    <div className="flex items-center gap-8 border-b border-[#eff1f0] w-full pt-1 shrink-0">
       <button
         type="button"
         onClick={() => onSelectTab("dishes")}

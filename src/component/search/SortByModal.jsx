@@ -79,19 +79,15 @@ export default function SortByModal({
                 className="flex items-center gap-3 py-2 px-1 cursor-pointer group"
               >
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  className={`w-5 h-5 rounded-full transition-all shrink-0 bg-white ${
                     isSelected
-                      ? "border-[#fe480b]"
-                      : "border-[#fe480b]/60 group-hover:border-[#fe480b]"
+                      ? "border-[5px] border-[#fe480b]"
+                      : "border border-[#fe480b]"
                   }`}
-                >
-                  {isSelected && (
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#fe480b]" />
-                  )}
-                </div>
+                />
                 <span
-                  className={`text-sm font-medium transition-colors ${
-                    isSelected ? "text-[#03130a] font-bold" : "text-[#445048]"
+                  className={`text-sm transition-colors ${
+                    isSelected ? "text-[#03130a] font-bold" : "text-[#445048] font-normal"
                   }`}
                 >
                   {option.label}

@@ -19,7 +19,8 @@ export default function SearchInputBar({
   };
 
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className="flex items-center gap-3 w-full shrink-0">
+      {/* Search Input */}
       <div className="relative flex-1">
         <input
           type="text"
@@ -39,12 +40,8 @@ export default function SearchInputBar({
         </div>
       </div>
 
-      <
-        ToggleSwitch
-        isOn={isVegOnly}
-        onToggle={onToggleVeg}
-        label="Veg"
-      />
+      {/*  Toggle */}
+      <ToggleSwitch isOn={isVegOnly} onToggle={onToggleVeg} label="Veg" />
     </div>
   );
 }
