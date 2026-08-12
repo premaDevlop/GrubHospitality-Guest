@@ -12,21 +12,20 @@ export default function StayDetailsCard({ user }) {
   const checkOut = user?.checkOut || "28 June 2026";
 
   return (
-    <div className="w-full bg-white rounded-2xl p-5 shadow-xs border border-[#e0e3e1] flex flex-col gap-4">
-      {/* Top Header */}
+    <div className="w-full bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#e0e3e1] flex flex-col gap-3">
       <div
         onClick={() => router.push("/profile/stay-details")}
-        className="flex items-start justify-between gap-2 cursor-pointer group border-b border-[#eff1f0] pb-3"
+        className="flex items-start justify-between gap-2 cursor-pointer pb-1"
       >
-        <div className="flex flex-col gap-0.5">
-          <h3 className="text-base font-bold text-[#03130a] group-hover:text-[#FF480B] transition-colors">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-[18px] leading-[28px] font-semibold text-[#03130A]">
             Stay Details
           </h3>
-          <p className="text-xs text-[#6b7971] italic font-normal">
+          <p className="text-[14px] leading-[20px] font-normal italic text-[#6B7971]">
             View your stay information.
           </p>
         </div>
-        <div className="w-6 h-6 flex items-center justify-center shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
+        <div className="w-7 h-7 rounded-lg bg-[#f7f8fa] flex items-center justify-center shrink-0">
           <Image
             src="/profile/external_link.svg"
             alt="Stay Info"
@@ -37,44 +36,41 @@ export default function StayDetailsCard({ user }) {
         </div>
       </div>
 
-      {/* Details Grid */}
-      <div className="grid grid-cols-2 gap-y-4 gap-x-2 pt-1">
-        {/* Hotel Name */}
-        <div className="flex flex-col">
-          <span className="text-sm font-bold text-[#03130a]">
+      <div className="w-full border-t border-[#E0E3E1] my-0.5" />
+
+      <div className="grid grid-cols-2 gap-y-3 gap-x-2 pt-1">
+        <div className="flex flex-col gap-1">
+          <span className="text-[16px] leading-[24px] font-semibold text-[#37493F]">
             {hotelName}
           </span>
-          <span className="text-xs text-[#6b7971] font-normal">
+          <span className="text-[14px] leading-[20px] font-normal text-[#6B7971]">
             Hotel Name
           </span>
         </div>
 
-        {/* Reservation ID */}
-        <div className="flex flex-col text-right">
-          <span className="text-sm font-bold text-[#03130a]">
+        <div className="flex flex-col gap-1 text-right">
+          <span className="text-[16px] leading-[24px] font-semibold text-[#37493F]">
             {reservationId}
           </span>
-          <span className="text-xs text-[#6b7971] font-normal">
+          <span className="text-[14px] leading-[20px] font-normal text-[#6B7971]">
             Reservation ID
           </span>
         </div>
 
-        {/* Check-in */}
-        <div className="flex flex-col">
-          <span className="text-sm font-bold text-[#03130a]">
+        <div className="flex flex-col gap-1">
+          <span className="text-[16px] leading-[24px] font-semibold text-[#37493F]">
             {checkIn}
           </span>
-          <span className="text-xs text-[#6b7971] font-normal">
+          <span className="text-[14px] leading-[20px] font-normal text-[#6B7971]">
             Check-in
           </span>
         </div>
 
-        {/* Check-out */}
-        <div className="flex flex-col text-right">
-          <span className="text-sm font-bold text-[#03130a]">
+        <div className="flex flex-col gap-1 text-right">
+          <span className="text-[16px] leading-[24px] font-semibold text-[#37493F]">
             {checkOut}
           </span>
-          <span className="text-xs text-[#6b7971] font-normal">
+          <span className="text-[14px] leading-[20px] font-normal text-[#6B7971]">
             Check-out
           </span>
         </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import data from "@/data/data.json";
 
 import ProfileCard from "@/component/profile/ProfileCard";
@@ -39,7 +40,7 @@ export default function ProfilePage() {
           <button
             type="button"
             onClick={handleBack}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer"
             aria-label="Go back"
           >
             <Image
@@ -53,7 +54,6 @@ export default function ProfilePage() {
           <h1 className="text-lg font-bold text-[#03130a]">Back</h1>
         </header>
 
-        {/* Scrollable Body Content */}
         <main className="flex-1 px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
           {isEditing ? (
             <ProfileEditView
@@ -85,7 +85,7 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => router.push("/login")}
-                  className="w-full py-3 bg-white border border-[#03130a]/40 hover:bg-slate-50 text-[#445048] rounded-xl text-sm font-bold uppercase transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                  className="w-full py-3 bg-white border border-[#03130a]/40 text-[#445048] rounded-xl text-sm font-bold uppercase flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
                 >
                   <Image
                     src="/profile/logout.svg"
@@ -94,17 +94,16 @@ export default function ProfilePage() {
                     height={18}
                     className="w-4.5 h-4.5 object-contain"
                   />
-                  <span>LOGOUT</span>
+                  <span>logout</span>
                 </button>
               </div>
 
-              {/* Footer Quick Links */}
-              <div className="flex flex-col items-center gap-4 py-4 mt-1">
-                {/* Help & FAQ */}
+              {/* Footer  */}
+              <div className="flex flex-col items-center gap-4 py-4 mt-1 bg-transparent">
                 <div className="flex items-center justify-center gap-8 text-xs font-bold text-[#6b7971]">
-                  <a
-                    href="#"
-                    className="flex items-center gap-1.5 hover:text-[#03130a] uppercase transition-colors"
+                  <Link
+                    href="/help"
+                    className="flex items-center gap-1.5 uppercase cursor-pointer"
                   >
                     <Image
                       src="/profile/help.svg"
@@ -113,24 +112,23 @@ export default function ProfilePage() {
                       height={16}
                       className="w-4 h-4 object-contain opacity-70"
                     />
-                    <span>HELP</span>
-                  </a>
-                  <a
-                    href="#"
-                    className="hover:text-[#03130a] uppercase transition-colors"
+                    <span>help</span>
+                  </Link>
+                  <Link
+                    href="/help"
+                    className="uppercase cursor-pointer"
                   >
-                    FAQ
-                  </a>
+                    faq
+                  </Link>
                 </div>
 
-                {/* Privacy & Terms */}
                 <div className="flex items-center justify-center gap-6 text-xs font-bold text-[#6b7971] tracking-wider uppercase">
-                  <a href="#" className="hover:text-[#03130a] transition-colors">
-                    PRIVACY POLICY
-                  </a>
-                  <a href="#" className="hover:text-[#03130a] transition-colors">
-                    TERMS OF SERVICE
-                  </a>
+                  <Link href="/privacy-policy" className="cursor-pointer">
+                    privacy policy
+                  </Link>
+                  <Link href="/terms-of-service" className="cursor-pointer">
+                    terms of service
+                  </Link>
                 </div>
               </div>
             </>

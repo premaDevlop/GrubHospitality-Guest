@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Input from "@/component/ui/Input";
 import Icon from "@/component/ui/Icon";
 import Image from "next/image";
@@ -88,7 +89,7 @@ export default function OtpLoginModal({ onNext }) {
           <Icon name="arrow_right" className="w-5 h-5" />
         </button>
 
-        {/*  Divider */}
+        {/* Divider */}
         <div className="relative w-full flex items-center justify-center mb-3.5">
           <div className="border-t border-[#e0e3e1] w-full" />
           <span className="absolute bg-white px-2 text-xs text-[#6b7971] uppercase tracking-wider font-medium">
@@ -107,13 +108,13 @@ export default function OtpLoginModal({ onNext }) {
 
         {/* Footer */}
         <div className="flex items-center gap-4 text-xs text-[#6b7971] font-medium mt-1 mb-1">
-          <a href="#" className="hover:underline uppercase">
+          <Link href="/privacy-policy" className="hover:underline uppercase">
             privacy policy
-          </a>
+          </Link>
           <span>|</span>
-          <a href="#" className="hover:underline uppercase">
+          <Link href="/terms-of-service" className="hover:underline uppercase">
             terms of services
-          </a>
+          </Link>
         </div>
       </div>
     </form>

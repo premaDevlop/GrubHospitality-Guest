@@ -7,27 +7,27 @@ export default function OrderHistoryCard() {
   const router = useRouter();
 
   return (
-    <div className="w-full bg-white rounded-2xl p-5 shadow-xs border border-[#e0e3e1] flex flex-col gap-2">
+    <div className="w-full bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#e0e3e1] flex flex-col gap-2">
       <div
         onClick={() => router.push("/profile/order-history")}
-        className="flex items-center justify-between gap-2 cursor-pointer group"
+        className="flex items-center justify-between gap-2 cursor-pointer"
       >
-        <div className="flex flex-col gap-0.5">
-          <h3 className="text-base font-bold text-[#03130a] group-hover:text-[#FF480B] transition-colors">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-[18px] leading-[28px] font-semibold text-[#03130A]">
             Order History
           </h3>
-          <p className="text-xs text-[#6b7971] italic font-normal">
+          <p className="text-[14px] leading-[20px] font-normal italic text-[#6B7971]">
             View your recently delivered orders
           </p>
         </div>
 
-        <div className="w-6 h-6 flex items-center justify-center shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
+        <div className="w-7 h-7 rounded-lg bg-[#f7f8fa] flex items-center justify-center shrink-0">
           <Image
             src="/profile/chevron_down.svg"
             alt="Order History"
-            width={14}
-            height={14}
-            className="w-3.5 h-3.5 object-contain"
+            width={16}
+            height={16}
+            className="w-4 h-4 object-contain"
           />
         </div>
       </div>
