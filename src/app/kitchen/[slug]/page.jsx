@@ -51,6 +51,23 @@ export default function KitchenPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    if (showOrderBanner && isBannerExpanded) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, [showOrderBanner, isBannerExpanded]);
+
   const restaurant = useMemo(
     () => data.restaurants.find((r) => r.slug === slug) || null,
     [slug],
@@ -288,9 +305,9 @@ export default function KitchenPage() {
         />
       )}
 
-      {/* Order Status Bottom Panel — Figma Design */}
+      {/* Order Status Bottom Panel — matches schedule modal styling */}
       {showOrderBanner && (
-        <ScheduledOrderPanel
+        <OrderStatusBottomPanel
           isExpanded={isBannerExpanded}
           onToggle={() => setIsBannerExpanded((v) => !v)}
           isScheduled={isScheduled}
@@ -304,88 +321,128 @@ export default function KitchenPage() {
   );
 }
 
-// ---- Scheduled Order Panel Component ----
-function ScheduledOrderPanel({ isExpanded, onToggle, isScheduled, scheduleInfo }) {
-  // Calculate step times from the scheduled delivery time
-  const steps = calculateSteps(scheduleInfo?.time);
+// ---- Order Status Bottom Panel ----
+function OrderStatusBottomPanel({ isExpanded, onToggle, isScheduled, scheduleInfo }) {
+  const steps = isScheduled
+    ? calculateScheduledSteps(scheduleInfo?.time)
+    : calculateInstantOrderSteps();
+
+  const primaryMessage = isScheduled
+    ? "Your order has been scheduled."
+    : "We've successfully received your order.";
 
   return (
-    <div
-      className={`fixed bottom-0 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 ${
-        isExpanded
-          ? "w-full px-0 pb-0 pt-0"
-          : "w-full max-w-[480px] sm:max-w-[768px] px-4 pb-4 pt-0"
-      }`}
-    >
+    <>
+      {isExpanded && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1.5px]"
+          aria-hidden="true"
+        />
+      )}
+
       <div
-        className={`bg-white border border-[#e0e3e1] shadow-[0_-4px_24px_rgba(0,0,0,0.12)] pointer-events-auto overflow-hidden transition-all duration-300 ${
-          isExpanded ? "rounded-none" : "rounded-xl"
+        className={`fixed bottom-0 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 ${
+          isExpanded
+            ? "w-full px-0 pb-0 pt-0"
+            : "w-full max-w-[480px] sm:max-w-[768px] px-4 pb-4 pt-0"
         }`}
       >
-      {/* Collapsed header row — always visible */}
-      <button
-        type="button"
-        onClick={onToggle}
-        className="w-full flex items-center justify-between px-4 py-3.5 cursor-pointer"
-        id="order-status-banner"
-        aria-expanded={isExpanded}
-      >
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-2">
-            {/* Clipboard icon */}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" />
-              <rect x="9" y="3" width="6" height="4" rx="1" stroke="#6b7971" strokeWidth="1.5" />
-            </svg>
-            <span className="text-sm font-bold text-[#03130a]">Order Status</span>
-          </div>
-          <p className="text-xs text-[#6b7971] mt-0.5 pl-[26px]">
-            Your order has been{" "}
-            <span className="text-green-600 font-semibold italic">scheduled.</span>
-          </p>
-        </div>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          className={`transition-transform duration-300 shrink-0 ${isExpanded ? "rotate-180" : "rotate-0"}`}
-        >
-          <path d="M6 9L12 15L18 9" stroke="#6b7971" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {/* Expanded timeline */}
-      {isExpanded && (
-        <div className="px-4 pb-4 pt-1 border-t border-[#f0f0f0]">
-          <div className="flex flex-col gap-0">
-            {steps.map((step, idx) => (
-              <TimelineStep
-                key={step.id}
-                icon={step.icon}
-                title={step.title}
-                subtitle={step.subtitle}
-                isFirst={idx === 0}
-                isLast={idx === steps.length - 1}
-                isDone={idx === 0}
-              />
-            ))}
-          </div>
+        {isExpanded && (
           <button
             type="button"
-            className="w-full mt-4 py-2 text-xs font-bold uppercase tracking-widest text-[#03130a] cursor-pointer hover:opacity-70 transition-opacity"
-            id="view-order-details-btn"
+            onClick={onToggle}
+            className="absolute -top-12 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white border border-[#e0e3e1] shadow-md flex items-center justify-center cursor-pointer hover:bg-[#f7f8fa] transition-colors z-10 pointer-events-auto"
+            aria-label="Close order status panel"
+            id="order-status-close"
           >
-            VIEW DETAILS
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18M6 6L18 18"
+                stroke="#03130a"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
+        )}
+
+        <div
+          className={`bg-white border border-[#e0e3e1] shadow-[0_-4px_24px_rgba(0,0,0,0.12)] pointer-events-auto overflow-hidden transition-all duration-300 ${
+            isExpanded ? "rounded-none" : "rounded-xl"
+          }`}
+        >
+          <button
+            type="button"
+            onClick={onToggle}
+            className="w-full flex items-center justify-between px-4 py-3.5 cursor-pointer"
+            id="order-status-banner"
+            aria-expanded={isExpanded}
+          >
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" />
+                  <rect x="9" y="3" width="6" height="4" rx="1" stroke="#6b7971" strokeWidth="1.5" />
+                </svg>
+                <span className="text-sm font-bold text-[#03130a]">Order Status</span>
+              </div>
+              <p className="text-xs text-[#6b7971] mt-0.5 pl-[26px]">
+                {primaryMessage}
+              </p>
+            </div>
+
+            {!isExpanded && (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="transition-transform duration-300 shrink-0 rotate-180"
+              >
+                <path d="M6 9L12 15L18 9" stroke="#6b7971" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+          </button>
+
+          {isExpanded && (
+            <div className="px-4 pb-4 pt-1 border-t border-[#f0f0f0]">
+              <div className="flex flex-col gap-0">
+                {steps.map((step, idx) => (
+                  <TimelineStep
+                    key={step.id}
+                    icon={step.icon}
+                    title={step.title}
+                    subtitle={step.subtitle}
+                    isFirst={idx === 0}
+                    isLast={idx === steps.length - 1}
+                    isDone={step.done}
+                    timestamp={step.timestamp}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                className="w-full mt-4 py-2 text-xs font-bold uppercase tracking-widest text-[#03130a] cursor-pointer hover:opacity-70 transition-opacity"
+                id="view-order-details-btn"
+              >
+                VIEW DETAILS
+              </button>
+            </div>
+          )}
         </div>
-      )}
       </div>
-    </div>
+    </>
   );
 }
 
-function TimelineStep({ icon, title, subtitle, isFirst, isLast, isDone }) {
+function TimelineStep({ icon, title, subtitle, isFirst, isLast, isDone, timestamp }) {
   return (
     <div className="flex items-start gap-3">
       {/* Icon + vertical line column */}
@@ -429,10 +486,8 @@ function TimelineStep({ icon, title, subtitle, isFirst, isLast, isDone }) {
           >
             {title}
           </span>
-          {isFirst && (
-            <span className="text-xs text-[#6b7971] font-medium">
-              {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })}
-            </span>
+          {isFirst && timestamp && (
+            <span className="text-xs text-[#6b7971] font-medium">{timestamp}</span>
           )}
         </div>
         <p className="text-xs text-[#9ca8a2] mt-0.5">{subtitle}</p>
@@ -441,7 +496,48 @@ function TimelineStep({ icon, title, subtitle, isFirst, isLast, isDone }) {
   );
 }
 
-function calculateSteps(deliveryTime) {
+function calculateInstantOrderSteps() {
+  const now = new Date();
+  const timestamp = now.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  return [
+    {
+      id: "accepted",
+      title: "Order Accepted",
+      subtitle: "Done",
+      icon: <CheckIcon />,
+      done: true,
+      timestamp,
+    },
+    {
+      id: "prepared",
+      title: "Order Prepared",
+      subtitle: "In Process...",
+      icon: <PrepIcon />,
+      done: false,
+    },
+    {
+      id: "ready",
+      title: "Order Ready",
+      subtitle: "Est. 15 Minutes",
+      icon: <ReadyIcon />,
+      done: false,
+    },
+    {
+      id: "delivered",
+      title: "Order Delivered",
+      subtitle: "Est. 15 Minutes",
+      icon: <DeliverIcon />,
+      done: false,
+    },
+  ];
+}
+
+function calculateScheduledSteps(deliveryTime) {
   // deliveryTime is "HH:MM" string e.g. "12:30"
   const parseTime = (t) => {
     if (!t) return null;

@@ -215,7 +215,12 @@ export default function CartPage() {
 
   const handleOrderNow = () => {
     placeOrder();
-    router.push("/order-status?placed=true");
+    const restaurantSlug = grouped[0]?.restaurant?.slug;
+    if (restaurantSlug) {
+      router.push(`/kitchen/${restaurantSlug}?orderPlaced=true`);
+    } else {
+      router.push("/home?orderPlaced=true");
+    }
   };
 
   const handleScheduleConfirm = (schedule) => {
