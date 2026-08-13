@@ -65,15 +65,6 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState(null);
 
-  // Reset on open
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedDateIndex(0);
-      setSelectedTime(null);
-    }
-  }, [isOpen]);
-
   useEffect(() => {
     if (typeof document === "undefined") return;
 

@@ -14,22 +14,19 @@ export default function SwitchRoomModal({
   const rooms = [currentRoom, "206", "207", "208"];
 
   useEffect(() => {
-    if (isOpen) {
-      setSelectedRoom(currentRoom);
-    }
-  }, [isOpen, currentRoom]);
-
-  useEffect(() => {
     if (typeof document === "undefined") return;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
 
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     }
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [isOpen]);
 
