@@ -5,10 +5,28 @@ import { useState, useEffect } from "react";
 function generateDates(count = 7) {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
-  const fullDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const fullDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const dates = [];
   const today = new Date();
@@ -48,11 +66,29 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
   const [selectedTime, setSelectedTime] = useState(null);
 
   // Reset on open
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (isOpen) {
       setSelectedDateIndex(0);
       setSelectedTime(null);
     }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
   }, [isOpen]);
 
   const handleSchedule = () => {
@@ -68,50 +104,46 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 z-50"
+        className="fixed backdrop-blur-[1.5px] inset-0 bg-black/40 z-50"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Bottom Sheet */}
       <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-50 flex flex-col"
-        style={{ maxHeight: "90vh" }}
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-50 flex flex-col overflow-visible"
+        style={{ maxHeight: "70vh" }}
         role="dialog"
         aria-modal="true"
         aria-label="Schedule Order"
       >
-        {/* Handle + Close */}
-        <div className="flex items-center justify-between px-5 pt-4 pb-2">
-          <div /> {/* spacer */}
-          <div className="w-10 h-1 rounded-full bg-[#e0e3e1] absolute left-1/2 -translate-x-1/2 top-3" />
-          <button
-            type="button"
-            onClick={onClose}
-            className="ml-auto w-8 h-8 rounded-full bg-[#f7f8fa] flex items-center justify-center cursor-pointer hover:bg-[#eff1f0] transition-colors"
-            aria-label="Close schedule modal"
-            id="schedule-modal-close"
+        {/* Close button — floats above the sheet's top edge */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-12 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white border border-[#e0e3e1] shadow-md flex items-center justify-center cursor-pointer hover:bg-[#f7f8fa] transition-colors z-10"
+          aria-label="Close schedule modal"
+          id="schedule-modal-close"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M18 6L6 18M6 6L18 18"
-                stroke="#03130a"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+            <path
+              d="M18 6L6 18M6 6L18 18"
+              stroke="#03130a"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
 
         {/* Header */}
-        <div className="px-5 pb-4 border-b border-[#eff1f0]">
+        <div className="px-5 pt-6 pb-4 border-b border-[#eff1f0]">
           <h2 className="text-base font-bold text-[#03130a]">Schedule Order</h2>
           <p className="text-sm text-[#6b7971] mt-0.5 italic">
             Select when you&apos;d like to receive your order.
@@ -128,9 +160,7 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
                 type="button"
                 onClick={() => setSelectedDateIndex(i)}
                 className={`flex flex-col items-center py-3 px-4 shrink-0 border-b-2 transition-colors cursor-pointer ${
-                  isSelected
-                    ? "border-[#fe480b]"
-                    : "border-transparent"
+                  isSelected ? "border-[#fe480b]" : "border-transparent"
                 }`}
                 id={`schedule-date-${i}`}
               >
@@ -154,7 +184,7 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
         </div>
 
         {/* Time Slots */}
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="overflow-y-auto py-1" style={{ maxHeight: "180px" }}>
           {timeSlots.map((slot) => {
             const isSelected = selectedTime === slot;
             return (
@@ -162,7 +192,7 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
                 key={slot}
                 type="button"
                 onClick={() => setSelectedTime(slot)}
-                className={`w-full py-3.5 text-center text-sm font-semibold transition-colors cursor-pointer ${
+                className={`w-full py-2.5 text-center text-sm font-semibold transition-colors cursor-pointer ${
                   isSelected
                     ? "text-[#fe480b]"
                     : "text-[#6b7971] hover:text-[#03130a] hover:bg-[#f7f8fa]"

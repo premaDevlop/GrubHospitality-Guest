@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/component/providers/CartProvider";
 import ScheduleOrderModal from "@/component/ui/ScheduleOrderModal";
+import SwitchRoomModal from "@/component/ui/SwitchRoomModal";
 import data from "@/data/data.json";
 
 // Veg / Non-veg indicator dot
@@ -52,18 +53,17 @@ function QtyStepper({ qty, onDecrease, onIncrease }) {
 // Scalloped bill summary card
 function BillSummaryCard({ subtotal }) {
   return (
-    <div className="relative mx-0">
-      {/* Top scallop */}
-      <div
-        className="w-full h-3 bg-[#f7f8fa]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 0, #f7f8fa 10px, transparent 10px)",
-          backgroundSize: "20px 12px",
-          backgroundRepeat: "repeat-x",
-        }}
-      />
-      <div className="bg-white px-5 py-5 flex flex-col gap-3">
+    <div
+      className="relative w-full min-h-[260px] mx-auto"
+      style={{
+        width: "calc(100% + 19px)",
+        marginLeft: "-8px",
+        backgroundImage: "url('/kitchen/subtract.png')",
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="px-11 py-9 flex flex-col gap-3">
         <div>
           <h2 className="text-sm font-bold text-[#03130a]">Bill Summary</h2>
           <p className="text-xs text-[#6b7971] mt-0.5">
@@ -76,34 +76,28 @@ function BillSummaryCard({ subtotal }) {
           <span className="text-[#6b7971]">Items Total</span>
           <span className="font-semibold text-[#03130a]">₹{subtotal}</span>
         </div>
-        <p className="text-[11px] text-[#6b7971]">*Bill will be added to your hotel bill.</p>
-        <div className="h-px bg-[#03130a]" style={{ borderTop: "1px dashed #e0e3e1", background: "none" }} />
+        <p className="text-[11px] text-[#6b7971]">
+          *Bill will be added to your hotel bill.
+        </p>
+        <div className="h-px" style={{ borderTop: "1px dashed #e0e3e1" }} />
         <div className="flex items-center justify-between text-sm">
           <span className="font-bold text-[#03130a]">Grand Total</span>
           <span className="font-bold text-[#03130a]">₹{subtotal}</span>
         </div>
       </div>
-      {/* Bottom scallop */}
-      <div
-        className="w-full h-3 bg-[#f7f8fa]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 50% 100%, #f7f8fa 10px, transparent 10px)",
-          backgroundSize: "20px 12px",
-          backgroundRepeat: "repeat-x",
-        }}
-      />
     </div>
   );
 }
 
 // Delivery details section
-function DeliveryDetails({ orderId }) {
+function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
   const user = data.user;
   return (
-    <div className="px-5 py-5 bg-white flex flex-col gap-3">
-      <h2 className="text-sm font-bold text-[#03130a]">Delivery Details</h2>
-      <p className="text-xs text-[#6b7971]">Order ID #{orderId}</p>
+    <div className="px-5 py-5 flex flex-col gap-3">
+      <div>
+        <h2 className="text-sm font-bold text-[#03130a]">Delivery Details</h2>
+        <p className="text-xs text-[#6b7971] mt-0.5">Order ID #{orderId}</p>
+      </div>
       <div className="grid grid-cols-2 gap-y-3 text-sm">
         <div className="flex flex-col gap-0.5">
           <span className="font-semibold text-[#03130a]">20-30 Minutes</span>
@@ -111,19 +105,26 @@ function DeliveryDetails({ orderId }) {
         </div>
         <div className="flex flex-col gap-0.5 items-end">
           <div className="flex items-center gap-1">
-            <span className="font-semibold text-[#03130a]">{user.room}</span>
+            <span className="font-semibold text-[#03130a]">
+              {selectedRoom || user.room}
+            </span>
+          </div>
+          <span className="text-xs text-[#6b7971]">
+            Room No.{" "}
             <button
               type="button"
-              className="text-xs text-[#fe480b] font-semibold cursor-pointer hover:underline"
+              onClick={onChangeRoom}
+              className="text-xs underline text-[#fe480b] font-semibold cursor-pointer hover:underline"
               id="change-room-btn"
             >
               Change
             </button>
-          </div>
-          <span className="text-xs text-[#6b7971]">Room No.</span>
+          </span>
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="font-semibold text-[#03130a]">{user.reservationId}</span>
+          <span className="font-semibold text-[#03130a]">
+            {user.reservationId}
+          </span>
           <span className="text-xs text-[#6b7971]">Guest ID</span>
         </div>
         <div className="flex flex-col gap-0.5 items-end">
@@ -145,7 +146,13 @@ function AddInstructionButton({ onClick }) {
       id="add-instruction-btn"
     >
       {/* Pencil icon */}
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
           stroke="#fe480b"
@@ -172,7 +179,6 @@ export default function CartPage() {
   const router = useRouter();
   const {
     items,
-    itemCount,
     subtotal,
     updateQty,
     kitchenNotes,
@@ -185,6 +191,8 @@ export default function CartPage() {
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [scheduledFor, setScheduledFor] = useState(null);
   const [showInstructionFor, setShowInstructionFor] = useState(null); // restaurantId | 'global'
+  const [isRoomSwitchOpen, setIsRoomSwitchOpen] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(data.user.room);
 
   // Generate unique order ID once per cart session
   const [orderId] = useState(
@@ -227,7 +235,13 @@ export default function CartPage() {
               aria-label="Go back"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M15 18L9 12L15 6" stroke="#03130a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="#03130a"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
             <h1 className="text-base font-bold text-[#03130a]">Cart</h1>
@@ -236,13 +250,29 @@ export default function CartPage() {
           <div className="flex flex-col items-center justify-center gap-4 py-24 text-center px-8 flex-1">
             <div className="w-16 h-16 rounded-full bg-[#f7f8fa] flex items-center justify-center">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M3 6h18M16 10a4 4 0 01-8 0" stroke="#6b7971" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"
+                  stroke="#6b7971"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M3 6h18M16 10a4 4 0 01-8 0"
+                  stroke="#6b7971"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </div>
             <div className="flex flex-col gap-1">
-              <h2 className="text-base font-bold text-[#03130a]">Your cart is empty</h2>
-              <p className="text-sm text-[#6b7971]">Add dishes from any restaurant to get started.</p>
+              <h2 className="text-base font-bold text-[#03130a]">
+                Your cart is empty
+              </h2>
+              <p className="text-sm text-[#6b7971]">
+                Add dishes from any restaurant to get started.
+              </p>
             </div>
             <button
               type="button"
@@ -269,7 +299,13 @@ export default function CartPage() {
             aria-label="Go back"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="#03130a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="#03130a"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
           <h1 className="text-base font-bold text-[#03130a]">Cart</h1>
@@ -277,13 +313,25 @@ export default function CartPage() {
 
         {/* Scheduled banner */}
         {scheduledFor && (
-          <div className="mx-4 mt-3 px-4 py-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2">
+          <div className="mx-4 mt-3 px-4 py-3 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-2">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="#16a34a" strokeWidth="1.5" />
-              <path d="M12 6v6l4 2" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" />
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="#16a34a"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M12 6v6l4 2"
+                stroke="#16a34a"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             <span className="text-xs font-semibold text-green-700">
-              Scheduled for {scheduledFor.date.day} {scheduledFor.date.month} at {scheduledFor.time}
+              Scheduled for {scheduledFor.date.day} {scheduledFor.date.month} at{" "}
+              {scheduledFor.time}
             </span>
             <button
               type="button"
@@ -296,8 +344,8 @@ export default function CartPage() {
         )}
 
         {/* Items Section */}
-        <div className="mt-3 bg-white">
-          <div className="px-4 pt-5 pb-3">
+        <div className="mt-3 mx-4 bg-white rounded-2xl overflow-hidden">
+          <div className="px-5 pt-5 pb-3">
             <h2 className="text-sm font-bold text-[#03130a]">Items</h2>
           </div>
 
@@ -305,7 +353,7 @@ export default function CartPage() {
             <div key={restaurant.id}>
               {/* Kitchen name label — only for multi-kitchen */}
               {isMultiKitchen && (
-                <div className="px-4 pt-3 pb-1">
+                <div className="px-5 pt-3 pb-1">
                   <span className="text-xs font-bold text-[#03130a] uppercase tracking-wide">
                     {restaurant.name}
                   </span>
@@ -316,7 +364,7 @@ export default function CartPage() {
               {entries.map((entry) => (
                 <div
                   key={entry.item.id}
-                  className="flex items-center justify-between px-4 py-4 border-t border-[#eff1f0]"
+                  className="flex items-center justify-between px-5 py-4 border-t border-dashed border-[#e0e3e1]"
                 >
                   <div className="flex items-start gap-2 flex-1 min-w-0">
                     <VegDot isVeg={entry.item.isVeg !== false} />
@@ -331,20 +379,26 @@ export default function CartPage() {
                   </div>
                   <QtyStepper
                     qty={entry.qty}
-                    onDecrease={() => updateQty(restaurant.id, entry.item.id, -1)}
-                    onIncrease={() => updateQty(restaurant.id, entry.item.id, 1)}
+                    onDecrease={() =>
+                      updateQty(restaurant.id, entry.item.id, -1)
+                    }
+                    onIncrease={() =>
+                      updateQty(restaurant.id, entry.item.id, 1)
+                    }
                   />
                 </div>
               ))}
 
-              {/* Per-kitchen note (multi-kitchen only) */}
+              {/* Per-kitchen ADD INSTRUCTION (multi-kitchen only) */}
               {isMultiKitchen && (
-                <div className="px-4 pb-4 pt-2">
+                <div className="px-5 pb-4 pt-2">
                   {showInstructionFor === restaurant.id ? (
                     <div className="flex flex-col gap-2">
                       <textarea
                         value={kitchenNotes[restaurant.id] || ""}
-                        onChange={(e) => setKitchenNote(restaurant.id, e.target.value)}
+                        onChange={(e) =>
+                          setKitchenNote(restaurant.id, e.target.value)
+                        }
                         placeholder="Add Note"
                         rows={3}
                         className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
@@ -358,8 +412,18 @@ export default function CartPage() {
                           id={`submit-note-${restaurant.id}`}
                         >
                           Submit
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 18L15 12L9 6" stroke="#fe480b" strokeWidth="2" strokeLinecap="round" />
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M9 18L15 12L9 6"
+                              stroke="#fe480b"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -381,7 +445,7 @@ export default function CartPage() {
 
           {/* Single-kitchen ADD INSTRUCTION */}
           {!isMultiKitchen && (
-            <div className="px-4 pb-4 pt-2 border-t border-[#eff1f0]">
+            <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
               {showInstructionFor === "global" ? (
                 <div className="flex flex-col gap-2">
                   <textarea
@@ -399,56 +463,43 @@ export default function CartPage() {
                       className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
                     >
                       Submit
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 18L15 12L9 6" stroke="#fe480b" strokeWidth="2" strokeLinecap="round" />
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M9 18L15 12L9 6"
+                          stroke="#fe480b"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
                       </svg>
                     </button>
                   </div>
                 </div>
               ) : (
-                <AddInstructionButton onClick={() => setShowInstructionFor("global")} />
-              )}
-            </div>
-          )}
-
-          {/* Multi-kitchen global ADD INSTRUCTION at bottom */}
-          {isMultiKitchen && (
-            <div className="px-4 pb-4 pt-2 border-t border-[#eff1f0]">
-              {showInstructionFor === "global" ? (
-                <div className="flex flex-col gap-2">
-                  <textarea
-                    value={orderInstruction}
-                    onChange={(e) => setOrderInstruction(e.target.value)}
-                    placeholder="Add a note for the entire order..."
-                    rows={3}
-                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
-                    id="global-instruction-input"
-                  />
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setShowInstructionFor(null)}
-                      className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <AddInstructionButton onClick={() => setShowInstructionFor("global")} />
+                <AddInstructionButton
+                  onClick={() => setShowInstructionFor("global")}
+                />
               )}
             </div>
           )}
         </div>
 
         {/* Bill Summary (scalloped ticket style) */}
-        <div className="mt-3">
+        <div className=" mx-auto  mx-4 w-full">
           <BillSummaryCard subtotal={subtotal} />
         </div>
 
         {/* Delivery Details */}
-        <div className="mt-1 bg-white">
-          <DeliveryDetails orderId={orderId} />
+        <div className=" mx-4  bg-white rounded-2xl">
+          <DeliveryDetails
+            orderId={orderId}
+            selectedRoom={selectedRoom}
+            onChangeRoom={() => setIsRoomSwitchOpen(true)}
+          />
         </div>
       </div>
 
@@ -479,6 +530,14 @@ export default function CartPage() {
         isOpen={isScheduleOpen}
         onClose={() => setIsScheduleOpen(false)}
         onSchedule={handleScheduleConfirm}
+      />
+
+      {/* Switch Room Modal */}
+      <SwitchRoomModal
+        isOpen={isRoomSwitchOpen}
+        onClose={() => setIsRoomSwitchOpen(false)}
+        currentRoom={selectedRoom}
+        onConfirm={(room) => setSelectedRoom(room)}
       />
     </div>
   );
