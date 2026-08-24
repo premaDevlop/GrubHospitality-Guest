@@ -1,9 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import CartCounterButton from "@/component/ui/CartCounterButton";
 
 export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) {
   if (!isOpen || !dish) return null;
+
+  const restaurant = {
+    id: dish.restaurantId,
+    name: dish.kitchenName,
+    slug: dish.restaurantSlug,
+  };
 
   return (
     <div
@@ -42,12 +49,10 @@ export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) 
           />
         </div>
 
-        
         <h3 className="text-lg font-bold text-[#03130a]">
           {dish.name}
         </h3>
 
-        
         <div className="flex items-center justify-between border-y border-[#eff1f0] py-3">
           <div className="flex items-center gap-3">
             <span className="text-lg font-bold text-[#03130a]">
@@ -81,26 +86,9 @@ export default function DishDetailModal({ dish, isOpen, onClose, onAddToCart }) 
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              if (onAddToCart) onAddToCart(dish);
-              onClose();
-            }}
-            className="px-5 py-2 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-xl text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-          >
-            <Image
-              src="/kitchen/plus.svg"
-              alt="Add"
-              width={14}
-              height={14}
-              className="w-3.5 h-3.5 object-contain"
-            />
-            <span>add</span>
-          </button>
+          <CartCounterButton restaurant={restaurant} item={dish} />
         </div>
 
-       
         <p className="text-xs text-[#6b7971] leading-relaxed font-normal pb-2">
           {dish.description ||
             "Savor our exquisite Hyderabadi Biryani, featuring aromatic basmati rice, succulent marinated meat, and a delicate blend of traditional spices, all slow-cooked to perfection in a 5-star style."}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import CartCounterButton from "@/component/ui/CartCounterButton";
 
 export default function RestaurantDishGroupCard({
   restaurant,
@@ -15,7 +16,7 @@ export default function RestaurantDishGroupCard({
   return (
     <div className="w-full bg-white border border-[#e0e3e1] rounded-2xl p-4 flex flex-col gap-4 shadow-xs">
       <div
-        onClick={() => router.push("/home/restaurant-list")}
+        onClick={() => router.push(`/kitchen/${restaurant.slug}`)}
         className="flex items-start justify-between gap-2 border-b border-[#eff1f0] pb-3 cursor-pointer group"
       >
         <div className="flex flex-col gap-0.5">
@@ -81,24 +82,11 @@ export default function RestaurantDishGroupCard({
               </div>
             </div>
 
-            {/* ADD Button */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onAddToCart) onAddToCart(dish);
-              }}
-              className="w-full py-1 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-lg text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer mt-1"
-            >
-              <Image
-                src="/kitchen/plus.svg"
-                alt="Add"
-                width={12}
-                height={12}
-                className="w-3 h-3 object-contain"
-              />
-              <span>add</span>
-            </button>
+            {/* Cart Counter Button */}
+            <CartCounterButton
+              restaurant={{ id: restaurant.id, name: restaurant.name, slug: restaurant.slug }}
+              item={dish}
+            />
           </div>
         ))}
       </div>

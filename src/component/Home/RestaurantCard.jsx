@@ -56,7 +56,7 @@ export default function RestaurantCard({ restaurant }) {
 
           <button
             type="button"
-            onClick={() => router.push("/home/restaurant-list")}
+            onClick={() => router.push(`/kitchen/${restaurant.slug}`)}
             className="px-3.5 py-1.5 border border-[#FF3333] text-[#FF3333] hover:bg-red-50 rounded-lg text-xs font-semibold uppercase transition-colors cursor-pointer"
           >
             VIEW MENU

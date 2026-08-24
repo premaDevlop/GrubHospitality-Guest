@@ -12,13 +12,20 @@ import SearchFilterBar from "@/component/search/SearchFilterBar";
 import DishCard from "@/component/search/DishCard";
 import RestaurantDishGroupCard from "@/component/search/RestaurantDishGroupCard";
 import SortByModal from "@/component/search/SortByModal";
-import FilterModal from "@/component/search/FilterModal";
+import FilterModal, {
+  CUISINE_OPTIONS,
+  DIETARY_OPTIONS,
+  PRICE_OPTIONS,
+  getPriceRange,
+} from "@/component/search/FilterModal";
 import DishDetailModal from "@/component/search/DishDetailModal";
+import { useCart } from "@/component/providers/CartProvider";
 
 function SearchResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams ? searchParams.get("q") || "Biryani" : "Biryani";
+  const { addToCart } = useCart();
 
   const [query, setQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState("dishes"); // "dishes" | "restaurant"
@@ -26,6 +33,8 @@ function SearchResultContent() {
   const [isRated4Plus, setIsRated4Plus] = useState(false);
   const [selectedSort, setSelectedSort] = useState("relevance");
   const [selectedCuisines, setSelectedCuisines] = useState([]);
+  const [selectedPrices, setSelectedPrices] = useState([]);
+  const [selectedDietary, setSelectedDietary] = useState([]);
 
   // Modal states
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -33,6 +42,16 @@ function SearchResultContent() {
   const [activeDishModal, setActiveDishModal] = useState(null);
 
   const { dishes = [], restaurants = [] } = data;
+
+  const handleAddToCart = (dish) => {
+    const rest = restaurants.find((r) => r.id === dish.restaurantId);
+    addToCart(
+      rest
+        ? { id: rest.id, name: rest.name, slug: rest.slug }
+        : { id: dish.restaurantId, name: dish.kitchenName, slug: dish.restaurantSlug },
+      dish,
+    );
+  };
 
   // Filter Dishes
   const filteredDishes = useMemo(() => {
@@ -43,12 +62,24 @@ function SearchResultContent() {
         dish.name.toLowerCase().includes(q) ||
         dish.kitchenName.toLowerCase().includes(q) ||
         dish.cuisine.toLowerCase().includes(q);
-      const matchesVeg = !isVegOnly || dish.isVeg === true;
+      const matchesVeg =
+        (!isVegOnly || dish.isVeg === true) &&
+        (selectedDietary.length === 0 ||
+          (selectedDietary.includes("Veg") && dish.isVeg === true) ||
+          (selectedDietary.includes("Non-Veg") && dish.isVeg === false));
       const matchesRating = !isRated4Plus || (dish.rating && dish.rating >= 4.0);
       const matchesCuisine =
         selectedCuisines.length === 0 || selectedCuisines.includes(dish.cuisine);
+      const matchesPrice =
+        selectedPrices.length === 0 ||
+        selectedPrices.some((label) => {
+          const range = getPriceRange(label);
+          return range && dish.price >= range.min && dish.price <= range.max;
+        });
 
-      return matchesQuery && matchesVeg && matchesRating && matchesCuisine;
+      return (
+        matchesQuery && matchesVeg && matchesRating && matchesCuisine && matchesPrice
+      );
     });
 
     // Sorting
@@ -63,7 +94,7 @@ function SearchResultContent() {
     }
 
     return result;
-  }, [dishes, query, isVegOnly, isRated4Plus, selectedCuisines, selectedSort]);
+  }, [dishes, query, isVegOnly, isRated4Plus, selectedCuisines, selectedPrices, selectedDietary, selectedSort]);
 
   // Filter Restaurants & group dishes by restaurant
   const restaurantGroups = useMemo(() => {
@@ -145,6 +176,7 @@ function SearchResultContent() {
                     key={dish.id}
                     dish={dish}
                     onSelectDish={(item) => setActiveDishModal(item)}
+                    onAddToCart={handleAddToCart}
                   />
                 ))
               ) : (
@@ -159,6 +191,7 @@ function SearchResultContent() {
                   restaurant={group.restaurant}
                   dishes={group.dishes}
                   onSelectDish={(item) => setActiveDishModal(item)}
+                  onAddToCart={handleAddToCart}
                 />
               ))
             ) : (
@@ -180,14 +213,28 @@ function SearchResultContent() {
         <FilterModal
           isOpen={isFilterOpen}
           onClose={() => setIsFilterOpen(false)}
-          selectedCuisines={selectedCuisines}
-          onApplyFilters={(cuisines) => setSelectedCuisines(cuisines)}
+          sections={[
+            { id: "PRICE", label: "PRICE", options: PRICE_OPTIONS },
+            { id: "DIETARY", label: "DIETARY", options: DIETARY_OPTIONS },
+            { id: "CUISINES", label: "CUISINES", options: CUISINE_OPTIONS },
+          ]}
+          selections={{
+            PRICE: selectedPrices,
+            DIETARY: selectedDietary,
+            CUISINES: selectedCuisines,
+          }}
+          onApplyFilters={(selections) => {
+            setSelectedPrices(selections.PRICE || []);
+            setSelectedDietary(selections.DIETARY || []);
+            setSelectedCuisines(selections.CUISINES || []);
+          }}
         />
 
         <DishDetailModal
           isOpen={Boolean(activeDishModal)}
           dish={activeDishModal}
           onClose={() => setActiveDishModal(null)}
+          onAddToCart={handleAddToCart}
         />
       </div>
     </div>

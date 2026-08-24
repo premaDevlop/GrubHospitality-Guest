@@ -1,9 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import CartCounterButton from "@/component/ui/CartCounterButton";
 
 export default function DishCard({ dish, onSelectDish, onAddToCart }) {
   if (!dish) return null;
+
+  const restaurant = {
+    id: dish.restaurantId,
+    name: dish.kitchenName,
+    slug: dish.restaurantSlug,
+  };
 
   return (
     <div
@@ -74,23 +81,7 @@ export default function DishCard({ dish, onSelectDish, onAddToCart }) {
           />
         </div>
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onAddToCart) onAddToCart(dish);
-          }}
-          className="w-full py-1.5 px-3 border border-[#fe480b] text-[#fe480b] hover:bg-red-50 rounded-lg text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-        >
-          <Image
-            src="/kitchen/plus.svg"
-            alt="Add"
-            width={12}
-            height={12}
-            className="w-3 h-3 object-contain"
-          />
-          <span>add</span>
-        </button>
+        <CartCounterButton restaurant={restaurant} item={dish} />
       </div>
     </div>
   );
