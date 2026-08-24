@@ -2,12 +2,15 @@
 
 import ToastProvider from "../ui/ToastProvider";
 import { CartProvider } from "./CartProvider";
+import { RoomProvider } from "./RoomProvider";
 
 export default function MainProvider({ children }) {
   return (
     <>
       <ToastProvider />
-      <CartProvider>{children}</CartProvider>
+      <RoomProvider>
+        <CartProvider>{children}</CartProvider>
+      </RoomProvider>
     </>
   );
 }

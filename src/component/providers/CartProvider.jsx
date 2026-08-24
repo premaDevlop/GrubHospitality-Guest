@@ -1,25 +1,8 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
-import toast from "react-hot-toast";
 
 const CartContext = createContext(null);
-
-function CartToast({ name }) {
-  return (
-    <div className="flex items-center gap-3 bg-white border border-[#e0e3e1] rounded-xl shadow-lg px-4 py-3">
-      <div className="w-2.5 h-2.5 rounded-full bg-[#fe480b]" />
-      <div className="flex flex-col">
-        <span className="text-sm font-bold text-[#03130a]">
-          {name} added to cart
-        </span>
-        <span className="text-xs text-[#6b7971]">
-          Go to cart to review and place your order
-        </span>
-      </div>
-    </div>
-  );
-}
 
 export function CartProvider({ children }) {
   // items: [{ restaurant, item, qty }] where restaurant = { id, name, slug }
@@ -46,7 +29,6 @@ export function CartProvider({ children }) {
       }
       return [...prev, { restaurant, item, qty: 1 }];
     });
-    toast.custom(() => <CartToast name={item.name} />, { duration: 2500 });
   };
 
   const removeFromCart = (restaurantId, itemId) => {

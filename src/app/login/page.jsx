@@ -5,14 +5,19 @@ import { useRouter } from "next/navigation";
 import LoginHeader from "@/component/login/LoginHeader";
 import OtpLoginModal from "@/component/login/OtpLoginModal";
 import OtpVerifyModal from "@/component/login/OtpVerifyModal";
+import LoadingScreen from "@/component/ui/LoadingScreen";
+import { useRoom } from "@/component/providers/RoomProvider";
 
 export default function AuthPage({ onLoginSuccess }) {
   const router = useRouter();
+  const { setPhone, bookedRooms, setSelectedRoom } = useRoom();
   const [step, setStep] = useState("login");
   const [email, setEmail] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
 
   const handleNext = (enteredEmail) => {
     setEmail(enteredEmail);
+    setPhone(enteredEmail);
     setStep("verify");
   };
 
@@ -25,10 +30,23 @@ export default function AuthPage({ onLoginSuccess }) {
       if (onLoginSuccess) {
         onLoginSuccess();
       } else {
-        router.push("/home");
+        if (bookedRooms.length > 1) {
+          router.push("/room-selection");
+        } else {
+          setSelectedRoom(bookedRooms[0] || "302");
+          setShowLoading(true);
+        }
       }
     }
   };
+
+  const handleLoadingComplete = () => {
+    router.push("/home");
+  };
+
+  if (showLoading) {
+    return <LoadingScreen onComplete={handleLoadingComplete} duration={2000} />;
+  }
 
   return (
     <main className="w-full min-h-screen bg-white flex flex-col justify-between select-none">

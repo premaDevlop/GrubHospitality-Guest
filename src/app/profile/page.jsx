@@ -11,13 +11,20 @@ import StayDetailsCard from "@/component/profile/StayDetailsCard";
 import OrderStatusCard from "@/component/profile/OrderStatusCard";
 import OrderHistoryCard from "@/component/profile/OrderHistoryCard";
 import ProfileEditView from "@/component/profile/ProfileEditView";
+import { useRoom } from "@/component/providers/RoomProvider";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const { selectedRoom } = useRoom();
 
   const { user } = data;
+
+  const userWithRoom = {
+    ...user,
+    room: selectedRoom || user.room,
+  };
 
   const handleBack = () => {
     if (isEditing) {
@@ -57,7 +64,7 @@ export default function ProfilePage() {
         <main className="flex-1 px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
           {isEditing ? (
             <ProfileEditView
-              user={user}
+              user={userWithRoom}
               avatarUrl={avatarUrl}
               onSaveAvatar={handleSaveAvatar}
               onCancel={() => setIsEditing(false)}
@@ -66,7 +73,7 @@ export default function ProfilePage() {
             <>
               {/* Profile Card */}
               <ProfileCard
-                user={user}
+                user={userWithRoom}
                 avatarUrl={avatarUrl}
                 onEditClick={() => setIsEditing(true)}
               />
