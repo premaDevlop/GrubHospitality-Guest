@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/component/providers/CartProvider";
+import { useRoom } from "@/component/providers/RoomProvider";
 import ScheduleOrderModal from "@/component/ui/ScheduleOrderModal";
 import SwitchRoomModal from "@/component/ui/SwitchRoomModal";
 import data from "@/data/data.json";
@@ -187,12 +188,13 @@ export default function CartPage() {
     setOrderInstruction,
     placeOrder,
   } = useCart();
+  const { selectedRoom: defaultRoom, setSelectedRoom: setGlobalRoom } = useRoom();
 
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [scheduledFor, setScheduledFor] = useState(null);
   const [showInstructionFor, setShowInstructionFor] = useState(null); // restaurantId | 'global'
   const [isRoomSwitchOpen, setIsRoomSwitchOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(data.user.room);
+  const [selectedRoom, setSelectedRoom] = useState(defaultRoom || data.user.room);
 
   // Generate unique order ID once per cart session
   const [orderId] = useState(
@@ -560,7 +562,10 @@ export default function CartPage() {
         isOpen={isRoomSwitchOpen}
         onClose={() => setIsRoomSwitchOpen(false)}
         currentRoom={selectedRoom}
-        onConfirm={(room) => setSelectedRoom(room)}
+        onConfirm={(room) => {
+          setSelectedRoom(room);
+          setGlobalRoom(room);
+        }}
       />
     </div>
   );

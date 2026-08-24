@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRoom } from "@/component/providers/RoomProvider";
 
 export default function SwitchRoomModal({
   isOpen,
@@ -8,10 +9,13 @@ export default function SwitchRoomModal({
   currentRoom,
   onConfirm,
 }) {
+  const { bookedRooms } = useRoom();
   const [selectedRoom, setSelectedRoom] = useState(currentRoom);
 
-  // Build room list dynamically with current room first
-  const rooms = [currentRoom, "206", "207", "208"];
+  // Build room list from context, with current room first
+  const rooms = bookedRooms.length > 0
+    ? [currentRoom, ...bookedRooms.filter((r) => r !== currentRoom)]
+    : [currentRoom, "206", "207", "208"];
 
   useEffect(() => {
     if (typeof document === "undefined") return;
