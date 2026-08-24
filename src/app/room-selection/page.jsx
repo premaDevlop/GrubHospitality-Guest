@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import LoadingScreen from "@/component/ui/LoadingScreen";
 import { useRoom } from "@/component/providers/RoomProvider";
 
@@ -109,24 +110,21 @@ export default function RoomSelectionPage() {
           </button>
 
           {/* Info Box */}
-          <div className="bg-[#f7f8fa] rounded-xl px-4 py-3 flex gap-3">
+          <div className="bg-[#E8EAE9] border border-[#C1C7C4] rounded-lg p-4 flex gap-3">
             <div className="shrink-0 mt-0.5">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="text-[#6b7971]"
-              >
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 16v-4M12 8h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
+              <Image
+                src="/home/info.svg"
+                alt="Info"
+                width={22}
+                height={22}
+                className="w-[22px] h-[22px] object-contain"
+              />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#03130a] mb-0.5">
+              <p className="text-[14px] leading-[20px] font-semibold text-[#37493F] mb-0.5">
                 Why choose a room?
               </p>
-              <p className="text-xs text-[#6b7971] leading-relaxed">
+              <p className="text-[12px] leading-[16px] font-normal text-[#6B7971]">
                 This helps us deliver your order to the right room quickly and
                 accurately.
               </p>
