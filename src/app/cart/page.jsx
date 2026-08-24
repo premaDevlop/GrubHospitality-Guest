@@ -91,7 +91,7 @@ function BillSummaryCard({ subtotal }) {
 }
 
 // Delivery details section
-function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
+function DeliveryDetails({ orderId, onChangeRoom, selectedRoom, isMultipleRooms }) {
   const user = data.user;
   return (
     <div className="px-5 py-5 flex flex-col gap-3">
@@ -112,14 +112,16 @@ function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
           </div>
           <span className="text-xs text-[#6b7971]">
             Room No.{" "}
-            <button
-              type="button"
-              onClick={onChangeRoom}
-              className="text-xs underline text-[#fe480b] font-semibold cursor-pointer hover:underline"
-              id="change-room-btn"
-            >
-              Change
-            </button>
+            {isMultipleRooms && (
+              <button
+                type="button"
+                onClick={onChangeRoom}
+                className="text-xs underline text-[#fe480b] font-semibold cursor-pointer hover:underline"
+                id="change-room-btn"
+              >
+                Change
+              </button>
+            )}
           </span>
         </div>
         <div className="flex flex-col gap-0.5">
@@ -129,7 +131,7 @@ function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
           <span className="text-xs text-[#6b7971]">Guest ID</span>
         </div>
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="font-semibold text-[#03130a]">{user.guestName}</span>
+          <span className="font-semibold text-[#03130a]">{user.name || user.guestName}</span>
           <span className="text-xs text-[#6b7971]">Guest Name</span>
         </div>
       </div>
@@ -188,7 +190,7 @@ export default function CartPage() {
     setOrderInstruction,
     placeOrder,
   } = useCart();
-  const { selectedRoom: defaultRoom, setSelectedRoom: setGlobalRoom } = useRoom();
+  const { selectedRoom: defaultRoom, setSelectedRoom: setGlobalRoom, isMultipleRooms } = useRoom();
 
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [scheduledFor, setScheduledFor] = useState(null);
@@ -522,6 +524,7 @@ export default function CartPage() {
             orderId={orderId}
             selectedRoom={selectedRoom}
             onChangeRoom={() => setIsRoomSwitchOpen(true)}
+            isMultipleRooms={isMultipleRooms}
           />
         </div>
       </div>
