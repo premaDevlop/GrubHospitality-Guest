@@ -8,7 +8,6 @@ import ScheduleOrderModal from "@/component/ui/ScheduleOrderModal";
 import SwitchRoomModal from "@/component/ui/SwitchRoomModal";
 import data from "@/data/data.json";
 
-// Veg / Non-veg indicator dot
 function VegDot({ isVeg = true }) {
   if (isVeg) {
     return (
