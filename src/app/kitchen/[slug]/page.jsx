@@ -225,10 +225,14 @@ export default function KitchenPage() {
   }
 
   return (
-    <main className="w-full min-h-screen bg-[#F7F8FA]" style={{ paddingBottom: itemCount > 0 ? "80px" : "0" }}>
-      <BackButton />
+    <div className="w-full h-screen bg-[#F7F8FA] flex flex-col items-center overflow-hidden">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] h-screen bg-[#F7F8FA] flex flex-col overflow-hidden relative" style={{ paddingBottom: itemCount > 0 ? "80px" : "0" }}>
+        <div className="w-full shrink-0 bg-[#F7F8FA] z-40 border-b border-[#eff1f0]/60">
+          <BackButton />
+        </div>
 
-      <div className="w-full">
+        <main className="flex-1 overflow-y-auto flex flex-col pb-4">
+          <div className="w-full">
         <RestaurantCard
           image={restaurant.image}
           name={restaurant.name}
@@ -317,7 +321,9 @@ export default function KitchenPage() {
 
       {/* Cart Checkout Bar — only shows when no order banner */}
       {!showOrderBanner && <CartCheckoutBar />}
-    </main>
+        </main>
+      </div>
+    </div>
   );
 }
 

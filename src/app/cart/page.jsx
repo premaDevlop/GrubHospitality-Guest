@@ -312,10 +312,10 @@ export default function CartPage() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#f7f8fa] flex flex-col items-center">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-[#f7f8fa] flex flex-col pb-28">
+    <div className="w-full h-screen bg-[#f7f8fa] flex flex-col items-center overflow-hidden">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] h-screen bg-[#f7f8fa] flex flex-col overflow-hidden relative">
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-[#eff1f0]">
+        <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-[#eff1f0] shrink-0 z-40">
           <button
             type="button"
             onClick={() => router.back()}
@@ -334,6 +334,8 @@ export default function CartPage() {
           </button>
           <h1 className="text-base font-bold text-[#03130a]">Cart</h1>
         </div>
+
+        <main className="flex-1 overflow-y-auto pb-28 flex flex-col gap-4">
 
         {/* Scheduled banner */}
         {scheduledFor && (
@@ -526,7 +528,8 @@ export default function CartPage() {
             isMultipleRooms={isMultipleRooms}
           />
         </div>
-      </div>
+      </main>
+    </div>
 
       {/* Fixed bottom buttons */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white border-t border-[#eff1f0] px-4 py-3 z-30">
