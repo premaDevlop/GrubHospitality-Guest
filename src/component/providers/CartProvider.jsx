@@ -102,7 +102,7 @@ export function CartProvider({ children }) {
     });
   };
 
-  const placeOrder = () => {
+  const placeOrder = (scheduleInfo = null) => {
     const randomId = `#${Math.floor(100000 + Math.random() * 900000)}`;
     const orderItems = [...items];
     const orderData = {
@@ -112,6 +112,8 @@ export function CartProvider({ children }) {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
       status: "Accepted",
       restaurantSlug: orderItems[0]?.restaurant?.slug || null,
+      isScheduled: !!scheduleInfo,
+      scheduleInfo: scheduleInfo || null,
     };
 
     setActiveOrder(orderData);

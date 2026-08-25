@@ -220,7 +220,7 @@ export default function CartPage() {
 
   const handleScheduleConfirm = (schedule) => {
     setScheduledFor(schedule);
-    placeOrder();
+    placeOrder(schedule);
     router.push("/order-status?placed=true&scheduled=true");
   };
 

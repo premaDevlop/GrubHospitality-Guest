@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useCart } from "@/component/providers/CartProvider";
 import { useRoom } from "@/component/providers/RoomProvider";
 
-// Cancel reasons 
+// Cancel reasons
 const CANCEL_REASONS = [
   "Changed my mind",
   "Ordered by mistake",
@@ -15,7 +15,7 @@ const CANCEL_REASONS = [
   "Other",
 ];
 
-//  Veg / Non-veg dot 
+// Veg / Non-veg dot
 function VegDot({ isVeg = true }) {
   if (isVeg) {
     return (
@@ -31,6 +31,7 @@ function VegDot({ isVeg = true }) {
   );
 }
 
+// Step circle icon
 function StepCheck({ done, cancelled }) {
   if (cancelled) {
     return (
@@ -55,7 +56,7 @@ function StepCheck({ done, cancelled }) {
   );
 }
 
-// Cancel Modal 
+// Cancel Modal
 function CancelModal({ onClose, onConfirm }) {
   const [reason, setReason] = useState("");
   const [comments, setComments] = useState("");
@@ -63,12 +64,10 @@ function CancelModal({ onClose, onConfirm }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
-      {/* Sheet */}
       <div className="relative w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl px-5 pt-5 pb-8 z-10 flex flex-col gap-4">
-        {/* Close button */}
+        {/* Close */}
         <button
           type="button"
           onClick={onClose}
@@ -90,7 +89,7 @@ function CancelModal({ onClose, onConfirm }) {
           </div>
         </div>
 
-        {/* Warning box */}
+        {/* Warning */}
         <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl p-3.5">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5">
             <circle cx="12" cy="12" r="10" fill="#EF4444" />
@@ -147,7 +146,7 @@ function CancelModal({ onClose, onConfirm }) {
           onClick={() => onConfirm({ reason, comments })}
           className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF3333] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <Image src="/profile/trash.svg" alt="" width={16} height={16} className="object-contain brightness-[100] invert" />
+          <Image src="/profile/trash_white.svg" alt="" width={16} height={16} className="object-contain" />
           Cancel Order
         </button>
 
@@ -161,6 +160,25 @@ function CancelModal({ onClose, onConfirm }) {
       </div>
     </div>
   );
+}
+
+// Helper: format scheduled time to 12-hour
+function fmt12(timeStr) {
+  if (!timeStr) return "";
+  const [h, m] = timeStr.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+}
+
+// Helper: add minutes to HH:MM string
+function addMinutes(timeStr, mins) {
+  if (!timeStr) return "";
+  const [h, m] = timeStr.split(":").map(Number);
+  const total = h * 60 + m + mins;
+  const nh = Math.floor(total / 60) % 24;
+  const nm = total % 60;
+  return `${String(nh).padStart(2, "0")}:${String(nm).padStart(2, "0")}`;
 }
 
 // Main page
@@ -177,11 +195,20 @@ function OrderStatusContent() {
       : null);
 
   const isCancelled = activeOrder?.status === "Cancelled";
+  const isScheduled = activeOrder?.isScheduled === true;
+  const scheduleInfo = activeOrder?.scheduleInfo;
+
   const orderId = activeOrder?.id || "#112233";
   const roomNo = selectedRoom || "201";
   const orderItems = activeOrder?.items || [];
-  const orderTime = activeOrder?.time || new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+  const orderTime = activeOrder?.time || "";
   const restaurantSlug = activeOrder?.restaurantSlug;
+
+  // Format scheduled delivery time
+  const scheduledTimeStr = scheduleInfo?.time || "";
+  const scheduledTimeDisplay = fmt12(scheduledTimeStr);
+  const acceptByTime = scheduledTimeStr ? fmt12(addMinutes(scheduledTimeStr, -120)) : "";
+  const prepTime = scheduledTimeStr ? fmt12(addMinutes(scheduledTimeStr, -15)) : "";
 
   const handleBack = () => {
     if (restaurantSlug) {
@@ -196,19 +223,40 @@ function OrderStatusContent() {
     setShowCancelModal(false);
   };
 
-  // Status steps
-  const steps = [
-    {
-      id: "accepted",
-      title: isCancelled ? "Order Cancelled" : "Order Accepted",
-      subtitle: isCancelled ? "Cancelled" : "Done",
-      done: !isCancelled,
-      cancelled: isCancelled,
-    },
-    { id: "prepared", title: "Order Prepared", subtitle: "In Process...", done: false, cancelled: false },
-    { id: "ready", title: "Order Ready", subtitle: "Est. 15 Minutes", done: false, cancelled: false },
-    { id: "delivery", title: "Order Delivery", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
-  ];
+  // Build status steps
+  const steps = isScheduled
+    ? [
+        {
+          id: "accepted",
+          title: "Will be Accepted",
+          subtitle: acceptByTime ? `By ${acceptByTime} (2 hours before delivery)` : "2 hours before delivery",
+          done: false,
+          cancelled: false,
+          timestamp: orderTime,
+        },
+        {
+          id: "prepared",
+          title: "Order Prepared",
+          subtitle: prepTime ? `Will start at ${prepTime}` : "Before your delivery time",
+          done: false,
+          cancelled: false,
+        },
+        { id: "ready", title: "Order Ready", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
+        { id: "delivery", title: "Order Delivery", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
+      ]
+    : [
+        {
+          id: "accepted",
+          title: isCancelled ? "Order Cancelled" : "Order Accepted",
+          subtitle: isCancelled ? "Cancelled" : "Done",
+          done: !isCancelled,
+          cancelled: isCancelled,
+          timestamp: orderTime,
+        },
+        { id: "prepared", title: "Order Prepared", subtitle: "In Process...", done: false, cancelled: false },
+        { id: "ready", title: "Order Ready", subtitle: "Est. 15 Minutes", done: false, cancelled: false },
+        { id: "delivery", title: "Order Delivery", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
+      ];
 
   return (
     <>
@@ -232,7 +280,24 @@ function OrderStatusContent() {
 
           <main className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
 
-            {/*  Cancelled Banner  */}
+            {/* Scheduled Banner */}
+            {isScheduled && !isCancelled && (
+              <div className="flex flex-col items-center text-center py-4">
+                <Image
+                  src="/profile/schedule_badge.svg"
+                  alt="Scheduled"
+                  width={76}
+                  height={76}
+                  className="w-[76px] h-[76px] object-contain mb-3"
+                />
+                <h1 className="text-lg font-bold text-[#03130a]">Order Scheduled!</h1>
+                <p className="text-xs text-[#6b7971] leading-relaxed max-w-[280px] mt-1">
+                  Your order has been scheduled successfully. We will start preparing it closer to your selected time.
+                </p>
+              </div>
+            )}
+
+            {/* Cancelled Banner */}
             {isCancelled && (
               <div className="flex flex-col items-center text-center py-4">
                 <Image
@@ -249,7 +314,7 @@ function OrderStatusContent() {
               </div>
             )}
 
-            {/* Delivery Details*/}
+            {/* Delivery Details */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
               <h3 className="text-sm font-bold text-[#03130a]">Delivery Details</h3>
               <span className="text-xs text-[#6b7971] mt-0.5 block">Order ID {orderId}</span>
@@ -257,10 +322,10 @@ function OrderStatusContent() {
               <div className="grid grid-cols-2">
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-[#03130a]">
-                    {isCancelled ? "Order Cancelled" : "20-30 Minutes"}
+                    {isCancelled ? "Order Cancelled" : isScheduled ? (scheduledTimeDisplay || "Scheduled") : "20-30 Minutes"}
                   </span>
                   <span className="text-[11px] text-[#6b7971] mt-0.5">
-                    {isCancelled ? "Order Status" : "Estimated Delivery"}
+                    {isCancelled ? "Order Status" : isScheduled ? "Scheduled Time" : "Estimated Delivery"}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
@@ -270,29 +335,28 @@ function OrderStatusContent() {
               </div>
             </div>
 
-            {/*  Order Status */}
+            {/* Order Status */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
               <h3 className="text-sm font-bold text-[#03130a] mb-4">Order Status</h3>
               <div className="flex flex-col">
                 {steps.map((step, idx) => (
                   <div key={step.id} className="flex gap-3 items-start relative">
-                    {/* Vertical line */}
                     {idx < steps.length - 1 && (
                       <div
                         className="absolute left-[15px] top-[32px] bottom-[-20px] w-0.5"
-                        style={{ background: step.done ? "#22c55e" : step.cancelled ? "#EF4444" : "#e0e3e1" }}
+                        style={{
+                          background: step.done ? "#22c55e" : step.cancelled ? "#EF4444" : "#e0e3e1",
+                        }}
                       />
                     )}
-
                     <StepCheck done={step.done} cancelled={step.cancelled} />
-
                     <div className="flex-1 pb-6 min-w-0">
                       <div className="flex items-baseline justify-between">
                         <span className={`text-sm font-semibold ${step.done ? "text-[#03130a]" : step.cancelled ? "text-[#03130a]" : "text-[#6b7971]"}`}>
                           {step.title}
                         </span>
-                        {idx === 0 && (
-                          <span className="text-xs text-[#6b7971] font-medium">{orderTime}</span>
+                        {idx === 0 && step.timestamp && (
+                          <span className="text-xs text-[#6b7971] font-medium">{step.timestamp}</span>
                         )}
                       </div>
                       <p className={`text-xs mt-0.5 ${step.cancelled ? "text-red-500 font-semibold" : "text-[#9ca8a2]"}`}>
@@ -304,7 +368,7 @@ function OrderStatusContent() {
               </div>
             </div>
 
-            {/*  Order Details */}
+            {/* Order Details */}
             {orderItems.length > 0 && (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
                 <h3 className="text-sm font-bold text-[#03130a] mb-1">Order Details</h3>
@@ -325,7 +389,7 @@ function OrderStatusContent() {
               </div>
             )}
 
-            {/* ── Cancel Reason (shown after cancel) ── */}
+            {/* Cancel Reason (after cancellation) */}
             {isCancelled && (activeOrder?.cancelReason || activeOrder?.cancelComments) && (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
                 <h3 className="text-sm font-bold text-[#03130a] mb-3">Cancel Reason</h3>
@@ -344,7 +408,7 @@ function OrderStatusContent() {
 
           </main>
 
-          {/* ── Fixed Bottom ── */}
+          {/* Fixed Bottom */}
           <div className="absolute bottom-0 left-0 w-full bg-[#f7f8fa] px-4 py-3 flex flex-col gap-2 z-30">
             <a
               href="tel:+123456789"
@@ -368,7 +432,6 @@ function OrderStatusContent() {
         </div>
       </div>
 
-      {/* Cancel Modal */}
       {showCancelModal && (
         <CancelModal
           onClose={() => setShowCancelModal(false)}
