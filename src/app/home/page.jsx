@@ -10,7 +10,7 @@ import HomeScheduleBanner from "@/component/Home/HomeScheduleBanner";
 import RestaurantListSection from "@/component/Home/RestaurantListSection";
 import HomeSkeleton from "@/component/Home/HomeSkeleton";
 import { useRoom } from "@/component/providers/RoomProvider";
-import ActiveOrderBanner from "@/component/ui/ActiveOrderBanner";
+import OrderStatusPanel from "@/component/ui/OrderStatusPanel";
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +59,7 @@ export default function HomePage() {
             searchQuery={searchQuery}
           />
         </main>
-        <ActiveOrderBanner />
+        <OrderStatusPanel />
       </div>
     </div>
   );

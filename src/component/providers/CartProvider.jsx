@@ -91,6 +91,17 @@ export function CartProvider({ children }) {
     });
   };
 
+  const cancelOrder = ({ reason, comments }) => {
+    setActiveOrder((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, status: "Cancelled", cancelReason: reason, cancelComments: comments };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("grubpac_active_order", JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
   const placeOrder = () => {
     const randomId = `#${Math.floor(100000 + Math.random() * 900000)}`;
     const orderItems = [...items];
@@ -138,6 +149,7 @@ export function CartProvider({ children }) {
       placeOrder,
       clearActiveOrder,
       updateActiveOrderStatus,
+      cancelOrder,
     };
   }, [items, kitchenNotes, orderInstruction, lastOrderId, activeOrder]);
 

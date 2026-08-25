@@ -1,11 +1,21 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCart } from "@/component/providers/CartProvider";
 import { useRoom } from "@/component/providers/RoomProvider";
 
+// Cancel reasons 
+const CANCEL_REASONS = [
+  "Changed my mind",
+  "Ordered by mistake",
+  "Food taking too long",
+  "Duplicate order",
+  "Other",
+];
+
+//  Veg / Non-veg dot 
 function VegDot({ isVeg = true }) {
   if (isVeg) {
     return (
@@ -21,137 +31,351 @@ function VegDot({ isVeg = true }) {
   );
 }
 
-function OrderConfirmContent() {
-  const router = useRouter();
-  const { activeOrder } = useCart();
-  const { selectedRoom } = useRoom();
+function StepCheck({ done, cancelled }) {
+  if (cancelled) {
+    return (
+      <div className="w-8 h-8 rounded-full border-2 border-red-500 bg-white flex items-center justify-center shrink-0">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#EF4444" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      </div>
+    );
+  }
+  if (done) {
+    return (
+      <div className="w-8 h-8 rounded-full border-2 border-green-500 bg-white flex items-center justify-center shrink-0">
+        <Image src="/profile/check_circle_green.svg" alt="Done" width={18} height={18} className="object-contain" />
+      </div>
+    );
+  }
+  return (
+    <div className="w-8 h-8 rounded-full border-2 border-[#e0e3e1] bg-white flex items-center justify-center shrink-0">
+      <div className="w-2 h-2 rounded-full bg-[#e0e3e1]" />
+    </div>
+  );
+}
 
+// Cancel Modal 
+function CancelModal({ onClose, onConfirm }) {
+  const [reason, setReason] = useState("");
+  const [comments, setComments] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+
+      {/* Sheet */}
+      <div className="relative w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl px-5 pt-5 pb-8 z-10 flex flex-col gap-4">
+        {/* Close button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 rounded-full border border-[#e0e3e1] flex items-center justify-center cursor-pointer hover:bg-[#f7f8fa] transition-colors"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="#03130a" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <Image src="/profile/trash.svg" alt="Cancel" width={22} height={22} className="object-contain" />
+          <div>
+            <h3 className="text-base font-bold text-[#03130a]">Cancel Order?</h3>
+            <p className="text-xs text-[#6b7971] mt-0.5">
+              We're sorry to see you cancel. Please let us know the reason so we can do better.
+            </p>
+          </div>
+        </div>
+
+        {/* Warning box */}
+        <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl p-3.5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5">
+            <circle cx="12" cy="12" r="10" fill="#EF4444" />
+            <path d="M12 8v4M12 16h.01" stroke="white" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          <p className="text-xs text-red-700 font-medium leading-relaxed">
+            Your order will be cancelled immediately. If the food preparation has already started, cancellation may not be possible.
+          </p>
+        </div>
+
+        {/* Reason dropdown */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setDropdownOpen((p) => !p)}
+            className="w-full flex items-center justify-between border border-[#e0e3e1] rounded-xl px-4 py-3 text-sm text-left cursor-pointer"
+          >
+            <span className={reason ? "text-[#03130a]" : "text-[#9ca8a2]"}>
+              {reason || "Select a reason"}
+            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`}>
+              <path d="M6 9L12 15L18 9" stroke="#6b7971" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
+          {dropdownOpen && (
+            <div className="absolute top-full left-0 w-full bg-white border border-[#e0e3e1] rounded-xl mt-1 z-20 overflow-hidden shadow-md">
+              {CANCEL_REASONS.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => { setReason(r); setDropdownOpen(false); }}
+                  className="w-full text-left px-4 py-3 text-sm text-[#03130a] hover:bg-[#f7f8fa] transition-colors cursor-pointer border-b border-[#f0f2f1] last:border-0"
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Comments */}
+        <textarea
+          value={comments}
+          onChange={(e) => setComments(e.target.value)}
+          placeholder="Additional comments (optional)"
+          rows={3}
+          className="w-full border border-[#e0e3e1] rounded-xl px-4 py-3 text-sm text-[#03130a] placeholder-[#9ca8a2] resize-none outline-none focus:border-[#fe480b] transition-colors"
+        />
+
+        {/* Actions */}
+        <button
+          type="button"
+          disabled={!reason}
+          onClick={() => onConfirm({ reason, comments })}
+          className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF3333] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Image src="/profile/trash.svg" alt="" width={16} height={16} className="object-contain brightness-[100] invert" />
+          Cancel Order
+        </button>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full py-3.5 border border-[#e0e3e1] text-[#03130a] rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-[#f7f8fa] transition-colors"
+        >
+          Keep Order
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Main page
+function OrderStatusContent() {
+  const router = useRouter();
+  const { activeOrder: contextOrder, cancelOrder } = useCart();
+  const { selectedRoom } = useRoom();
+  const [showCancelModal, setShowCancelModal] = useState(false);
+
+  const activeOrder =
+    contextOrder ??
+    (typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("grubpac_active_order") || "null")
+      : null);
+
+  const isCancelled = activeOrder?.status === "Cancelled";
   const orderId = activeOrder?.id || "#112233";
   const roomNo = selectedRoom || "201";
   const orderItems = activeOrder?.items || [];
-
-  // Get restaurant slug to go back to kitchen with order status panel
+  const orderTime = activeOrder?.time || new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
   const restaurantSlug = activeOrder?.restaurantSlug;
 
   const handleBack = () => {
     if (restaurantSlug) {
-      router.push(`/kitchen/${restaurantSlug}?orderPlaced=true`);
+      router.replace(`/kitchen/${restaurantSlug}?orderPlaced=true`);
     } else {
-      router.back();
+      router.replace("/home");
     }
   };
 
+  const handleConfirmCancel = ({ reason, comments }) => {
+    cancelOrder({ reason, comments });
+    setShowCancelModal(false);
+  };
+
+  // Status steps
+  const steps = [
+    {
+      id: "accepted",
+      title: isCancelled ? "Order Cancelled" : "Order Accepted",
+      subtitle: isCancelled ? "Cancelled" : "Done",
+      done: !isCancelled,
+      cancelled: isCancelled,
+    },
+    { id: "prepared", title: "Order Prepared", subtitle: "In Process...", done: false, cancelled: false },
+    { id: "ready", title: "Order Ready", subtitle: "Est. 15 Minutes", done: false, cancelled: false },
+    { id: "delivery", title: "Order Delivery", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
+  ];
+
   return (
-    <div className="w-full min-h-screen bg-[#f7f8fa] flex flex-col items-center select-none">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-[#f7f8fa] flex flex-col pb-24 relative shadow-sm">
+    <>
+      <div className="w-full min-h-screen bg-[#f7f8fa] flex flex-col items-center select-none">
+        <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen bg-[#f7f8fa] flex flex-col pb-32 relative shadow-sm">
 
-        {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-[#eff1f0] shrink-0 z-40">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
-            aria-label="Go back"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M15 18L9 12L15 6"
-                stroke="#03130a"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-          <span
-            className="text-sm font-semibold text-[#03130a] cursor-pointer"
-            onClick={handleBack}
-          >
-            Back
-          </span>
-        </div>
-
-        <main className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
-
-          {/* Order Confirmed Banner */}
-          <div className="flex flex-col items-center text-center py-6">
-            <Image
-              src="/profile/verified_badge_114.svg"
-              alt="Order Confirmed"
-              width={76}
-              height={76}
-              className="w-[76px] h-[76px] object-contain mb-3"
-            />
-            <h1 className="text-lg font-bold text-[#03130a]">Order Confirmed!</h1>
-            <p className="text-xs text-[#6b7971] leading-relaxed max-w-[280px] mt-1">
-              Your order has been successfully placed and is being prepared by our kitchen team.
-            </p>
+          {/* Header */}
+          <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-[#eff1f0] shrink-0 z-40">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Go back"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M15 18L9 12L15 6" stroke="#03130a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <span className="text-sm font-semibold text-[#03130a] cursor-pointer" onClick={handleBack}>Back</span>
           </div>
 
-          {/* Delivery Details Card */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
-            <h3 className="text-sm font-bold text-[#03130a]">Delivery Details</h3>
-            <span className="text-xs text-[#6b7971] mt-0.5 block">Order ID {orderId}</span>
-            <div className="h-px bg-[#f0f2f1] my-4" />
-            <div className="grid grid-cols-2">
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-[#03130a]">20-30 Minutes</span>
-                <span className="text-[11px] text-[#6b7971] mt-0.5">Estimated Delivery</span>
+          <main className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
+
+            {/*  Cancelled Banner  */}
+            {isCancelled && (
+              <div className="flex flex-col items-center text-center py-4">
+                <Image
+                  src="/profile/cancel_badge.svg"
+                  alt="Cancelled"
+                  width={76}
+                  height={76}
+                  className="w-[76px] h-[76px] object-contain mb-3"
+                />
+                <h1 className="text-lg font-bold text-[#03130a]">Order Cancelled!</h1>
+                <p className="text-xs text-[#6b7971] leading-relaxed max-w-[260px] mt-1">
+                  Your order has been cancelled, you can place a new order anytime
+                </p>
               </div>
-              <div className="flex flex-col text-right">
-                <span className="text-sm font-bold text-[#03130a]">{roomNo}</span>
-                <span className="text-[11px] text-[#6b7971] mt-0.5">Room No.</span>
+            )}
+
+            {/* Delivery Details*/}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
+              <h3 className="text-sm font-bold text-[#03130a]">Delivery Details</h3>
+              <span className="text-xs text-[#6b7971] mt-0.5 block">Order ID {orderId}</span>
+              <div className="h-px bg-[#f0f2f1] my-4" />
+              <div className="grid grid-cols-2">
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-[#03130a]">
+                    {isCancelled ? "Order Cancelled" : "20-30 Minutes"}
+                  </span>
+                  <span className="text-[11px] text-[#6b7971] mt-0.5">
+                    {isCancelled ? "Order Status" : "Estimated Delivery"}
+                  </span>
+                </div>
+                <div className="flex flex-col text-right">
+                  <span className="text-sm font-bold text-[#03130a]">{roomNo}</span>
+                  <span className="text-[11px] text-[#6b7971] mt-0.5">Room No.</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Order Details Card */}
-          {orderItems.length > 0 && (
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1] flex flex-col gap-4">
-              <h3 className="text-sm font-bold text-[#03130a]">Order Details</h3>
-              <div className="flex flex-col divide-y divide-[#f0f2f1] border-t border-[#f0f2f1]">
-                {orderItems.map((entry, idx) => (
-                  <div key={idx} className="flex items-center justify-between py-4">
-                    <div className="flex items-start gap-2 flex-1 min-w-0">
-                      <VegDot isVeg={entry.item?.isVeg !== false} />
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-semibold text-[#03130a] leading-tight">
-                          {entry.item?.name}
+            {/*  Order Status */}
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
+              <h3 className="text-sm font-bold text-[#03130a] mb-4">Order Status</h3>
+              <div className="flex flex-col">
+                {steps.map((step, idx) => (
+                  <div key={step.id} className="flex gap-3 items-start relative">
+                    {/* Vertical line */}
+                    {idx < steps.length - 1 && (
+                      <div
+                        className="absolute left-[15px] top-[32px] bottom-[-20px] w-0.5"
+                        style={{ background: step.done ? "#22c55e" : step.cancelled ? "#EF4444" : "#e0e3e1" }}
+                      />
+                    )}
+
+                    <StepCheck done={step.done} cancelled={step.cancelled} />
+
+                    <div className="flex-1 pb-6 min-w-0">
+                      <div className="flex items-baseline justify-between">
+                        <span className={`text-sm font-semibold ${step.done ? "text-[#03130a]" : step.cancelled ? "text-[#03130a]" : "text-[#6b7971]"}`}>
+                          {step.title}
                         </span>
-                        <span className="text-xs text-[#6b7971] mt-0.5">
-                          ₹{entry.item?.price}
-                        </span>
+                        {idx === 0 && (
+                          <span className="text-xs text-[#6b7971] font-medium">{orderTime}</span>
+                        )}
                       </div>
+                      <p className={`text-xs mt-0.5 ${step.cancelled ? "text-red-500 font-semibold" : "text-[#9ca8a2]"}`}>
+                        {step.subtitle}
+                      </p>
                     </div>
-                    <span className="text-sm font-semibold text-[#6b7971]">
-                      x{entry.qty}
-                    </span>
                   </div>
                 ))}
               </div>
             </div>
-          )}
 
-        </main>
+            {/*  Order Details */}
+            {orderItems.length > 0 && (
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
+                <h3 className="text-sm font-bold text-[#03130a] mb-1">Order Details</h3>
+                <div className="flex flex-col divide-y divide-[#f0f2f1] border-t border-[#f0f2f1]">
+                  {orderItems.map((entry, idx) => (
+                    <div key={idx} className="flex items-center justify-between py-3.5">
+                      <div className="flex items-start gap-2 flex-1 min-w-0">
+                        <VegDot isVeg={entry.item?.isVeg !== false} />
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-sm font-semibold text-[#03130a] leading-tight">{entry.item?.name}</span>
+                          <span className="text-xs text-[#6b7971] mt-0.5">₹{entry.item?.price}</span>
+                        </div>
+                      </div>
+                      <span className="text-sm font-semibold text-[#6b7971]">x{entry.qty}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        <div className="absolute bottom-0 left-0 w-full bg-[#f7f8fa] px-4 py-3 shrink-0 z-30">
-          <a
-            href="tel:+123456789"
-            className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF4B4B] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors"
-          >
-            <Image
-              src="/profile/phone_white.svg"
-              alt="Phone"
-              width={16}
-              height={16}
-              className="w-4 h-4 object-contain"
-            />
-            Call Reception
-          </a>
+            {/* ── Cancel Reason (shown after cancel) ── */}
+            {isCancelled && (activeOrder?.cancelReason || activeOrder?.cancelComments) && (
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
+                <h3 className="text-sm font-bold text-[#03130a] mb-3">Cancel Reason</h3>
+                {activeOrder?.cancelReason && (
+                  <div className="border border-[#e0e3e1] rounded-xl px-4 py-3 text-sm text-[#03130a] bg-[#f7f8fa] mb-3">
+                    {activeOrder.cancelReason}
+                  </div>
+                )}
+                {activeOrder?.cancelComments && (
+                  <div className="border border-[#e0e3e1] rounded-xl px-4 py-3 text-sm text-[#6b7971] bg-[#f7f8fa] min-h-[60px]">
+                    {activeOrder.cancelComments}
+                  </div>
+                )}
+              </div>
+            )}
+
+          </main>
+
+          {/* ── Fixed Bottom ── */}
+          <div className="absolute bottom-0 left-0 w-full bg-[#f7f8fa] px-4 py-3 flex flex-col gap-2 z-30">
+            <a
+              href="tel:+123456789"
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF4B4B] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors"
+            >
+              <Image src="/profile/phone_white.svg" alt="Phone" width={16} height={16} className="w-4 h-4 object-contain" />
+              Call Reception
+            </a>
+
+            {!isCancelled && (
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(true)}
+                className="w-full py-3 text-sm font-bold text-[#6b7971] uppercase tracking-wide cursor-pointer hover:text-red-500 transition-colors"
+              >
+                Cancel Order
+              </button>
+            )}
+          </div>
+
         </div>
-
       </div>
-    </div>
+
+      {/* Cancel Modal */}
+      {showCancelModal && (
+        <CancelModal
+          onClose={() => setShowCancelModal(false)}
+          onConfirm={handleConfirmCancel}
+        />
+      )}
+    </>
   );
 }
 
@@ -164,7 +388,7 @@ export default function OrderStatusPage() {
         </div>
       }
     >
-      <OrderConfirmContent />
+      <OrderStatusContent />
     </Suspense>
   );
 }
