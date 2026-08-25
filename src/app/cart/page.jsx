@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useCart } from "@/component/providers/CartProvider";
 import { useRoom } from "@/component/providers/RoomProvider";
 import ScheduleOrderModal from "@/component/ui/ScheduleOrderModal";
@@ -30,10 +31,16 @@ function QtyStepper({ qty, onDecrease, onIncrease }) {
       <button
         type="button"
         onClick={onDecrease}
-        className="w-7 h-7 flex items-center justify-center text-[#fe480b] text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        className="w-7 h-7 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
         aria-label="Decrease quantity"
       >
-        −
+        <Image
+          src="/kitchen/minus.svg"
+          alt="Decrease"
+          width={14}
+          height={14}
+          className="w-3.5 h-3.5 object-contain"
+        />
       </button>
       <span className="text-sm font-semibold text-[#03130a] min-w-[16px] text-center">
         {qty}
@@ -41,10 +48,16 @@ function QtyStepper({ qty, onDecrease, onIncrease }) {
       <button
         type="button"
         onClick={onIncrease}
-        className="w-7 h-7 flex items-center justify-center text-[#fe480b] text-lg font-bold cursor-pointer hover:opacity-80 transition-opacity"
+        className="w-7 h-7 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
         aria-label="Increase quantity"
       >
-        +
+        <Image
+          src="/kitchen/plus.svg"
+          alt="Increase"
+          width={14}
+          height={14}
+          className="w-3.5 h-3.5 object-contain"
+        />
       </button>
     </div>
   );
@@ -147,29 +160,13 @@ function AddInstructionButton({ onClick }) {
       className="flex items-center gap-2 border border-[#fe480b] rounded-lg px-4 py-2 cursor-pointer hover:bg-red-50 transition-colors"
       id="add-instruction-btn"
     >
-      {/* Pencil icon */}
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-          stroke="#fe480b"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-          stroke="#fe480b"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <Image
+        src="/profile/edit.svg"
+        alt="Edit"
+        width={14}
+        height={14}
+        className="w-3.5 h-3.5 object-contain"
+      />
       <span className="text-xs font-semibold text-[#fe480b] uppercase tracking-wide">
         Add Instruction
       </span>
@@ -337,199 +334,202 @@ export default function CartPage() {
 
         <main className="flex-1 overflow-y-auto pb-28 flex flex-col gap-4">
 
-        {/* Scheduled banner */}
-        {scheduledFor && (
-          <div className="mx-4 mt-3 px-4 py-3 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="#16a34a"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M12 6v6l4 2"
-                stroke="#16a34a"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="text-xs font-semibold text-green-700">
-              Scheduled for {scheduledFor.date.day} {scheduledFor.date.month} at{" "}
-              {scheduledFor.time}
-            </span>
-            <button
-              type="button"
-              onClick={() => setScheduledFor(null)}
-              className="ml-auto text-xs text-green-600 underline cursor-pointer"
-            >
-              Change
-            </button>
-          </div>
-        )}
-
-        {/* Items Section */}
-        <div className="mt-3 mx-4 bg-white rounded-2xl overflow-hidden">
-          <div className="px-5 pt-5 pb-3">
-            <h2 className="text-sm font-bold text-[#03130a]">Items</h2>
-          </div>
-
-          {grouped.map(({ restaurant, entries }, gIdx) => (
-            <div key={restaurant.id}>
-              {/* Kitchen name label — only for multi-kitchen */}
-              {isMultiKitchen && (
-                <div className="px-5 pt-3 pb-1">
-                  <span className="text-xs font-bold text-[#03130a] uppercase tracking-wide">
-                    {restaurant.name}
-                  </span>
-                </div>
-              )}
-
-              {/* Item rows */}
-              {entries.map((entry) => (
-                <div
-                  key={entry.item.id}
-                  className="flex items-center justify-between px-5 py-4 border-t border-dashed border-[#e0e3e1]"
-                >
-                  <div className="flex items-start gap-2 flex-1 min-w-0">
-                    <VegDot isVeg={entry.item.isVeg !== false} />
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-semibold text-[#03130a] leading-tight truncate">
-                        {entry.item.name}
-                      </span>
-                      <span className="text-xs text-[#6b7971] mt-0.5">
-                        ₹{entry.item.price}
-                      </span>
-                    </div>
-                  </div>
-                  <QtyStepper
-                    qty={entry.qty}
-                    onDecrease={() =>
-                      updateQty(restaurant.id, entry.item.id, -1)
-                    }
-                    onIncrease={() =>
-                      updateQty(restaurant.id, entry.item.id, 1)
-                    }
-                  />
-                </div>
-              ))}
-
-              {/* Per-kitchen ADD INSTRUCTION (multi-kitchen only) */}
-              {isMultiKitchen && (
-                <div className="px-5 pb-4 pt-2">
-                  {showInstructionFor === restaurant.id ? (
-                    <div className="flex flex-col gap-2">
-                      <textarea
-                        value={kitchenNotes[restaurant.id] || ""}
-                        onChange={(e) =>
-                          setKitchenNote(restaurant.id, e.target.value)
-                        }
-                        placeholder="Add Note"
-                        rows={3}
-                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
-                        id={`kitchen-note-${restaurant.id}`}
-                      />
-                      <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={() => setShowInstructionFor(null)}
-                          className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
-                          id={`submit-note-${restaurant.id}`}
-                        >
-                          Submit
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                          >
-                            <path
-                              d="M9 18L15 12L9 6"
-                              stroke="#fe480b"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <AddInstructionButton
-                      onClick={() => setShowInstructionFor(restaurant.id)}
-                    />
-                  )}
-                </div>
-              )}
-
-              {/* Divider between kitchens */}
-              {isMultiKitchen && gIdx < grouped.length - 1 && (
-                <div className="h-2 bg-[#f7f8fa]" />
-              )}
-            </div>
-          ))}
-
-          {/* Single-kitchen ADD INSTRUCTION */}
-          {!isMultiKitchen && (
-            <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
-              {showInstructionFor === "global" ? (
-                <div className="flex flex-col gap-2">
-                  <textarea
-                    value={orderInstruction}
-                    onChange={(e) => setOrderInstruction(e.target.value)}
-                    placeholder="Add special instructions for your order..."
-                    rows={3}
-                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
-                    id="order-instruction-input"
-                  />
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      onClick={() => setShowInstructionFor(null)}
-                      className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
-                    >
-                      Submit
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        <path
-                          d="M9 18L15 12L9 6"
-                          stroke="#fe480b"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <AddInstructionButton
-                  onClick={() => setShowInstructionFor("global")}
+          {/* Scheduled banner */}
+          {scheduledFor && (
+            <div className="mx-4 mt-3 px-4 py-3 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="#16a34a"
+                  strokeWidth="1.5"
                 />
-              )}
+                <path
+                  d="M12 6v6l4 2"
+                  stroke="#16a34a"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="text-xs font-semibold text-green-700">
+                Scheduled for {scheduledFor.date.day} {scheduledFor.date.month} at{" "}
+                {scheduledFor.time}
+              </span>
+              <button
+                type="button"
+                onClick={() => setScheduledFor(null)}
+                className="ml-auto text-xs text-green-600 underline cursor-pointer"
+              >
+                Change
+              </button>
             </div>
           )}
-        </div>
 
-        {/* Bill Summary (scalloped ticket style) */}
-        <div className=" mx-auto  mx-4 w-full">
-          <BillSummaryCard subtotal={subtotal} />
-        </div>
+          {/* Items Section */}
+          <div className="mt-3 mx-4 bg-white rounded-2xl overflow-hidden">
+            <div className="px-5 pt-5 pb-3">
+              <h2 className="text-sm font-bold text-[#03130a]">Items</h2>
+            </div>
+            {grouped.map(({ restaurant, entries }, gIdx) => (
+              <div key={restaurant.id}>
+                {/* Kitchen name label — only for multi-kitchen */}
+                {isMultiKitchen && (
+                  <div className="px-5 pt-3 pb-1">
+                    <span className="text-xs font-bold text-[#6b7971] uppercase tracking-wide">
+                      {restaurant.name}
+                    </span>
+                  </div>
+                )}
 
-        {/* Delivery Details */}
-        <div className=" mx-4  bg-white rounded-2xl">
-          <DeliveryDetails
-            orderId={orderId}
-            selectedRoom={selectedRoom}
-            onChangeRoom={() => setIsRoomSwitchOpen(true)}
-            isMultipleRooms={isMultipleRooms}
-          />
-        </div>
-      </main>
-    </div>
+                {/* Item rows scrollable area */}
+                <div className="max-h-[220px] lg:max-h-[350px] overflow-y-auto overscroll-contain touch-pan-y custom-scrollbar">
+                  {entries.map((entry) => (
+                    <div
+                      key={entry.item.id}
+                      className="flex items-center justify-between px-5 py-4 border-t border-dashed border-[#e0e3e1] first:border-t-0"
+                    >
+                      <div className="flex items-start gap-2 flex-1 min-w-0">
+                        <VegDot isVeg={entry.item.isVeg !== false} />
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-sm font-semibold text-[#03130a] leading-tight truncate">
+                            {entry.item.name}
+                          </span>
+                          <span className="text-xs text-[#6b7971] mt-0.5">
+                            ₹{entry.item.price}
+                          </span>
+                        </div>
+                      </div>
+                      <QtyStepper
+                        qty={entry.qty}
+                        onDecrease={() =>
+                          updateQty(restaurant.id, entry.item.id, -1)
+                        }
+                        onIncrease={() =>
+                          updateQty(restaurant.id, entry.item.id, 1)
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Per-kitchen ADD INSTRUCTION (multi-kitchen only) - Rendered Inline */}
+                {isMultiKitchen && (
+                  <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
+                    {showInstructionFor === restaurant.id ? (
+                      <div className="flex flex-col gap-2">
+                        <textarea
+                          value={kitchenNotes[restaurant.id] || ""}
+                          onChange={(e) =>
+                            setKitchenNote(restaurant.id, e.target.value)
+                          }
+                          placeholder="Add Note"
+                          rows={3}
+                          className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                          id={`kitchen-note-${restaurant.id}`}
+                        />
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => setShowInstructionFor(null)}
+                            className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                            id={`submit-note-${restaurant.id}`}
+                          >
+                            Submit
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                            >
+                              <path
+                                d="M9 18L15 12L9 6"
+                                stroke="#fe480b"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <AddInstructionButton
+                        onClick={() => setShowInstructionFor(restaurant.id)}
+                      />
+                    )}
+                  </div>
+                )}
+
+                {/* Divider between kitchens */}
+                {isMultiKitchen && gIdx < grouped.length - 1 && (
+                  <div className="h-2 bg-[#f7f8fa]" />
+                )}
+              </div>
+            ))}
+
+            {/* Single-kitchen ADD INSTRUCTION - Rendered Inline */}
+            {!isMultiKitchen && (
+              <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
+                {showInstructionFor === "global" ? (
+                  <div className="flex flex-col gap-2">
+                    <textarea
+                      value={orderInstruction}
+                      onChange={(e) => setOrderInstruction(e.target.value)}
+                      placeholder="Add special instructions for your order..."
+                      rows={3}
+                      className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                      id="order-instruction-input"
+                    />
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setShowInstructionFor(null)}
+                        className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                      >
+                        Submit
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M9 18L15 12L9 6"
+                            stroke="#fe480b"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <AddInstructionButton
+                    onClick={() => setShowInstructionFor("global")}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Bill Summary (scalloped ticket style) */}
+          <div className=" mx-auto  mx-4 w-full">
+            <BillSummaryCard subtotal={subtotal} />
+          </div>
+
+          {/* Delivery Details */}
+          <div className=" mx-4  bg-white rounded-2xl">
+            <DeliveryDetails
+              orderId={orderId}
+              selectedRoom={selectedRoom}
+              onChangeRoom={() => setIsRoomSwitchOpen(true)}
+              isMultipleRooms={isMultipleRooms}
+            />
+          </div>
+        </main>
+      </div>
 
       {/* Fixed bottom buttons */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white border-t border-[#eff1f0] px-4 py-3 z-30">
