@@ -371,23 +371,23 @@ export default function CartPage() {
             <div className="px-5 pt-5 pb-3">
               <h2 className="text-sm font-bold text-[#03130a]">Items</h2>
             </div>
-            {grouped.map(({ restaurant, entries }, gIdx) => (
-              <div key={restaurant.id}>
-                {/* Kitchen name label — only for multi-kitchen */}
-                {isMultiKitchen && (
-                  <div className="px-5 pt-3 pb-1">
-                    <span className="text-xs font-bold text-[#6b7971] uppercase tracking-wide">
-                      {restaurant.name}
-                    </span>
-                  </div>
-                )}
+            <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+              {grouped.map(({ restaurant, entries }, gIdx) => (
+                <div key={restaurant.id}>
+                  {/* Kitchen name label — only for multi-kitchen */}
+                  {isMultiKitchen && (
+                    <div className="px-5 pt-3 pb-1">
+                      <span className="text-xs font-bold text-[#6b7971] uppercase tracking-wide">
+                        {restaurant.name}
+                      </span>
+                    </div>
+                  )}
 
-                {/* Item rows scrollable area */}
-                <div className="max-h-[220px] lg:max-h-[350px] overflow-y-auto overscroll-contain touch-pan-y custom-scrollbar">
+                  {/* Item rows */}
                   {entries.map((entry) => (
                     <div
                       key={entry.item.id}
-                      className="flex items-center justify-between px-5 py-4 border-t border-dashed border-[#e0e3e1] first:border-t-0"
+                      className="flex items-center justify-between px-5 py-4 border-t border-dashed border-[#e0e3e1]"
                     >
                       <div className="flex items-start gap-2 flex-1 min-w-0">
                         <VegDot isVeg={entry.item.isVeg !== false} />
@@ -411,107 +411,97 @@ export default function CartPage() {
                       />
                     </div>
                   ))}
-                </div>
 
-                {/* Per-kitchen ADD INSTRUCTION (multi-kitchen only) - Rendered Inline */}
-                {isMultiKitchen && (
-                  <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
-                    {showInstructionFor === restaurant.id ? (
-                      <div className="flex flex-col gap-2">
-                        <textarea
-                          value={kitchenNotes[restaurant.id] || ""}
-                          onChange={(e) =>
-                            setKitchenNote(restaurant.id, e.target.value)
-                          }
-                          placeholder="Add Note"
-                          rows={3}
-                          className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
-                          id={`kitchen-note-${restaurant.id}`}
+                  {/* Per-kitchen ADD INSTRUCTION (multi-kitchen only) - Rendered Inline */}
+                  {isMultiKitchen && (
+                    <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
+                      {showInstructionFor === restaurant.id ? (
+                        <div className="flex flex-col gap-2">
+                          <textarea
+                            value={kitchenNotes[restaurant.id] || ""}
+                            onChange={(e) =>
+                              setKitchenNote(restaurant.id, e.target.value)
+                            }
+                            placeholder="Add Note"
+                            rows={3}
+                            className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                            id={`kitchen-note-${restaurant.id}`}
+                          />
+                          {(kitchenNotes[restaurant.id] || "").trim() !== "" && (
+                            <div className="flex justify-end">
+                              <button
+                                type="button"
+                                onClick={() => setShowInstructionFor(null)}
+                                className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
+                                id={`submit-note-${restaurant.id}`}
+                              >
+                                Submit
+                                <Image
+                                  src="/profile/chevron_right_red.svg"
+                                  alt="Submit"
+                                  width={14}
+                                  height={14}
+                                  className="w-3.5 h-3.5 object-contain"
+                                />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <AddInstructionButton
+                          onClick={() => setShowInstructionFor(restaurant.id)}
                         />
+                      )}
+                    </div>
+                  )}
+
+                  {/* Divider between kitchens */}
+                  {isMultiKitchen && gIdx < grouped.length - 1 && (
+                    <div className="h-2 bg-[#f7f8fa]" />
+                  )}
+                </div>
+              ))}
+
+              {/* Single-kitchen ADD INSTRUCTION - Rendered Inline */}
+              {!isMultiKitchen && (
+                <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
+                  {showInstructionFor === "global" ? (
+                    <div className="flex flex-col gap-2">
+                      <textarea
+                        value={orderInstruction}
+                        onChange={(e) => setOrderInstruction(e.target.value)}
+                        placeholder="Add special instructions for your order..."
+                        rows={3}
+                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                        id="order-instruction-input"
+                      />
+                      {(orderInstruction || "").trim() !== "" && (
                         <div className="flex justify-end">
                           <button
                             type="button"
                             onClick={() => setShowInstructionFor(null)}
                             className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
-                            id={`submit-note-${restaurant.id}`}
                           >
                             Submit
-                            <svg
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                            >
-                              <path
-                                d="M9 18L15 12L9 6"
-                                stroke="#fe480b"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
+                            <Image
+                              src="/profile/chevron_right_red.svg"
+                              alt="Submit"
+                              width={14}
+                              height={14}
+                              className="w-3.5 h-3.5 object-contain"
+                            />
                           </button>
                         </div>
-                      </div>
-                    ) : (
-                      <AddInstructionButton
-                        onClick={() => setShowInstructionFor(restaurant.id)}
-                      />
-                    )}
-                  </div>
-                )}
-
-                {/* Divider between kitchens */}
-                {isMultiKitchen && gIdx < grouped.length - 1 && (
-                  <div className="h-2 bg-[#f7f8fa]" />
-                )}
-              </div>
-            ))}
-
-            {/* Single-kitchen ADD INSTRUCTION - Rendered Inline */}
-            {!isMultiKitchen && (
-              <div className="px-5 pb-4 pt-2 border-t border-dashed border-[#e0e3e1]">
-                {showInstructionFor === "global" ? (
-                  <div className="flex flex-col gap-2">
-                    <textarea
-                      value={orderInstruction}
-                      onChange={(e) => setOrderInstruction(e.target.value)}
-                      placeholder="Add special instructions for your order..."
-                      rows={3}
-                      className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
-                      id="order-instruction-input"
-                    />
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => setShowInstructionFor(null)}
-                        className="flex items-center gap-1.5 border border-[#fe480b] text-[#fe480b] rounded-lg px-4 py-2 text-xs font-bold uppercase cursor-pointer hover:bg-red-50 transition-colors"
-                      >
-                        Submit
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            d="M9 18L15 12L9 6"
-                            stroke="#fe480b"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
+                      )}
                     </div>
-                  </div>
-                ) : (
-                  <AddInstructionButton
-                    onClick={() => setShowInstructionFor("global")}
-                  />
-                )}
-              </div>
-            )}
+                  ) : (
+                    <AddInstructionButton
+                      onClick={() => setShowInstructionFor("global")}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Bill Summary (scalloped ticket style) */}
