@@ -188,9 +188,8 @@ function SearchResultContent() {
         
         <HomeHeader />
 
-        <main className="flex-1 px-5 pt-3 pb-16 flex flex-col gap-4 overflow-y-auto">
-          
-          <div className="flex items-center gap-3 py-1 shrink-0">
+        <div className="shrink-0 px-5 pt-3 pb-3 bg-white border-b border-[#eff1f0]/60 flex flex-col gap-4 z-40">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => router.push("/home")}
@@ -210,7 +209,6 @@ function SearchResultContent() {
             </h1>
           </div>
 
-          {/* Toggle Switch */}
           <SearchInputBar
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -219,19 +217,19 @@ function SearchResultContent() {
             placeholder="Search dish or kitchen"
           />
 
-          {/* Active Tabs */}
           <SearchTabs activeTab={activeTab} onSelectTab={setActiveTab} />
 
-          {/* Filter & Sort */}
           <SearchFilterBar
             onOpenFilter={() => setIsFilterOpen(true)}
             onOpenSort={() => setIsSortOpen(true)}
             isRated4Plus={isRated4Plus}
             onToggleRated4Plus={() => setIsRated4Plus(!isRated4Plus)}
           />
+        </div>
 
-          {/* Tab Content */}
-          <div className="flex flex-col gap-4 mt-1">
+        {/* Scrollable Tab Content Area */}
+        <main className="flex-1 px-5 pt-4 pb-20 flex flex-col gap-4 overflow-y-auto bg-[#f7f8fa]">
+          <div className="flex flex-col gap-4">
             {activeTab === "dishes" ? (
               filteredDishes.length > 0 ? (
                 filteredDishes.map((dish) => (
