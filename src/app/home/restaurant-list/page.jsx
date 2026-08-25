@@ -8,6 +8,7 @@ import data from "@/data/data.json";
 import HomeHeader from "@/component/Home/HomeHeader";
 import HomeSearchBar from "@/component/Home/HomeSearchBar";
 import RestaurantCard from "@/component/Home/RestaurantCard";
+import ActiveOrderBanner from "@/component/ui/ActiveOrderBanner";
 
 export default function RestaurantListPage() {
   const router = useRouter();
@@ -67,6 +68,7 @@ export default function RestaurantListPage() {
             )}
           </div>
         </div>
+        <ActiveOrderBanner />
       </div>
     </div>
   );
