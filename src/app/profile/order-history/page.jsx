@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 import OrderHistoryItemCard from "@/component/profile/OrderHistoryItemCard";
+import { useCart } from "@/component/providers/CartProvider";
 
 export default function OrderHistoryPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("completed"); // "completed" | "canceled"
+  const { reorderItems } = useCart();
 
   const { orderHistory = { completedOrders: [], canceledOrders: [] } } = data;
 
@@ -16,6 +18,11 @@ export default function OrderHistoryPage() {
     activeTab === "completed"
       ? orderHistory.completedOrders || []
       : orderHistory.canceledOrders || [];
+
+  const handleReorder = (order) => {
+    reorderItems(order);
+    router.push("/cart");
+  };
 
   return (
     <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
@@ -98,7 +105,7 @@ export default function OrderHistoryPage() {
             <div className="flex flex-col gap-3 pt-1 w-full">
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => (
-                  <OrderHistoryItemCard key={order.id} order={order} />
+                  <OrderHistoryItemCard key={order.id} order={order} onReorder={handleReorder} />
                 ))
               ) : (
                 <div className="py-8 text-center text-sm font-medium text-[#6B7971] italic">

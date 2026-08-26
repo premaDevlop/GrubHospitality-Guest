@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
+import data from "@/data/data.json";
 
 const CartContext = createContext(null);
 
@@ -57,6 +58,37 @@ export function CartProvider({ children }) {
         )
         .filter((entry) => entry.qty > 0),
     );
+  };
+
+  const reorderItems = (order) => {
+    if (!order || !order.items) return;
+
+    const restaurant = data.restaurants.find(
+      (r) => r.name.toLowerCase() === order.restaurantName.toLowerCase(),
+    );
+    if (!restaurant) return;
+
+    const allMenuItems = restaurant.menu.flatMap((cat) => cat.items || []);
+
+    order.items.forEach((orderItem) => {
+      const menuItem = allMenuItems.find(
+        (mi) => mi.name.toLowerCase() === orderItem.name.toLowerCase(),
+      );
+      const itemToAdd = menuItem || {
+        id: `reorder-${order.id}-${orderItem.name}`,
+        name: orderItem.name,
+        price: orderItem.price || 0,
+        isVeg: orderItem.isVeg,
+      };
+
+      const qty = orderItem.qty || 1;
+      for (let i = 0; i < qty; i++) {
+        addToCart(
+          { id: restaurant.id, name: restaurant.name, slug: restaurant.slug },
+          itemToAdd,
+        );
+      }
+    });
   };
 
   const clearCart = () => {
@@ -143,6 +175,7 @@ export function CartProvider({ children }) {
       lastOrderId,
       activeOrder,
       addToCart,
+      reorderItems,
       removeFromCart,
       updateQty,
       clearCart,
