@@ -26,7 +26,7 @@ export default function AuthPage({ onLoginSuccess }) {
 
   const handleNext = (enteredEmail) => {
     const cleanEmail = enteredEmail.trim();
-    if (cleanEmail === "1234567890" || cleanEmail === "user@gmail.com") {
+    if (!cleanEmail) {
       setShowToast(true);
       return;
     }
