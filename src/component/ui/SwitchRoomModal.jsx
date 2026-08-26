@@ -13,9 +13,9 @@ export default function SwitchRoomModal({
   const [selectedRoom, setSelectedRoom] = useState(currentRoom);
 
   // Build room list from context, with current room first
-  const rooms = bookedRooms.length > 0
+  const rooms = bookedRooms.length > 1
     ? [currentRoom, ...bookedRooms.filter((r) => r !== currentRoom)]
-    : [currentRoom, "206", "207", "208"];
+    : [currentRoom, ...["206", "207", "208"].filter((r) => r !== currentRoom)];
 
   useEffect(() => {
     if (typeof document === "undefined") return;

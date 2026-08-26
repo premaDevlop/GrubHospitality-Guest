@@ -3,7 +3,14 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export const DIETARY_OPTIONS = ["Veg", "Non-Veg"];
+export const DIETARY_OPTIONS = [
+  "Veg",
+  "Non-Veg",
+  "Nut Free",
+  "No Refined sugar",
+  "Low Calories",
+  "Dairy free"
+];
 
 export const CUISINE_OPTIONS = [
   "Indian",
@@ -19,7 +26,7 @@ export const CUISINE_OPTIONS = [
 ];
 
 export const PRICE_RANGES = [
-  { label: "Under ₹500", min: 0, max: 500 },
+  { label: "Below ₹500", min: 0, max: 500 },
   { label: "₹500 - ₹1,000", min: 500, max: 1000 },
   { label: "₹1,000 - ₹2,000", min: 1000, max: 2000 },
   { label: "Above ₹2,000", min: 2000, max: Infinity },

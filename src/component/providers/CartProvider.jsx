@@ -13,6 +13,14 @@ export function CartProvider({ children }) {
   const [orderInstruction, setOrderInstructionState] = useState("");
   // Order placed flag
   const [lastOrderId, setLastOrderId] = useState(null);
+  // Active order details
+  const [activeOrder, setActiveOrder] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("grubpac_active_order");
+      return saved ? JSON.parse(saved) : null;
+    }
+    return null;
+  });
 
   const addToCart = (restaurant, item) => {
     if (!restaurant || !item) return;
@@ -64,12 +72,58 @@ export function CartProvider({ children }) {
   const setOrderInstruction = (text) => {
     setOrderInstructionState(text);
   };
+  
+  const clearActiveOrder = () => {
+    setActiveOrder(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("grubpac_active_order");
+    }
+  };
 
-  const placeOrder = () => {
-    const orderId = `ORD${Date.now()}`;
-    setLastOrderId(orderId);
+  const updateActiveOrderStatus = (newStatus) => {
+    setActiveOrder((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, status: newStatus };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("grubpac_active_order", JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
+  const cancelOrder = ({ reason, comments }) => {
+    setActiveOrder((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, status: "Cancelled", cancelReason: reason, cancelComments: comments };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("grubpac_active_order", JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
+  const placeOrder = (scheduleInfo = null) => {
+    const randomId = `#${Math.floor(100000 + Math.random() * 900000)}`;
+    const orderItems = [...items];
+    const orderData = {
+      id: randomId,
+      items: orderItems,
+      subtotal: items.reduce((sum, entry) => sum + entry.qty * entry.item.price, 0),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+      status: "Accepted",
+      restaurantSlug: orderItems[0]?.restaurant?.slug || null,
+      isScheduled: !!scheduleInfo,
+      scheduleInfo: scheduleInfo || null,
+    };
+
+    setActiveOrder(orderData);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("grubpac_active_order", JSON.stringify(orderData));
+    }
+
+    setLastOrderId(randomId);
     clearCart();
-    return orderId;
+    return orderData;
   };
 
   const value = useMemo(() => {
@@ -87,6 +141,7 @@ export function CartProvider({ children }) {
       kitchenNotes,
       orderInstruction,
       lastOrderId,
+      activeOrder,
       addToCart,
       removeFromCart,
       updateQty,
@@ -94,8 +149,11 @@ export function CartProvider({ children }) {
       setKitchenNote,
       setOrderInstruction,
       placeOrder,
+      clearActiveOrder,
+      updateActiveOrderStatus,
+      cancelOrder,
     };
-  }, [items, kitchenNotes, orderInstruction, lastOrderId]);
+  }, [items, kitchenNotes, orderInstruction, lastOrderId, activeOrder]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

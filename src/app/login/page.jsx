@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import LoginHeader from "@/component/login/LoginHeader";
 import OtpLoginModal from "@/component/login/OtpLoginModal";
 import OtpVerifyModal from "@/component/login/OtpVerifyModal";
@@ -14,10 +15,23 @@ export default function AuthPage({ onLoginSuccess }) {
   const [step, setStep] = useState("login");
   const [email, setEmail] = useState("");
   const [showLoading, setShowLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const handleNext = (enteredEmail) => {
-    setEmail(enteredEmail);
-    setPhone(enteredEmail);
+    const cleanEmail = enteredEmail.trim();
+    if (cleanEmail === "1234567890" || cleanEmail === "user@gmail.com") {
+      setShowToast(true);
+      return;
+    }
+    setEmail(cleanEmail);
+    setPhone(cleanEmail);
     setStep("verify");
   };
 
@@ -49,7 +63,31 @@ export default function AuthPage({ onLoginSuccess }) {
   }
 
   return (
-    <main className="w-full min-h-screen bg-white flex flex-col justify-between select-none">
+    <main className="w-full min-h-screen bg-white flex flex-col justify-between select-none relative">
+      {/* Toast Alert */}
+      {showToast && (
+        <div className="absolute top-4 left-4 right-4 z-50 bg-[#ffcccc] border border-[#cc0101] rounded-xl p-4 flex gap-3 shadow-lg transition-all">
+          <div className="shrink-0 mt-0.5">
+            <Image
+              src="/otp_icons/guest_not_found.svg"
+              alt="Warning"
+              width={22}
+              height={21}
+              className="w-[22px] h-[21px] object-contain"
+            />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-[14px] leading-[18px] font-bold text-[#cc0101] mb-1">
+              Guest Details Not Found
+            </h3>
+            <p className="text-[12px] leading-[16px] font-normal text-[#cc0101]">
+              We couldn't find your details in our system.
+              <br />
+              Please contact hotel staff for support.
+            </p>
+          </div>
+        </div>
+      )}
      
       <LoginHeader />
 

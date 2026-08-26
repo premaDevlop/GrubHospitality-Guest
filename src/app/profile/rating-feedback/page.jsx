@@ -23,9 +23,9 @@ export default function RatingFeedbackPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] min-h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
-=        <header className="w-full px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
+    <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
+        <header className="w-full px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
           <button
             type="button"
             onClick={() => router.back()}
@@ -44,7 +44,7 @@ export default function RatingFeedbackPage() {
         </header>
 
         {/* Scrollable Main Content */}
-        <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-6 overflow-y-auto">
+        <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
           {/* Order Summary Card */}
           <RatingFeedbackOrderCard order={sampleOrder} />
 
@@ -55,7 +55,7 @@ export default function RatingFeedbackPage() {
           <BillSummaryCard amount={1500} />
 
           {/* Bottom Reorder Button */}
-          <div className="w-full pt-2 pb-6">
+          <div className="w-full pt-2 pb-4">
             <button
               type="button"
               onClick={() => router.push("/home/search-result")}

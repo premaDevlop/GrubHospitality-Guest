@@ -14,7 +14,7 @@ export default function SearchFilterBar({
       <button
         type="button"
         onClick={onOpenFilter}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#d2d7d4] rounded-lg text-xs font-bold text-[#445048] hover:bg-slate-50 transition-colors shrink-0 cursor-pointer uppercase"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#d2d7d4] rounded-lg text-xs font-bold text-[#6b7971] hover:bg-slate-50 transition-colors shrink-0 cursor-pointer uppercase"
       >
         <Image
           src="/restaurant/funnel.svg"
@@ -37,7 +37,7 @@ export default function SearchFilterBar({
       <button
         type="button"
         onClick={onOpenSort}
-        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#d2d7d4] rounded-lg text-xs font-bold text-[#445048] hover:bg-slate-50 transition-colors shrink-0 cursor-pointer uppercase"
+        className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#d2d7d4] rounded-lg text-xs font-bold text-[#6b7971] hover:bg-slate-50 transition-colors shrink-0 cursor-pointer uppercase"
       >
         <Image
           src="/restaurant/sort.svg"
@@ -60,11 +60,10 @@ export default function SearchFilterBar({
       <button
         type="button"
         onClick={onToggleRated4Plus}
-        className={`px-3 py-1.5 border rounded-lg text-xs font-bold transition-colors shrink-0 cursor-pointer uppercase ${
-          isRated4Plus
+        className={`px-3 py-1.5 border rounded-lg text-xs font-bold transition-colors shrink-0 cursor-pointer uppercase ${isRated4Plus
             ? "bg-red-50 border-[#fe480b] text-[#fe480b]"
-            : "bg-white border-[#d2d7d4] text-[#445048] hover:bg-slate-50"
-        }`}
+            : "bg-white border-[#d2d7d4] text-[#6b7971] hover:bg-slate-50"
+          }`}
       >
         rated 4+
       </button>
