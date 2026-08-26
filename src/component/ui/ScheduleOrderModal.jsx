@@ -102,7 +102,7 @@ export default function ScheduleOrderModal({ isOpen, onClose, onSchedule }) {
 
       {/* Bottom Sheet */}
       <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-50 flex flex-col overflow-visible"
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-[60] flex flex-col overflow-visible"
         style={{ maxHeight: "70vh" }}
         role="dialog"
         aria-modal="true"

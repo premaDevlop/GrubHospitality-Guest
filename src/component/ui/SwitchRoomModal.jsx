@@ -52,14 +52,14 @@ export default function SwitchRoomModal({
 
       {/* Bottom Sheet */}
       <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-50 flex flex-col"
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-[60] flex flex-col"
         style={{ maxHeight: "90vh" }}
         role="dialog"
         aria-modal="true"
         aria-label="Switch Room"
       >
         {/* Close button */}
-        <div className="flex justify-center pt-8 -mt-20 pb-2">
+        <div className="flex justify-center pt-8 -mt-20 pb-2 relative z-10">
           <button
             type="button"
             onClick={onClose}
