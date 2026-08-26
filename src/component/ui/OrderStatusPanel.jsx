@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/component/providers/CartProvider";
 
+const CART_BAR_HEIGHT = 80;
+
 // ---- Icon helpers ----
 function CheckIcon() {
   return (
@@ -90,7 +92,7 @@ function buildInstantSteps(orderTime) {
 // ---- Main reusable component ----
 export default function OrderStatusPanel() {
   const router = useRouter();
-  const { activeOrder } = useCart();
+  const { activeOrder, itemCount } = useCart();
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Only show when there is an active order
@@ -98,22 +100,26 @@ export default function OrderStatusPanel() {
 
   const steps = buildInstantSteps(activeOrder.time);
   const primaryMessage = "We've successfully received your order.";
+  const hasCartItems = itemCount > 0;
 
   return (
     <>
       {isExpanded && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1.5px]"
+          className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-[1.5px]"
           aria-hidden="true"
         />
       )}
 
       <div
-        className={`fixed bottom-0 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 ${
+        className={`fixed left-1/2 -translate-x-1/2 pointer-events-none transition-all duration-300 ${
           isExpanded
-            ? "w-full px-0 pb-0 pt-0"
-            : "w-full max-w-[480px] sm:max-w-[768px] px-4 pb-4 pt-0"
+            ? "w-full px-0 pb-0 pt-0 z-[9999] bottom-0"
+            : `w-full max-w-[480px] sm:max-w-[768px] px-4 pt-0 z-40 ${
+                hasCartItems ? "pb-4" : "pb-4"
+              }`
         }`}
+        style={isExpanded ? undefined : { bottom: hasCartItems ? `${CART_BAR_HEIGHT}px` : "0px" }}
       >
         {isExpanded && (
           <button

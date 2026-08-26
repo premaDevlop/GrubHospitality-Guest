@@ -6,12 +6,18 @@ import { useCart } from "@/component/providers/CartProvider";
 
 export default function CartCheckoutBar() {
   const router = useRouter();
-  const { itemCount } = useCart();
+  const { itemCount, activeOrder } = useCart();
 
   if (itemCount === 0) return null;
 
+  const hasActiveOrder = !!activeOrder;
+
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] px-5 pb-5 z-40 pointer-events-none">
+    <div
+      className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] px-5 pb-5 pointer-events-none ${
+        hasActiveOrder ? "z-50" : "z-40"
+      }`}
+    >
       <button
         type="button"
         onClick={() => router.push("/cart")}

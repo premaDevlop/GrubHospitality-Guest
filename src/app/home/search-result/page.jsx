@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/Home/HomeHeader";
+
 import SearchInputBar from "@/component/search/SearchInputBar";
 import SearchTabs from "@/component/search/SearchTabs";
 import SearchFilterBar from "@/component/search/SearchFilterBar";
@@ -19,7 +19,6 @@ import FilterModal, {
   getPriceRange,
 } from "@/component/search/FilterModal";
 import DishDetailModal from "@/component/search/DishDetailModal";
-import CartCheckoutBar from "@/component/ui/CartCheckoutBar";
 import { useCart } from "@/component/providers/CartProvider";
 
 function SearchResultContent() {
@@ -186,7 +185,7 @@ function SearchResultContent() {
     <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden">
       <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white h-screen shadow-sm flex flex-col overflow-hidden relative">
         
-        <HomeHeader />
+
 
         <div className="shrink-0 px-5 pt-3 pb-3 bg-white border-b border-[#eff1f0]/60 flex flex-col gap-4 z-40">
           <div className="flex items-center gap-3">
@@ -297,8 +296,6 @@ function SearchResultContent() {
           onClose={() => setActiveDishModal(null)}
           onAddToCart={handleAddToCart}
         />
-
-        <CartCheckoutBar />
       </div>
     </div>
   );

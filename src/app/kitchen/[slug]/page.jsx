@@ -16,7 +16,6 @@ import FilterModal, {
 import SortByModal from "@/component/search/SortByModal";
 import MenuList from "@/component/kitchen/MenuList";
 import MenuDetailModal from "@/component/kitchen/MenuDetailModal";
-import CartCheckoutBar from "@/component/ui/CartCheckoutBar";
 import OrderStatusPanel from "@/component/ui/OrderStatusPanel";
 import data from "@/data/data.json";
 import { useCart } from "@/component/providers/CartProvider";
@@ -311,9 +310,6 @@ export default function KitchenPage() {
 
       {/* Order Status Panel — reads activeOrder from context */}
       <OrderStatusPanel />
-
-      {/* Cart Checkout Bar — only shows when no order panel */}
-      {!showOrderBanner && <CartCheckoutBar />}
         </main>
       </div>
     </div>

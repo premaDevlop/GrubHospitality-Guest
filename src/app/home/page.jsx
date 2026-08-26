@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import data from "../../data/data.json";
 
-import HomeHeader from "@/component/Home/HomeHeader";
+
 import HomeHeroBanner from "@/component/Home/HomeHeroBanner";
 import HomeSearchBar from "@/component/Home/HomeSearchBar";
 import HomeScheduleBanner from "@/component/Home/HomeScheduleBanner";
@@ -46,7 +46,7 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col  items-center select-none">
       <div className="w-full max-w-[480px] sm:max-w-[768px] min-h-screen   shadow-sm flex flex-col pb-12">
-        <HomeHeader />
+
         <main className="flex-1 px-5 pt-4 flex flex-col gap-5 bg-[#f7f8fa] mt-2">
           <HomeHeroBanner user={userWithRoom} />
           <HomeSearchBar

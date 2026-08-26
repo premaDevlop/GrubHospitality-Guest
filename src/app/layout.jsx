@@ -3,6 +3,8 @@ import "@/app/globals.css";
 import "@/styles/globals.css";
 import MainProvider from "@/component/providers/MainProvider";
 import DesktopPreview from "@/component/ui/DesktopPreview";
+import AppHeader from "@/component/ui/AppHeader";
+import AppCartBar from "@/component/ui/AppCartBar";
 
 const inter = Inter({
 	variable: "--font-primary",
@@ -39,7 +41,9 @@ export default function RootLayout({
 			>
 				<MainProvider>
 					<DesktopPreview />
+					<AppHeader />
 					{children}
+					<AppCartBar />
 				</MainProvider>
 			</body>
 		</html>

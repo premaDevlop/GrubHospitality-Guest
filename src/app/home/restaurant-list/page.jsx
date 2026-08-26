@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/Home/HomeHeader";
+
 import HomeSearchBar from "@/component/Home/HomeSearchBar";
 import RestaurantCard from "@/component/Home/RestaurantCard";
 import OrderStatusPanel from "@/component/ui/OrderStatusPanel";
@@ -26,7 +26,7 @@ export default function RestaurantListPage() {
   return (
     <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden">
       <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white h-screen shadow-sm flex flex-col overflow-hidden relative">
-        <HomeHeader />
+
 
         <div className="shrink-0 px-5 pt-4 pb-3 flex flex-col gap-4 bg-white border-b border-[#eff1f0]">
           <div className="flex items-center gap-3">
