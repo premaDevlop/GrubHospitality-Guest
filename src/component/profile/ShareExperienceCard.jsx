@@ -112,7 +112,7 @@ const ShareExperienceCard = forwardRef(function ShareExperienceCard({ order }, r
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             disabled={submitted}
-            className="w-full p-3 pr-12 bg-white border border-[#E0E3E1] rounded-lg text-xs font-normal text-[#37493F] placeholder:text-[#6B7971] outline-none resize-none"
+            className="w-full p-3 pr-12 bg-white border border-[#E0E3E1] rounded-lg text-base font-normal text-[#37493F] placeholder:text-[#6B7971] outline-none resize-none"
           />
           <button
             type="button"

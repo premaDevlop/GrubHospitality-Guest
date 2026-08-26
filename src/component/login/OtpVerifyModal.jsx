@@ -72,7 +72,7 @@ export default function OtpVerifyModal({ email, onBack, onVerify, onResend }) {
                 inputMode="numeric"
                 maxLength={1}
                 placeholder="0"
-                className="w-full h-full rounded-xl text-center text-sm text-[var(--color-neutral-primary)] outline-none bg-transparent"
+                className="w-full h-full rounded-xl text-center text-base text-[var(--color-neutral-primary)] outline-none bg-transparent"
                 value={digit}
                 onChange={(e) => {
                   const val = e.target.value.replace(/[^0-9]/g, "");

@@ -64,7 +64,7 @@ function RatingFeedbackContent() {
             <h1 className="text-lg font-bold text-[#03130a]">Your Feedback</h1>
           </header>
 
-          <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
+          <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
             <RatingFeedbackOrderCard order={sampleOrder} />
 
             <div className="w-full bg-white rounded-lg p-4 shadow-2xs border border-[#E0E3E1] flex flex-col gap-3">
@@ -108,20 +108,20 @@ function RatingFeedbackContent() {
 
   return (
     <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
-        <header className="w-full px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer"
-            aria-label="Go back"
-          >
-            <Image src="/restaurant/back.svg" alt="Back" width={20} height={20} className="w-5 h-5 object-contain" />
-          </button>
-          <h1 className="text-lg font-bold text-[#03130a]">Rating & Feedback</h1>
-        </header>
+        <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
+          <header className="w-full px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer"
+              aria-label="Go back"
+            >
+              <Image src="/restaurant/back.svg" alt="Back" width={20} height={20} className="w-5 h-5 object-contain" />
+            </button>
+            <h1 className="text-lg font-bold text-[#03130a]">Your Feedback</h1>
+          </header>
 
-        <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto">
+          <main className="flex-1 px-4 sm:px-5 pt-4 pb-12 flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
           <RatingFeedbackOrderCard order={sampleOrder} />
           <ShareExperienceCard ref={shareExperienceRef} order={sampleOrder} />
           <BillSummaryCard amount={sampleOrder.totalAmount || 0} />

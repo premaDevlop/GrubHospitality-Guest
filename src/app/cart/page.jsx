@@ -407,7 +407,7 @@ export default function CartPage() {
                         }
                         placeholder="Add Note"
                         rows={3}
-                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-base text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
                         id={`kitchen-note-${restaurant.id}`}
                       />
                       <div className="flex justify-end">
@@ -459,7 +459,7 @@ export default function CartPage() {
                     onChange={(e) => setOrderInstruction(e.target.value)}
                     placeholder="Add special instructions for your order..."
                     rows={3}
-                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-base text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
                     id="order-instruction-input"
                   />
                   <div className="flex justify-end">

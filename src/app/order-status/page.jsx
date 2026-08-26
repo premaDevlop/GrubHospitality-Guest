@@ -137,7 +137,7 @@ function CancelModal({ onClose, onConfirm }) {
           onChange={(e) => setComments(e.target.value)}
           placeholder="Additional comments (optional)"
           rows={3}
-          className="w-full border border-[#e0e3e1] rounded-xl px-4 py-3 text-sm text-[#03130a] placeholder-[#9ca8a2] resize-none outline-none focus:border-[#fe480b] transition-colors"
+          className="w-full border border-[#e0e3e1] rounded-xl px-4 py-3 text-base text-[#03130a] placeholder-[#9ca8a2] resize-none outline-none focus:border-[#fe480b] transition-colors"
         />
 
         {/* Actions */}
