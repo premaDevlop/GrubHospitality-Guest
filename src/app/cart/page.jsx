@@ -217,30 +217,13 @@ export default function CartPage() {
 
   const handleOrderNow = () => {
     placeOrder();
-    const restaurantSlug = grouped[0]?.restaurant?.slug;
-    if (restaurantSlug) {
-      router.push(`/kitchen/${restaurantSlug}?orderPlaced=true`);
-    } else {
-      router.push("/home?orderPlaced=true");
-    }
+    router.push("/order-status");
   };
 
   const handleScheduleConfirm = (schedule) => {
     setScheduledFor(schedule);
     placeOrder();
-    const restaurantSlug = grouped[0]?.restaurant?.slug;
-    if (restaurantSlug) {
-      const params = new URLSearchParams({
-        orderPlaced: "true",
-        scheduled: "true",
-        time: schedule.time,
-        day: schedule.date.day,
-        month: schedule.date.month,
-      });
-      router.push(`/kitchen/${restaurantSlug}?${params.toString()}`);
-    } else {
-      router.push(`/home?orderPlaced=true&scheduled=true`);
-    }
+    router.push("/order-status");
   };
 
   if (items.length === 0) {
