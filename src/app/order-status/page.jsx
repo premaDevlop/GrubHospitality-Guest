@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useCart } from "@/component/providers/CartProvider";
 import { useRoom } from "@/component/providers/RoomProvider";
+import data from "@/data/data.json";
 
 // Cancel reasons
 const CANCEL_REASONS = [
@@ -195,6 +196,7 @@ function OrderStatusContent() {
       : null);
 
   const isCancelled = activeOrder?.status === "Cancelled";
+  const isDelivered = activeOrder?.status === "Delivered";
   const isScheduled = activeOrder?.isScheduled === true;
   const scheduleInfo = activeOrder?.scheduleInfo;
 
@@ -253,9 +255,9 @@ function OrderStatusContent() {
           cancelled: isCancelled,
           timestamp: orderTime,
         },
-        { id: "prepared", title: "Order Prepared", subtitle: "In Process...", done: false, cancelled: false },
-        { id: "ready", title: "Order Ready", subtitle: "Est. 15 Minutes", done: false, cancelled: false },
-        { id: "delivery", title: "Order Delivery", subtitle: "Est. 25 Minutes", done: false, cancelled: false },
+        { id: "prepared", title: "Order Prepared", subtitle: isDelivered ? "Done" : "In Process...", done: isDelivered, cancelled: false },
+        { id: "ready", title: "Order Ready", subtitle: isDelivered ? "Done" : "Est. 15 Minutes", done: isDelivered, cancelled: false },
+        { id: "delivery", title: "Order Delivery", subtitle: isDelivered ? "Delivered" : "Est. 25 Minutes", done: isDelivered, cancelled: false },
       ];
 
   return (
@@ -314,6 +316,40 @@ function OrderStatusContent() {
               </div>
             )}
 
+            {/* Delivered Banner */}
+            {isDelivered && !isCancelled && (
+              <div className="flex flex-col items-center text-center py-4">
+                <Image
+                  src="/Delivered.png"
+                  alt="Delivered"
+                  width={76}
+                  height={76}
+                  className="w-[76px] h-[76px] object-contain mb-3"
+                />
+                <h1 className="text-lg font-bold text-[#03130a]">Order Delivered!</h1>
+                <p className="text-xs text-[#6b7971] leading-relaxed max-w-[280px] mt-1">
+                  Your order has been successfully delivered. Enjoy your meal!
+                </p>
+              </div>
+            )}
+
+            {/* Order Confirmed Banner */}
+            {!isScheduled && !isCancelled && !isDelivered && (
+              <div className="flex flex-col items-center text-center py-4">
+                <Image
+                  src="/Done.png"
+                  alt="Order Confirmed"
+                  width={76}
+                  height={76}
+                  className="w-[76px] h-[76px] object-contain mb-3"
+                />
+                <h1 className="text-lg font-bold text-[#03130a]">Order Confirmed!</h1>
+                <p className="text-xs text-[#6b7971] leading-relaxed max-w-[280px] mt-1">
+                  Your order has been successfully placed and is being prepared by our kitchen team.
+                </p>
+              </div>
+            )}
+
             {/* Delivery Details */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#f0f2f1]">
               <h3 className="text-sm font-bold text-[#03130a]">Delivery Details</h3>
@@ -322,15 +358,23 @@ function OrderStatusContent() {
               <div className="grid grid-cols-2">
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-[#03130a]">
-                    {isCancelled ? "Order Cancelled" : isScheduled ? (scheduledTimeDisplay || "Scheduled") : "20-30 Minutes"}
+                    {isCancelled ? "Order Cancelled" : isDelivered ? "Order Delivered" : isScheduled ? (scheduledTimeDisplay || "Scheduled") : "20-30 Minutes"}
                   </span>
                   <span className="text-[11px] text-[#6b7971] mt-0.5">
-                    {isCancelled ? "Order Status" : isScheduled ? "Scheduled Time" : "Estimated Delivery"}
+                    {isCancelled ? "Order Status" : isDelivered ? "Order Status" : isScheduled ? "Scheduled Time" : "Estimated Delivery"}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
                   <span className="text-sm font-bold text-[#03130a]">{roomNo}</span>
                   <span className="text-[11px] text-[#6b7971] mt-0.5">Room No.</span>
+                </div>
+                <div className="flex flex-col mt-3">
+                  <span className="text-sm font-bold text-[#03130a]">{data.user?.reservationId}</span>
+                  <span className="text-[11px] text-[#6b7971] mt-0.5">Guest ID</span>
+                </div>
+                <div className="flex flex-col text-right mt-3">
+                  <span className="text-sm font-bold text-[#03130a]">{data.user?.name}</span>
+                  <span className="text-[11px] text-[#6b7971] mt-0.5">Guest Name</span>
                 </div>
               </div>
             </div>
@@ -410,13 +454,31 @@ function OrderStatusContent() {
 
           {/* Fixed Bottom */}
           <div className="absolute bottom-0 left-0 w-full bg-[#f7f8fa] px-4 py-3 flex flex-col gap-2 z-30">
-            <a
-              href="tel:+123456789"
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF4B4B] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors"
-            >
-              <Image src="/profile/phone_white.svg" alt="Phone" width={16} height={16} className="w-4 h-4 object-contain" />
-              Call Reception
-            </a>
+            {!isCancelled && !isDelivered && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (restaurantSlug) {
+                    router.replace(`/kitchen/${restaurantSlug}?orderPlaced=true`);
+                  } else {
+                    router.replace("/home");
+                  }
+                }}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF4B4B] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors"
+              >
+                Track Order
+              </button>
+            )}
+
+            {isDelivered && (
+              <button
+                type="button"
+                onClick={() => router.replace("/home")}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-[#FF4B4B] text-white rounded-xl text-sm font-bold uppercase tracking-wide cursor-pointer hover:bg-red-600 transition-colors"
+              >
+                Order Again
+              </button>
+            )}
 
             {!isCancelled && (
               <button
