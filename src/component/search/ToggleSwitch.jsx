@@ -22,14 +22,14 @@ export default function ToggleSwitch({ isOn, onToggle, label }) {
       <button
         type="button"
         onClick={onToggle}
-        className={`w-8 h-4 flex items-center rounded-full p-[1.5px] transition-all cursor-pointer ${
+        className={`w-11 h-6 flex items-center rounded-full p-[2px] transition-all cursor-pointer ${
           isOn ? "bg-[#C2E7D9]" : "bg-[#E0E3E1]"
         }`}
         aria-label={label || "Toggle Switch"}
       >
         <div
-          className={`w-[13px] h-[13px] rounded-full shadow-xs transform transition-all ${
-            isOn ? "translate-x-3.5 bg-[#00BD06]" : "translate-x-0 bg-[#6B7971]"
+          className={`w-5 h-5 rounded-full shadow-xs transform transition-all ${
+            isOn ? "translate-x-5 bg-[#00BD06]" : "translate-x-0 bg-[#6B7971]"
           }`}
         />
       </button>
