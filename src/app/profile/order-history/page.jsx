@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 import OrderHistoryItemCard from "@/component/profile/OrderHistoryItemCard";
+import { useCart } from "@/component/providers/CartProvider";
 
 export default function OrderHistoryPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("completed"); // "completed" | "canceled"
+  const { reorderItems } = useCart();
 
   const { orderHistory = { completedOrders: [], canceledOrders: [] } } = data;
 
@@ -17,9 +19,14 @@ export default function OrderHistoryPage() {
       ? orderHistory.completedOrders || []
       : orderHistory.canceledOrders || [];
 
+  const handleReorder = (order) => {
+    reorderItems(order);
+    router.push("/cart");
+  };
+
   return (
-    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] min-h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
+    <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden font-sans">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-[#f7f8fa] h-screen shadow-sm flex flex-col overflow-hidden relative pb-8">
         {/* Header Bar */}
         <header className="w-full px-4 sm:px-5 py-4 bg-white border-b border-[#eff1f0] flex items-center gap-3 shrink-0 z-40">
           <button
@@ -98,7 +105,7 @@ export default function OrderHistoryPage() {
             <div className="flex flex-col gap-3 pt-1 w-full">
               {currentOrders.length > 0 ? (
                 currentOrders.map((order) => (
-                  <OrderHistoryItemCard key={order.id} order={order} />
+                  <OrderHistoryItemCard key={order.id} order={order} onReorder={handleReorder} />
                 ))
               ) : (
                 <div className="py-8 text-center text-sm font-medium text-[#6B7971] italic">

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import Image from "next/image";
 
-export default function ShareExperienceCard({ order }) {
+const ShareExperienceCard = forwardRef(function ShareExperienceCard({ order }, ref) {
   const [overallRating, setOverallRating] = useState(0);
   const [itemRatings, setItemRatings] = useState({});
   const [feedback, setFeedback] = useState("");
@@ -24,6 +24,11 @@ export default function ShareExperienceCard({ order }) {
       setSubmitted(true);
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    handleSubmit,
+    submitted,
+  }));
 
   return (
     <div className="w-full bg-white rounded-lg p-4 shadow-2xs border border-[#E0E3E1] flex flex-col gap-3">
@@ -107,7 +112,7 @@ export default function ShareExperienceCard({ order }) {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             disabled={submitted}
-            className="w-full p-3 pr-12 bg-white border border-[#E0E3E1] rounded-lg text-xs font-normal text-[#37493F] placeholder:text-[#6B7971] outline-none resize-none"
+            className="w-full p-3 pr-12 bg-white border border-[#E0E3E1] rounded-lg text-base font-normal text-[#37493F] placeholder:text-[#6B7971] outline-none resize-none"
           />
           <button
             type="button"
@@ -132,4 +137,6 @@ export default function ShareExperienceCard({ order }) {
       </div>
     </div>
   );
-}
+});
+
+export default ShareExperienceCard;

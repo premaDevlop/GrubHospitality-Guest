@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, useState } from "react";
+import data from "@/data/data.json";
 
 const CartContext = createContext(null);
 
@@ -13,6 +14,14 @@ export function CartProvider({ children }) {
   const [orderInstruction, setOrderInstructionState] = useState("");
   // Order placed flag
   const [lastOrderId, setLastOrderId] = useState(null);
+  // Active order details
+  const [activeOrder, setActiveOrder] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("grubpac_active_order");
+      return saved ? JSON.parse(saved) : null;
+    }
+    return null;
+  });
 
   const addToCart = (restaurant, item) => {
     if (!restaurant || !item) return;
@@ -51,6 +60,37 @@ export function CartProvider({ children }) {
     );
   };
 
+  const reorderItems = (order) => {
+    if (!order || !order.items) return;
+
+    const restaurant = data.restaurants.find(
+      (r) => r.name.toLowerCase() === order.restaurantName.toLowerCase(),
+    );
+    if (!restaurant) return;
+
+    const allMenuItems = restaurant.menu.flatMap((cat) => cat.items || []);
+
+    order.items.forEach((orderItem) => {
+      const menuItem = allMenuItems.find(
+        (mi) => mi.name.toLowerCase() === orderItem.name.toLowerCase(),
+      );
+      const itemToAdd = menuItem || {
+        id: `reorder-${order.id}-${orderItem.name}`,
+        name: orderItem.name,
+        price: orderItem.price || 0,
+        isVeg: orderItem.isVeg,
+      };
+
+      const qty = orderItem.qty || 1;
+      for (let i = 0; i < qty; i++) {
+        addToCart(
+          { id: restaurant.id, name: restaurant.name, slug: restaurant.slug },
+          itemToAdd,
+        );
+      }
+    });
+  };
+
   const clearCart = () => {
     setItems([]);
     setKitchenNotesState({});
@@ -64,12 +104,58 @@ export function CartProvider({ children }) {
   const setOrderInstruction = (text) => {
     setOrderInstructionState(text);
   };
+  
+  const clearActiveOrder = () => {
+    setActiveOrder(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("grubpac_active_order");
+    }
+  };
 
-  const placeOrder = () => {
-    const orderId = `ORD${Date.now()}`;
-    setLastOrderId(orderId);
+  const updateActiveOrderStatus = (newStatus) => {
+    setActiveOrder((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, status: newStatus };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("grubpac_active_order", JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
+  const cancelOrder = ({ reason, comments }) => {
+    setActiveOrder((prev) => {
+      if (!prev) return null;
+      const updated = { ...prev, status: "Cancelled", cancelReason: reason, cancelComments: comments };
+      if (typeof window !== "undefined") {
+        localStorage.setItem("grubpac_active_order", JSON.stringify(updated));
+      }
+      return updated;
+    });
+  };
+
+  const placeOrder = (scheduleInfo = null) => {
+    const randomId = `#${Math.floor(100000 + Math.random() * 900000)}`;
+    const orderItems = [...items];
+    const orderData = {
+      id: randomId,
+      items: orderItems,
+      subtotal: items.reduce((sum, entry) => sum + entry.qty * entry.item.price, 0),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+      status: "Accepted",
+      restaurantSlug: orderItems[0]?.restaurant?.slug || null,
+      isScheduled: !!scheduleInfo,
+      scheduleInfo: scheduleInfo || null,
+    };
+
+    setActiveOrder(orderData);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("grubpac_active_order", JSON.stringify(orderData));
+    }
+
+    setLastOrderId(randomId);
     clearCart();
-    return orderId;
+    return orderData;
   };
 
   const value = useMemo(() => {
@@ -87,15 +173,20 @@ export function CartProvider({ children }) {
       kitchenNotes,
       orderInstruction,
       lastOrderId,
+      activeOrder,
       addToCart,
+      reorderItems,
       removeFromCart,
       updateQty,
       clearCart,
       setKitchenNote,
       setOrderInstruction,
       placeOrder,
+      clearActiveOrder,
+      updateActiveOrderStatus,
+      cancelOrder,
     };
-  }, [items, kitchenNotes, orderInstruction, lastOrderId]);
+  }, [items, kitchenNotes, orderInstruction, lastOrderId, activeOrder]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

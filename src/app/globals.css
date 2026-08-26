@@ -790,3 +790,23 @@
 .animate-slide-up {
 	animation: slide-up 0.3s ease-out;
 }
+
+/* Prevent iOS auto-zoom on input focus */
+@media screen and (max-width: 768px) {
+	input[type="text"],
+	input[type="email"],
+	input[type="number"],
+	input[type="tel"],
+	input[type="password"],
+	input[type="search"],
+	input[type="url"],
+	textarea,
+	select {
+		font-size: 16px !important;
+	}
+
+	/* Prevent double-tap zoom */
+	* {
+		touch-action: manipulation;
+	}
+}

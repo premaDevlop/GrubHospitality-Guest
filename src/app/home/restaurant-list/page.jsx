@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/Home/HomeHeader";
+
 import HomeSearchBar from "@/component/Home/HomeSearchBar";
 import RestaurantCard from "@/component/Home/RestaurantCard";
+import OrderStatusPanel from "@/component/ui/OrderStatusPanel";
 
 export default function RestaurantListPage() {
   const router = useRouter();
@@ -23,13 +24,12 @@ export default function RestaurantListPage() {
   );
 
   return (
-    <div className="w-full min-h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-y-auto">
-      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white min-h-screen shadow-sm flex flex-col pb-16">
-        <HomeHeader />
+    <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden">
+      <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white h-screen shadow-sm flex flex-col overflow-hidden relative">
 
-        <main className="flex-1 px-5 pt-4 flex flex-col gap-4 overflow-y-auto">
-          {/* Sub Header: Back Button & Title */}
-          <div className="flex items-center gap-3 py-1">
+
+        <div className="shrink-0 px-5 pt-4 pb-3 flex flex-col gap-4 bg-white border-b border-[#eff1f0]">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => router.push("/home")}
@@ -44,20 +44,19 @@ export default function RestaurantListPage() {
                 className="w-5 h-5 object-contain"
               />
             </button>
-            <h1 className="text-lg font-semibold text-[#03130a]">See More</h1>
+            <h1 className="text-lg font-semibold text-[#03130a]">Restaurants</h1>
           </div>
 
-          {/*  HomeSearchBar */}
           <HomeSearchBar
             placeholder="Search Restaurant"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </main>
+        </div>
 
-        <div className="bg-[#f7f8fa] mt-3 flex-1 px-5 pt-4 flex flex-col gap-4 overflow-y-auto">
-          {/* Restaurant Listing */}
-          <div className="flex flex-col gap-4 mt-10">
+        {/* Restaurant Listing - scrollable area */}
+        <div className="bg-[#f7f8fa] flex-1 px-5 py-4 flex flex-col gap-4 overflow-y-auto pb-16">
+          <div className="flex flex-col gap-4">
             {filteredRestaurants.length > 0 ? (
               filteredRestaurants.map((restaurant) => (
                 <RestaurantCard key={restaurant.id} restaurant={restaurant} />
@@ -69,6 +68,7 @@ export default function RestaurantListPage() {
             )}
           </div>
         </div>
+        <OrderStatusPanel />
       </div>
     </div>
   );

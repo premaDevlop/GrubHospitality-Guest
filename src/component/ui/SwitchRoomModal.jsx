@@ -13,9 +13,9 @@ export default function SwitchRoomModal({
   const [selectedRoom, setSelectedRoom] = useState(currentRoom);
 
   // Build room list from context, with current room first
-  const rooms = bookedRooms.length > 0
+  const rooms = bookedRooms.length > 1
     ? [currentRoom, ...bookedRooms.filter((r) => r !== currentRoom)]
-    : [currentRoom, "206", "207", "208"];
+    : [currentRoom, ...["206", "207", "208"].filter((r) => r !== currentRoom)];
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -52,14 +52,14 @@ export default function SwitchRoomModal({
 
       {/* Bottom Sheet */}
       <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-50 flex flex-col"
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] sm:max-w-[768px] bg-white rounded-t-2xl z-[60] flex flex-col"
         style={{ maxHeight: "90vh" }}
         role="dialog"
         aria-modal="true"
         aria-label="Switch Room"
       >
         {/* Close button */}
-        <div className="flex justify-center pt-8 -mt-20 pb-2">
+        <div className="flex justify-center pt-8 -mt-20 pb-2 relative z-10">
           <button
             type="button"
             onClick={onClose}

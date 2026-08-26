@@ -52,7 +52,7 @@ export default function HelpPage() {
               placeholder="Search for Help, Hotel Services"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 pl-10 pr-4 bg-white border border-[#e0e3e1] rounded-lg text-sm font-medium text-[#03130a] placeholder:text-[#a4aca7] outline-none shadow-2xs"
+              className="w-full h-11 pl-10 pr-4 bg-white border border-[#e0e3e1] rounded-lg text-base font-medium text-[#03130a] placeholder:text-[#a4aca7] outline-none shadow-2xs"
             />
             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
               <Image

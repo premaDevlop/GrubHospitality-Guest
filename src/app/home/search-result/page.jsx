@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import data from "@/data/data.json";
 
-import HomeHeader from "@/component/Home/HomeHeader";
+
 import SearchInputBar from "@/component/search/SearchInputBar";
 import SearchTabs from "@/component/search/SearchTabs";
 import SearchFilterBar from "@/component/search/SearchFilterBar";
@@ -65,8 +65,70 @@ function SearchResultContent() {
       const matchesVeg =
         (!isVegOnly || dish.isVeg === true) &&
         (selectedDietary.length === 0 ||
-          (selectedDietary.includes("Veg") && dish.isVeg === true) ||
-          (selectedDietary.includes("Non-Veg") && dish.isVeg === false));
+          selectedDietary.every((tag) => {
+            if (tag === "Veg") return dish.isVeg === true;
+            if (tag === "Non-Veg") return dish.isVeg === false;
+            const desc = (dish.description || "").toLowerCase();
+            const name = (dish.name || "").toLowerCase();
+            if (tag === "Nut Free") {
+              return (
+                desc.includes("nut free") ||
+                desc.includes("nut-free") ||
+                (!desc.includes("nut") &&
+                  !desc.includes("peanut") &&
+                  !desc.includes("cashew") &&
+                  !desc.includes("walnut") &&
+                  !desc.includes("almond") &&
+                  !name.includes("nut") &&
+                  !name.includes("peanut") &&
+                  !name.includes("cashew") &&
+                  !name.includes("walnut") &&
+                  !name.includes("almond"))
+              );
+            }
+            if (tag === "No Refined sugar") {
+              return (
+                desc.includes("sugar free") ||
+                desc.includes("sugar-free") ||
+                desc.includes("no refined sugar") ||
+                (!desc.includes("sugar") &&
+                  !desc.includes("syrup") &&
+                  !desc.includes("honey") &&
+                  !desc.includes("caramel") &&
+                  !name.includes("sugar") &&
+                  !name.includes("syrup") &&
+                  !name.includes("honey") &&
+                  !name.includes("caramel"))
+              );
+            }
+            if (tag === "Low Calories") {
+              return (
+                desc.includes("low calorie") ||
+                desc.includes("low-calorie") ||
+                desc.includes("light") ||
+                desc.includes("salad") ||
+                desc.includes("vegetable") ||
+                dish.price < 1000
+              );
+            }
+            if (tag === "Dairy free") {
+              return (
+                desc.includes("dairy free") ||
+                desc.includes("dairy-free") ||
+                (!desc.includes("cheese") &&
+                  !desc.includes("butter") &&
+                  !desc.includes("milk") &&
+                  !desc.includes("cream") &&
+                  !desc.includes("yogurt") &&
+                  !name.includes("cheese") &&
+                  !name.includes("butter") &&
+                  !name.includes("milk") &&
+                  !name.includes("cream") &&
+                  !name.includes("yogurt"))
+              );
+            }
+            return true;
+          }));
       const matchesRating = !isRated4Plus || (dish.rating && dish.rating >= 4.0);
       const matchesCuisine =
         selectedCuisines.length === 0 || selectedCuisines.includes(dish.cuisine);
@@ -123,11 +185,10 @@ function SearchResultContent() {
     <div className="w-full h-screen bg-[#f8faf9] flex flex-col items-center select-none overflow-hidden">
       <div className="w-full max-w-[480px] sm:max-w-[768px] bg-white h-screen shadow-sm flex flex-col overflow-hidden relative">
         
-        <HomeHeader />
 
-        <main className="flex-1 px-5 pt-3 pb-16 flex flex-col gap-4 overflow-y-auto">
-          
-          <div className="flex items-center gap-3 py-1 shrink-0">
+
+        <div className="shrink-0 px-5 pt-3 pb-3 bg-white border-b border-[#eff1f0]/60 flex flex-col gap-4 z-40">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => router.push("/home")}
@@ -147,7 +208,6 @@ function SearchResultContent() {
             </h1>
           </div>
 
-          {/* Toggle Switch */}
           <SearchInputBar
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -156,19 +216,19 @@ function SearchResultContent() {
             placeholder="Search dish or kitchen"
           />
 
-          {/* Active Tabs */}
           <SearchTabs activeTab={activeTab} onSelectTab={setActiveTab} />
 
-          {/* Filter & Sort */}
           <SearchFilterBar
             onOpenFilter={() => setIsFilterOpen(true)}
             onOpenSort={() => setIsSortOpen(true)}
             isRated4Plus={isRated4Plus}
             onToggleRated4Plus={() => setIsRated4Plus(!isRated4Plus)}
           />
+        </div>
 
-          {/* Tab Content */}
-          <div className="flex flex-col gap-4 mt-1">
+        {/* Scrollable Tab Content Area */}
+        <main className="flex-1 px-5 pt-4 pb-20 flex flex-col gap-4 overflow-y-auto bg-[#f7f8fa]">
+          <div className="flex flex-col gap-4">
             {activeTab === "dishes" ? (
               filteredDishes.length > 0 ? (
                 filteredDishes.map((dish) => (

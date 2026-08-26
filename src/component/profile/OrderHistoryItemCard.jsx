@@ -2,9 +2,19 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
-export default function OrderHistoryItemCard({ order }) {
+export default function OrderHistoryItemCard({ order, onReorder }) {
   const router = useRouter();
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (order?.id) {
+      const saved = localStorage.getItem(`feedback_${order.id}`);
+      if (saved) setFeedbackSubmitted(true);
+    }
+  }, [order?.id]);
+
   if (!order) return null;
 
   const isCanceled = order.status?.toLowerCase() === "canceled";
@@ -154,15 +164,15 @@ export default function OrderHistoryItemCard({ order }) {
           <div className="flex flex-col items-center gap-3 pt-2">
             <button
               type="button"
-              onClick={() => router.push("/profile/rating-feedback")}
+              onClick={() => router.push(`/profile/rating-feedback?orderId=${order.id}`)}
               className="text-[16px] leading-[20px] font-medium text-[#FF3333] uppercase cursor-pointer"
             >
-             share feedback
+             {feedbackSubmitted ? "view feedback" : "share feedback"}
             </button>
 
             <button
               type="button"
-              // onClick={() => router.push("/home/search-result")}
+              onClick={() => onReorder && onReorder(order)}
               className="w-full h-[40px] bg-[#FFFFFF] border border-[#FF3333] text-[#FF3333] rounded-lg text-[16px] leading-[20px] font-medium uppercase cursor-pointer flex items-center justify-center shadow-xs"
             >
               reorder

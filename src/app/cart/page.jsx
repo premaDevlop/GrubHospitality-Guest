@@ -91,7 +91,7 @@ function BillSummaryCard({ subtotal }) {
 }
 
 // Delivery details section
-function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
+function DeliveryDetails({ orderId, onChangeRoom, selectedRoom, isMultipleRooms }) {
   const user = data.user;
   return (
     <div className="px-5 py-5 flex flex-col gap-3">
@@ -112,14 +112,16 @@ function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
           </div>
           <span className="text-xs text-[#6b7971]">
             Room No.{" "}
-            <button
-              type="button"
-              onClick={onChangeRoom}
-              className="text-xs underline text-[#fe480b] font-semibold cursor-pointer hover:underline"
-              id="change-room-btn"
-            >
-              Change
-            </button>
+            {isMultipleRooms && (
+              <button
+                type="button"
+                onClick={onChangeRoom}
+                className="text-xs underline text-[#fe480b] font-semibold cursor-pointer hover:underline"
+                id="change-room-btn"
+              >
+                Change
+              </button>
+            )}
           </span>
         </div>
         <div className="flex flex-col gap-0.5">
@@ -129,7 +131,7 @@ function DeliveryDetails({ orderId, onChangeRoom, selectedRoom }) {
           <span className="text-xs text-[#6b7971]">Guest ID</span>
         </div>
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="font-semibold text-[#03130a]">{user.guestName}</span>
+          <span className="font-semibold text-[#03130a]">{user.name}</span>
           <span className="text-xs text-[#6b7971]">Guest Name</span>
         </div>
       </div>
@@ -188,7 +190,7 @@ export default function CartPage() {
     setOrderInstruction,
     placeOrder,
   } = useCart();
-  const { selectedRoom: defaultRoom, setSelectedRoom: setGlobalRoom } = useRoom();
+  const { selectedRoom: defaultRoom, setSelectedRoom: setGlobalRoom, isMultipleRooms } = useRoom();
 
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [scheduledFor, setScheduledFor] = useState(null);
@@ -217,32 +219,13 @@ export default function CartPage() {
 
   const handleOrderNow = () => {
     placeOrder();
-    const restaurantSlug = grouped[0]?.restaurant?.slug;
-    if (restaurantSlug) {
-      router.push(`/kitchen/${restaurantSlug}?orderPlaced=true`);
-    } else {
-      router.push("/home?orderPlaced=true");
-    }
+    router.push("/order-status");
   };
 
   const handleScheduleConfirm = (schedule) => {
     setScheduledFor(schedule);
-    // Place the order and navigate back to the kitchen with schedule info
     placeOrder();
-    // Find the restaurant slug from the first grouped item
-    const restaurantSlug = grouped[0]?.restaurant?.slug;
-    if (restaurantSlug) {
-      const params = new URLSearchParams({
-        orderPlaced: "true",
-        scheduled: "true",
-        time: schedule.time,
-        day: schedule.date.day,
-        month: schedule.date.month,
-      });
-      router.push(`/kitchen/${restaurantSlug}?${params.toString()}`);
-    } else {
-      router.push(`/home?orderPlaced=true&scheduled=true`);
-    }
+    router.push("/order-status");
   };
 
   if (items.length === 0) {
@@ -424,7 +407,7 @@ export default function CartPage() {
                         }
                         placeholder="Add Note"
                         rows={3}
-                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                        className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-base text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
                         id={`kitchen-note-${restaurant.id}`}
                       />
                       <div className="flex justify-end">
@@ -476,7 +459,7 @@ export default function CartPage() {
                     onChange={(e) => setOrderInstruction(e.target.value)}
                     placeholder="Add special instructions for your order..."
                     rows={3}
-                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-sm text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
+                    className="w-full border border-[#e0e3e1] rounded-lg px-3 py-2 text-base text-[#03130a] placeholder:text-[#b0b8b4] outline-none resize-none focus:border-[#fe480b] transition-colors"
                     id="order-instruction-input"
                   />
                   <div className="flex justify-end">
@@ -522,6 +505,7 @@ export default function CartPage() {
             orderId={orderId}
             selectedRoom={selectedRoom}
             onChangeRoom={() => setIsRoomSwitchOpen(true)}
+            isMultipleRooms={isMultipleRooms}
           />
         </div>
       </div>
