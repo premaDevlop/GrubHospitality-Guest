@@ -10,8 +10,41 @@ const ROOM_MAP = {
 };
 
 export function RoomProvider({ children }) {
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [phone, setPhone] = useState(null);
+  const [selectedRoom, setSelectedRoomState] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("grubpac_selected_room") || null;
+    }
+    return null;
+  });
+
+  const [phone, setPhoneState] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("grubpac_phone") || null;
+    }
+    return null;
+  });
+
+  const setSelectedRoom = (room) => {
+    setSelectedRoomState(room);
+    if (typeof window !== "undefined") {
+      if (room) {
+        localStorage.setItem("grubpac_selected_room", room);
+      } else {
+        localStorage.removeItem("grubpac_selected_room");
+      }
+    }
+  };
+
+  const setPhone = (p) => {
+    setPhoneState(p);
+    if (typeof window !== "undefined") {
+      if (p) {
+        localStorage.setItem("grubpac_phone", p);
+      } else {
+        localStorage.removeItem("grubpac_phone");
+      }
+    }
+  };
 
   const bookedRooms = useMemo(() => {
     if (!phone) return [];
